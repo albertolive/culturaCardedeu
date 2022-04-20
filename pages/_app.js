@@ -1,7 +1,12 @@
-import '../styles/globals.css'
+import "@styles/globals.css";
+import { BaseLayout } from "@components/ui/layout";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function CulturaCardedeuMainEntry({ Component, pageProps }) {
+  return (
+    <BaseLayout>
+      <Component {...pageProps} />
+    </BaseLayout>
+  );
 }
 
-export default MyApp
+export default CulturaCardedeuMainEntry;
