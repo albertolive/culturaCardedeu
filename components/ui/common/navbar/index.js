@@ -3,13 +3,14 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { PlusSmIcon } from "@heroicons/react/solid";
+import Image from "next/image";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+// const user = {
+//   name: "Tom Cook",
+//   email: "tom@example.com",
+//   imageUrl:
+//     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+// };
 const navigation = [
   { name: "Agenda", href: "/", current: true },
   // { name: "Team", href: "#", current: false },
@@ -46,10 +47,12 @@ export default function Example() {
                   </Disclosure.Button>
                 </div>
                 <div className="flex-shrink-0 flex items-center">
-                  <img
+                  <Image
+                    src="/static/images/logo-cultura-cardedeu-small.png"
                     className="block lg:hidden h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                    alt="Workflow"
+                    alt="Cultura Cardedeu"
+                    width={40}
+                    height={40}
                   />
                   <img
                     className="hidden lg:block h-8 w-auto"
@@ -80,7 +83,7 @@ export default function Example() {
                 <div className="flex-shrink-0">
                   <button
                     type="button"
-                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500"
+                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-green-500"
                   >
                     <PlusSmIcon
                       className="-ml-1 mr-2 h-5 w-5"
@@ -143,7 +146,7 @@ export default function Example() {
             </div>
           </div>
 
-          {/* <Disclosure.Panel className="md:hidden">
+          <Disclosure.Panel className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navigation.map((item) => (
                 <Disclosure.Button
@@ -162,6 +165,7 @@ export default function Example() {
                 </Disclosure.Button>
               ))}
             </div>
+            {/*
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="flex items-center px-5 sm:px-6">
                 <div className="flex-shrink-0">
@@ -187,7 +191,7 @@ export default function Example() {
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
-              <div className="mt-3 px-2 space-y-1 sm:px-3">
+               <div className="mt-3 px-2 space-y-1 sm:px-3">
                 {userNavigation.map((item) => (
                   <Disclosure.Button
                     key={item.name}
@@ -198,9 +202,9 @@ export default function Example() {
                     {item.name}
                   </Disclosure.Button>
                 ))}
-              </div>
-            </div>
-          </Disclosure.Panel> */}
+              </div> 
+            </div>*/}
+          </Disclosure.Panel>
         </>
       )}
     </Disclosure>
