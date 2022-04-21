@@ -7,7 +7,8 @@
       "@styles/*": ["styles/*"],
       "@content/*": ["content/*"],
       "@utils/*": ["utils/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "@config/*": ["config/*"]
     }
   }
 }
