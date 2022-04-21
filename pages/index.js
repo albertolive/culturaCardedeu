@@ -4,6 +4,7 @@ import List from "@components/ui/list";
 import { server } from "../config";
 
 export default function App({ events = [] }) {
+  console.log(events);
   return (
     <List events={events}>
       {(event) => <Card key={event.id} event={event} />}
