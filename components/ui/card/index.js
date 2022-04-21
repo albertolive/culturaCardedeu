@@ -25,7 +25,7 @@ export default function Card({ event }) {
           </div>
           <div className="p-4 flex-2">
             <div className="flex items-center">
-              <div className="flex items-center mr-2 tracking-wide text-sm text-red-500 font-bold">
+              <div className="flex items-center mr-2 tracking-wide text-sm text-green-600 font-bold">
                 {event.nameDay}, {event.formattedStart}
               </div>
               <div></div>
