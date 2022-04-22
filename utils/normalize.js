@@ -46,7 +46,7 @@ export const normalizeEvent = (event) => {
   )}`;
   const location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary || "";
-  const tag = tags.find((v) => title.includes(v));
+  const tag = tags.find((v) => title.includes(v)) || null;
 
   if (tag) {
     title = title.replace(`${tag}:`, "").trim();
@@ -59,7 +59,9 @@ export const normalizeEvent = (event) => {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/"/g, "")
     .replace(/,/g, "")
-    .replace(/:/g, "")}-${formattedStart.toLowerCase().replace(/ /g, "-")}`;
+    .replace(/:/g, "")}-${formattedStart.toLowerCase().replace(/ /g, "-")}-${
+    event.id
+  }`;
   const imageTitle = location
     .toLowerCase()
     .replace(/ /g, "-")
@@ -70,14 +72,8 @@ export const normalizeEvent = (event) => {
   const image = `/static/images/${imageTitle}.jpeg`;
 
   return {
-    start: event.start.date || event.start.dateTime,
-    end: event.end.date
-      ? new Date(end.getFullYear(), end.getMonth(), end.getDate() - 1)
-      : end,
     title,
     description: event.description || "",
-    attachments: event.attachments,
-    allDay: !event.start.dateTime,
     id: event.id,
     location,
     formattedStart,

@@ -1,18 +1,15 @@
 import React from "react";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
-import { server } from "../config";
-import useSWR from "swr";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { useGetEvents } from "@components/hooks/useGetEvents";
 
 export default function App(props) {
   const {
     data: { events = [] },
-  } = useSWR("/api/getEvents", fetcher, {
-    fallbackData: props,
-    refreshInterval: 30000,
-  });
+    error,
+  } = useGetEvents(props);
+
+  if (error) return <div>failed to load</div>;
 
   return (
     <List events={events}>
@@ -36,18 +33,3 @@ export async function getStaticProps() {
     revalidate: 1,
   };
 }
-
-// export const getStaticProps2 = async () => {
-//   try {
-//     const res = await fetch(`${server}/api/getEvents`);
-//     const events = await res.json();
-
-//     if (!res.ok)
-//       throw new Error(`Failed to fetch events, received status ${res.status}`);
-
-//     return { props: { events }, revalidate: 10 };
-//   } catch (err) {
-//     console.error(err);
-//     return { props: { error: JSON.parse(JSON.stringify(err)) } };
-//   }
-// };
