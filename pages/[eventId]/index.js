@@ -1,7 +1,6 @@
 import ReactHtmlParser from "react-html-parser";
 import { Image } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
-import Map from "@components/ui/map";
 
 function replaceURLs(text) {
   if (!text) return;
@@ -104,7 +103,12 @@ export default function Event(props) {
 
           <div>
             <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
-              <Map lat={lat} lng={lng} />
+              <iframe
+                style={{ border: 0 }}
+                loading="lazy"
+                allowfullscreen
+                src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
+              ></iframe>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 sm:gap-6 sm:mt-6 lg:gap-8 lg:mt-8">
               {images.length > 0 &&
