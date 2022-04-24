@@ -1,27 +1,16 @@
-import { useState } from "react";
-import Image from "next/image";
+import { Image } from "@components/ui/common";
 import Link from "next/link";
 import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
 
 export default function Card({ event }) {
-  const [src, setSrc] = useState(event.image);
+  const image = event.images && event.images[0];
 
   return (
     <Link href={`/${event.slug}`}>
       <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">
-            <Image
-              className="object-cover"
-              src={src}
-              layout="responsive"
-              width="200"
-              height="230"
-              alt={event.title}
-              placeholder="blur"
-              blurDataURL="/static/images/blur.png"
-              onError={() => setSrc("/static/images/cardedeu.jpeg")}
-            />
+            <Image title={event.title} image={image} />
           </div>
           <div className="p-4 flex-2">
             <div className="flex items-center">
