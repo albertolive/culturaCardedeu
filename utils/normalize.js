@@ -70,11 +70,15 @@ export const normalizeEvent = (event) => {
 
   let locationNormalized = VITAMINED_LOCATIONS["cardedeu"];
 
-  Object.keys(LOCATIONS).some((k) => {
-    if (LOCATIONS[k].toLowerCase().includes(location.toLowerCase())) {
-      locationNormalized = k;
-      location = LOCATIONS[k];
-    }
+  Object.keys(LOCATIONS).find((k) => {
+    const newLocation = event.location || "Cardedeu";
+    if (
+      location
+        .toLowerCase()
+        .split(" ")
+        .some((word) => LOCATIONS[k].includes(word))
+    )
+      locationNormalized = VITAMINED_LOCATIONS[k];
   });
 
   let slug = `${title
@@ -99,6 +103,6 @@ export const normalizeEvent = (event) => {
     endTime,
     tag,
     slug,
-    ...VITAMINED_LOCATIONS[locationNormalized],
+    ...locationNormalized,
   };
 };
