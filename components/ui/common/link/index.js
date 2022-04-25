@@ -8,7 +8,7 @@ export default function ActiveLink({ children, activeLinkClass, ...props }) {
 
   if (pathname === props.href)
     className = `${className} ${
-      activeLinkClass ? activeLinkClass : "text-red-500"
+      activeLinkClass ? activeLinkClass : "text-[#ECB84A]"
     }`;
 
   return <Link {...props}>{React.cloneElement(children, { className })}</Link>;
