@@ -109,36 +109,41 @@ export default function QuiSom() {
       <div className="relative px-4 sm:px-6 lg:px-8">
         <div className="text-lg max-w-prose mx-auto">
           <h1>
-            <span className="block text-base text-center text-indigo-600 font-semibold tracking-wide uppercase">
+            <span className="block text-base text-center text-[#ECB84A] font-semibold tracking-wide uppercase">
               Qui som?
             </span>
             <span className="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               Cultura Cardedeu
             </span>
           </h1>
-          <p className="mt-8 prose prose-indigo prose-lg text-gray-500 leading-8">
+          <p className="mt-8 prose prose-lg text-gray-500 leading-8">
             Cultura Cardedeu és una iniciativa ciutadana per veure en un cop
             d'ull tots els actes culturals que es fan a Cardedeu.
           </p>
         </div>
-        <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
+        <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
           <p>
             L'agenda és col·laborativa, i cada persona que organitzi un acte
             cultural podrà publicar-lo aquí pel seu compte.
           </p>
-          <p className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
+          <p className="mt-6 prose prose-lg text-gray-500 mx-auto">
             Podreu seguir l'agenda cultural en aquesta pàgina web i/o:
           </p>
           <ul role="list">
             <div>
               <span>🐦 Twitter: </span>
-              <a href="https://twitter.com/CulturaCardedeu" target="_blank">
+              <a
+                className="text-[#ECB84A]"
+                href="https://twitter.com/CulturaCardedeu"
+                target="_blank"
+              >
                 https://twitter.com/CulturaCardedeu
               </a>
             </div>
             <div>
               <span>ғ Facebook: </span>
               <a
+                className="text-[#ECB84A]"
                 href="https://www.facebook.com/agendaculturacardedeu/"
                 target="_blank"
               >
@@ -147,7 +152,11 @@ export default function QuiSom() {
             </div>
             <div>
               <span>ᴛ Telegram: </span>
-              <a href="https://t.me/culturacardedeu" target="_blank">
+              <a
+                className="text-[#ECB84A]"
+                href="https://t.me/culturacardedeu"
+                target="_blank"
+              >
                 https://t.me/culturacardedeu
               </a>
             </div>

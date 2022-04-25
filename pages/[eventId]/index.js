@@ -52,11 +52,11 @@ export default function Event(props) {
 
   return (
     <div className="bg-white">
-      <div className="max-w-2xl mx-auto py-12 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="max-w-2xl mx-auto px-4 md:px-0 lg:max-w-7xl">
         <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
-          <div>
-            <div className="border-b border-gray-200 pb-10">
-              <h2 className="font-medium text-gray-500">
+          <div className="prose prose-lg">
+            <div className="border-b border-gray-200">
+              <h2 className="font-bold text-[#ECB84A]">
                 {nameDay}, {formattedStart}
               </h2>
               <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
@@ -66,18 +66,16 @@ export default function Event(props) {
 
             <dl className="mt-6 space-y-10">
               <div>
-                <dt className="text-md font-medium text-gray-900">
-                  Descripció
-                </dt>
-                <dd className="mt-3 text-sm text-gray-500">
+                <dt className="text-md font-bold text-gray-900">Descripció</dt>
+                <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
                   {ReactHtmlParser(descriptionHTML)}
-                </dd>
+                </div>
               </div>
             </dl>
 
             <dl className="mt-6 space-y-10">
               <div>
-                <dt className="text-md font-medium text-gray-900">Hora</dt>
+                <dt className="text-md font-bold text-gray-900">Hora</dt>
                 <dd className="mt-3 text-sm text-gray-500">
                   {startTime} - {endTime}
                 </dd>
@@ -86,7 +84,7 @@ export default function Event(props) {
 
             <dl className="mt-6 space-y-10">
               <div>
-                <dt className="text-md font-medium text-gray-900">Lloc</dt>
+                <dt className="text-md font-bold text-gray-900">Lloc</dt>
                 <dd className="mt-3 text-sm text-gray-500">{location}</dd>
               </div>
             </dl>
@@ -106,7 +104,7 @@ export default function Event(props) {
               <iframe
                 style={{ border: 0 }}
                 loading="lazy"
-                allowfullscreen
+                allowFullScreen
                 src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
               ></iframe>
             </div>

@@ -32,21 +32,16 @@ export default function Example() {
                     )}
                   </Disclosure.Button>
                 </div>
-                <div className="flex-shrink-0 flex items-center">
-                  <Image
-                    src="/static/images/logo-cultura-cardedeu-small.png"
-                    className="block lg:hidden h-8 w-auto"
-                    alt="Cultura Cardedeu"
-                    width={40}
-                    height={40}
-                  />
-                  <Image
-                    src="/static/images/logo-cultura-cardedeu-small.png"
-                    className="hidden lg:block h-8 w-auto"
-                    alt="Cultura Cardedeu"
-                    width={40}
-                    height={40}
-                  />
+                <div className=" flex items-center">
+                  <ActiveLink href="/">
+                    <Image
+                      src="/static/images/logo-cultura-cardedeu.png"
+                      className="block h-8 cursor-pointer"
+                      alt="Cultura Cardedeu"
+                      width={120}
+                      height={60}
+                    />
+                  </ActiveLink>
                 </div>
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                   {navigation.map((item) => (
@@ -63,7 +58,7 @@ export default function Example() {
                 <div className="flex-shrink-0">
                   <button
                     type="button"
-                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-green-500"
+                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 "
                   >
                     <PlusSmIcon
                       className="-ml-1 mr-2 h-5 w-5"

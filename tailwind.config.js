@@ -20,6 +20,9 @@ module.exports = {
         "8xl": "1920px",
       },
     },
+    // colors: {
+    //   cultura: "#ECB84A",
+    // },
   },
   variants: {
     extend: {

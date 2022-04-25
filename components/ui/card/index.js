@@ -14,7 +14,7 @@ export default function Card({ event }) {
           </div>
           <div className="p-4 flex-2">
             <div className="flex items-center">
-              <div className="flex items-center mr-2 tracking-wide text-sm text-green-600 font-bold">
+              <div className="flex items-center mr-2 tracking-wide text-sm text-[#ECB84A] font-bold">
                 {event.nameDay}, {event.formattedStart}
               </div>
               <div></div>
@@ -28,7 +28,7 @@ export default function Card({ event }) {
               <span className="ml-1">{event.location}</span>
             </p>
             <div className="mt-2 mb-4 text-sm sm:text-base text-gray-500 ">
-              <span className="inline-flex p-1 px-2 rounded-full bg-slate-200 items-center border border-transparent shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800">
+              <span className="inline-flex p-1 px-2 rounded-full bg-slate-200 items-center border border-transparent shadow-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 shadow-grey-500/40">
                 <ClockIcon className="h-6 w-6" />
                 <p className="ml-2 ">
                   {event.startTime} - {event.endTime}
@@ -36,7 +36,7 @@ export default function Card({ event }) {
               </span>
             </div>
             {event.tag && (
-              <span className="p-1 px-2 text-white bg-red-500 relative items-center border border-transparent shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-md">
+              <span className="p-1 px-2 text-white bg-[#ECB84A] relative items-center border border-transparent shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-md">
                 {event.tag}
               </span>
             )}
