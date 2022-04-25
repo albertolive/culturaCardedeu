@@ -4,6 +4,10 @@ import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
 
 export default function Card({ event }) {
   const image = event.images && event.images[0];
+  const location =
+    event.location.length > 45
+      ? event.location.substring(0, 45) + "..."
+      : event.location;
 
   return (
     <Link href={`/${event.slug}`} passHref>
@@ -25,7 +29,7 @@ export default function Card({ event }) {
             </a>
             <p className="flex mt-2 mb-4 text-sm sm:text-base text-gray-900">
               <LocationMarkerIcon className="h-6 w-6" />
-              <span className="ml-1">{event.location}</span>
+              <span className="ml-1">{location}</span>
             </p>
             <div className="mt-2 mb-4 text-sm sm:text-base text-gray-500 ">
               <span className="inline-flex p-1 px-2 rounded-full bg-slate-200 items-center border border-transparent shadow-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 shadow-grey-500/40">
