@@ -1,3 +1,4 @@
+import Head from "next/head";
 import ReactHtmlParser from "react-html-parser";
 import { Image } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
@@ -51,82 +52,94 @@ export default function Event(props) {
     : replaceURLs(description);
 
   return (
-    <div className="bg-white">
-      <div className="max-w-2xl mx-auto px-4 md:px-0 lg:max-w-7xl">
-        <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
-          <div className="prose prose-lg">
-            <div className="border-b border-gray-200">
-              <h2 className="font-bold text-[#ECB84A]">
-                {nameDay}, {formattedStart}
-              </h2>
-              <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                {title}
-              </p>
-            </div>
+    <>
+      <Head>
+        <title>{`${title} - Cultura Cardedeu`}</title>
+        <meta
+          name="description"
+          content={`${title} - ${nameDay}, ${formattedStart} - ${location}`}
+        />
+      </Head>
 
-            <dl className="mt-6 space-y-10">
-              <div>
-                <dt className="text-md font-bold text-gray-900">Descripció</dt>
-                <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
-                  {ReactHtmlParser(descriptionHTML)}
-                </div>
+      <div className="bg-white">
+        <div className="max-w-2xl mx-auto px-4 md:px-0 lg:max-w-7xl">
+          <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
+            <div className="prose prose-lg">
+              <div className="border-b border-gray-200">
+                <h2 className="font-bold text-[#ECB84A]">
+                  {nameDay}, {formattedStart}
+                </h2>
+                <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                  {title}
+                </p>
               </div>
-            </dl>
 
-            <dl className="mt-6 space-y-10">
-              <div>
-                <dt className="text-md font-bold text-gray-900">Hora</dt>
-                <dd className="mt-3 text-sm text-gray-500">
-                  {startTime} - {endTime}
-                </dd>
-              </div>
-            </dl>
-
-            <dl className="mt-6 space-y-10">
-              <div>
-                <dt className="text-md font-bold text-gray-900">Lloc</dt>
-                <dd className="mt-3 text-sm text-gray-500">{location}</dd>
-              </div>
-            </dl>
-
-            {tag && (
               <dl className="mt-6 space-y-10">
                 <div>
-                  <dt className="text-md font-medium text-gray-900">Tags:</dt>
-                  <dd className="mt-3 text-sm text-gray-500">{tag}</dd>
+                  <dt className="text-md font-bold text-gray-900">
+                    Descripció
+                  </dt>
+                  <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
+                    {ReactHtmlParser(descriptionHTML)}
+                  </div>
                 </div>
               </dl>
-            )}
-          </div>
 
-          <div>
-            <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
-              <iframe
-                style={{ border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
-              ></iframe>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4 sm:gap-6 sm:mt-6 lg:gap-8 lg:mt-8">
-              {images.length > 0 &&
-                images.map((image) => (
-                  <div
-                    key={image}
-                    className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
-                  >
-                    <Image
-                      title={location}
-                      image={image}
-                      className="w-full h-full object-center object-cover"
-                    />
+              <dl className="mt-6 space-y-10">
+                <div>
+                  <dt className="text-md font-bold text-gray-900">Hora</dt>
+                  <dd className="mt-3 text-sm text-gray-500">
+                    {startTime} - {endTime}
+                  </dd>
+                </div>
+              </dl>
+
+              <dl className="mt-6 space-y-10">
+                <div>
+                  <dt className="text-md font-bold text-gray-900">Lloc</dt>
+                  <dd className="mt-3 text-sm text-gray-500">{location}</dd>
+                </div>
+              </dl>
+
+              {tag && (
+                <dl className="mt-6 space-y-10">
+                  <div>
+                    <dt className="text-md font-medium text-gray-900">Tags:</dt>
+                    <dd className="mt-3 text-sm text-gray-500">{tag}</dd>
                   </div>
-                ))}
+                </dl>
+              )}
+            </div>
+
+            <div>
+              <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
+                <iframe
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
+                ></iframe>
+              </div>
+              <div className="grid grid-cols-2 gap-4 mt-4 sm:gap-6 sm:mt-6 lg:gap-8 lg:mt-8">
+                {images.length > 0 &&
+                  images.map((image) => (
+                    <div
+                      key={image}
+                      className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
+                    >
+                      <Image
+                        title={location}
+                        image={image}
+                        className="w-full h-full object-center object-cover"
+                      />
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
