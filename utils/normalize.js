@@ -88,6 +88,8 @@ export const normalizeEvent = (event) => {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/"/g, "")
     .replace(/,/g, "")
+    .replace(/\+/g, "")
+    .replace(/\|/g, "")
     .replace(/:/g, "")}-${formattedStart.toLowerCase().replace(/ /g, "-")}-${
     event.id
   }`;

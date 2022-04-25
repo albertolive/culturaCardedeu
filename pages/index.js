@@ -1,4 +1,4 @@
-import React from "react";
+import Head from "next/head";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
@@ -12,9 +12,16 @@ export default function App(props) {
   if (error) return <div>failed to load</div>;
 
   return (
-    <List events={events}>
-      {(event) => <Card key={event.id} event={event} />}
-    </List>
+    <>
+      <Head>
+        <title>Agenda 2022 - Cultura Cardedeu</title>
+        <meta name="description" content="Agenda 2022 - Cultura Cardedeu" />
+      </Head>
+
+      <List events={events}>
+        {(event) => <Card key={event.id} event={event} />}
+      </List>
+    </>
   );
 }
 
