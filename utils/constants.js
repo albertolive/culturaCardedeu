@@ -25,6 +25,53 @@ export const MONTHS = [
 
 export const TAGS = ["Familiar", "Tertúlia Literària"];
 
+export const LOCATIONS_ARRAY = [
+  { value: "Ajuntament de Cardedeu", label: "Ajuntament de Cardedeu" },
+  { value: "Biblioteca Marc de Vilalba", label: "Biblioteca Marc de Vilalba" },
+  { value: "Cambridge School Cardedeu", label: "Cambridge School Cardedeu" },
+  {
+    value: "Capella de Sant Corneli i Sant Cebrià",
+    label: "Capella de Sant Corneli i Sant Cebrià",
+  },
+  { value: "Casa Corbella", label: "Casa Corbella" },
+  { value: "Casa Viader", label: "Casa Viader" },
+  {
+    value: "Casal Ajuntament de Cardedeu",
+    label: "Casal Ajuntament de Cardedeu",
+  },
+  { value: "Cementiri de Cardedeu", label: "Cementiri de Cardedeu" },
+  { value: "Cervesa Sant Jordi", label: "Cervesa Sant Jordi" },
+  { value: "Cinema Esbarjo", label: "Cinema Esbarjo" },
+  { value: "Església de Santa Maria", label: "Església de Santa Maria" },
+  { value: "Floristeria Parera", label: "Floristeria Parera" },
+  { value: "Granja el Melindro", label: "Granja el Melindro" },
+  { value: "Kid&Us Cardedeu", label: "Kid&Us Cardedeu" },
+  { value: "La Fresca", label: "La Fresca" },
+  {
+    value: "La Guingueta del Pompeu Fabra",
+    label: "La Guingueta del Pompeu Fabra",
+  },
+  { value: "La Terrassa de Viulamúsica", label: "La Terrassa de Viulamúsica" },
+  { value: "Museu Arxiu Tomàs Balvey", label: "Museu Arxiu Tomàs Balvey" },
+  { value: "Parc Pompeu Fabra", label: "Parc Pompeu Fabra" },
+  { value: "Plaça de l'Església", label: "Plaça de l'Església" },
+  { value: "Plaça Sant Corneli", label: "Plaça Sant Corneli" },
+  { value: "Plaça Sant Joan", label: "Plaça Sant Joan" },
+  { value: "Sala Sarau", label: "Sala Sarau" },
+  { value: "Sant Hilari", label: "Sant Hilari" },
+  { value: "Tarambana", label: "Tarambana" },
+  { value: "Teatre Auditori Cardedeu", label: "Teatre Auditori Cardedeu" },
+  {
+    value: "Tèxtil Rase Fàbrica de Cultura",
+    label: "Tèxtil Rase Fàbrica de Cultura",
+  },
+  { value: "Vil·la Paquita", label: "Vil·la Paquita" },
+  {
+    value: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
+    label: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
+  },
+];
+
 export const LOCATIONS = {
   ajuntamentCardedeu: ["ajuntament", "columnes"],
   bibliotecaMarcVilalba: ["vilalba"],

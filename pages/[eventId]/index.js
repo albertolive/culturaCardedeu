@@ -88,7 +88,7 @@ export default function Event(props) {
               <dl className="mt-6 space-y-10">
                 <div>
                   <dt className="text-md font-bold text-gray-900">Hora</dt>
-                  <dd className="mt-3 text-sm text-gray-500">
+                  <dd className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500">
                     {startTime} - {endTime}
                   </dd>
                 </div>
@@ -97,7 +97,9 @@ export default function Event(props) {
               <dl className="mt-6 space-y-10">
                 <div>
                   <dt className="text-md font-bold text-gray-900">Lloc</dt>
-                  <dd className="mt-3 text-sm text-gray-500">{location}</dd>
+                  <dd className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500">
+                    {location}
+                  </dd>
                 </div>
               </dl>
 
