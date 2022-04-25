@@ -16,11 +16,11 @@ export default function DatePickerComponent({ onChange }) {
 
   useEffect(() => {
     if (startDate > endDate) setStartDate(endDate);
-  }, [endDate]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     if (startDate > endDate) setEndDate(startDate);
-  }, [startDate]);
+  }, [startDate, endDate]);
 
   const onChangeStart = (date) => {
     onChange("startDate", date);
@@ -130,3 +130,5 @@ const ButtonInput = forwardRef(({ value, onClick }, ref) => {
     </button>
   );
 });
+
+ButtonInput.displayName = "ButtonInput";
