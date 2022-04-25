@@ -23,11 +23,3 @@ body {
 .next-image-wrapper > span {
   height: 100% !important;
 }
-
-a {
-  color: #ecb84a;
-}
-
-a:hover {
-  text-decoration: underline;
-}

@@ -118,16 +118,16 @@ export default function QuiSom() {
           </h1>
           <p className="mt-8 prose prose-lg text-gray-500 leading-8">
             Cultura Cardedeu és una iniciativa ciutadana per veure en un cop
-            d'ull tots els actes culturals que es fan a Cardedeu.
+            d&apos;ull tots els actes culturals que es fan a Cardedeu.
           </p>
         </div>
         <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
           <p>
-            L'agenda és col·laborativa, i cada persona que organitzi un acte
-            cultural podrà publicar-lo aquí pel seu compte.
+            L&apos;agenda és col·laborativa, i cada persona que organitzi un
+            acte cultural podrà publicar-lo aquí pel seu compte.
           </p>
           <p className="mt-6 prose prose-lg text-gray-500 mx-auto">
-            Podreu seguir l'agenda cultural en aquesta pàgina web i/o:
+            Podreu seguir l&apos;agenda cultural en aquesta pàgina web i/o:
           </p>
           <ul role="list">
             <div>
@@ -136,6 +136,7 @@ export default function QuiSom() {
                 className="text-[#ECB84A]"
                 href="https://twitter.com/CulturaCardedeu"
                 target="_blank"
+                rel="noreferrer"
               >
                 https://twitter.com/CulturaCardedeu
               </a>
@@ -146,6 +147,7 @@ export default function QuiSom() {
                 className="text-[#ECB84A]"
                 href="https://www.facebook.com/agendaculturacardedeu/"
                 target="_blank"
+                rel="noreferrer"
               >
                 https://www.facebook.com/agendaculturacardedeu/
               </a>
@@ -156,6 +158,7 @@ export default function QuiSom() {
                 className="text-[#ECB84A]"
                 href="https://t.me/culturacardedeu"
                 target="_blank"
+                rel="noreferrer"
               >
                 https://t.me/culturacardedeu
               </a>
