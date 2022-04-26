@@ -32,12 +32,15 @@ export default function DatePickerComponent({ onChange }) {
   };
 
   return (
-    <div className="mt-2 relative rounded-md">
-      <div className="flex flex-col max-w-2xl mx-auto">
-        <div className="relative w-full">
-          <div className="mb-1">
-            <label className="mb-2 font-bold">Inici</label>
-          </div>
+    <>
+      <div className="sm:col-span-3">
+        <label
+          htmlFor="first-name"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Inici *
+        </label>
+        <div className="mt-1">
           <DateComponent
             selected={startDate}
             startDate={startDate}
@@ -45,10 +48,15 @@ export default function DatePickerComponent({ onChange }) {
             onChange={onChangeStart}
           />
         </div>
-        <div className="relative w-full">
-          <div className="mb-1">
-            <label className="mb-2 font-bold">Final</label>
-          </div>
+      </div>
+      <div className="sm:col-span-3">
+        <label
+          htmlFor="first-name"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Final *
+        </label>
+        <div className="mt-1">
           <DateComponent
             selected={endDate}
             startDate={startDate}
@@ -57,7 +65,7 @@ export default function DatePickerComponent({ onChange }) {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -124,7 +132,7 @@ const ButtonInput = forwardRef(({ value, onClick }, ref) => {
       onClick={onClick}
       ref={ref}
       type="button"
-      className="capitalize w-full mb-1 shadow-sm block p-2 sm:text-sm border border-gray-200 rounded-md focus:border-yellow-500"
+      className="capitalize w-full mb-1 shadow-sm block p-2 sm:text-sm border border-gray-300 rounded-md focus:border-grey-300"
     >
       {value}
     </button>
