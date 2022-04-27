@@ -9,7 +9,6 @@ export default function Input({ register, id, title, value, onChange }) {
       </label>
       <div className="mt-1">
         <input
-          {...register(id, { required: true })}
           value={value}
           onChange={onChange}
           type="text"

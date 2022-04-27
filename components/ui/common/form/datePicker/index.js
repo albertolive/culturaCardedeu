@@ -12,14 +12,10 @@ export default function DatePickerComponent({ onChange }) {
   const [startDate, setStartDate] = useState(
     setHours(setMinutes(new Date(), 0), 9)
   );
-  const [endDate, setEndDate] = useState(new Date(startDate));
+  const [endDate, setEndDate] = useState(setMinutes(new Date(startDate), 60));
 
   useEffect(() => {
-    if (startDate > endDate) setStartDate(endDate);
-  }, [startDate, endDate]);
-
-  useEffect(() => {
-    if (startDate > endDate) setEndDate(startDate);
+    if (startDate > endDate) setEndDate(setMinutes(startDate, 60));
   }, [startDate, endDate]);
 
   const onChangeStart = (date) => {
@@ -43,9 +39,10 @@ export default function DatePickerComponent({ onChange }) {
         <div className="mt-1">
           <DateComponent
             selected={startDate}
+            onChange={onChangeStart}
+            selectsStart
             startDate={startDate}
             endDate={endDate}
-            onChange={onChangeStart}
           />
         </div>
       </div>
@@ -59,9 +56,11 @@ export default function DatePickerComponent({ onChange }) {
         <div className="mt-1">
           <DateComponent
             selected={endDate}
+            onChange={onChangeEnd}
+            selectsEnd
             startDate={startDate}
             endDate={endDate}
-            onChange={onChangeEnd}
+            minDate={startDate}
           />
         </div>
       </div>
@@ -69,16 +68,26 @@ export default function DatePickerComponent({ onChange }) {
   );
 }
 
-const DateComponent = ({ selected, startDate, endDate, onChange }) => {
+const DateComponent = ({
+  selected,
+  startDate,
+  endDate,
+  onChange,
+  selectsStart,
+  selectsEnd,
+  minDate,
+}) => {
   return (
     <DatePicker
       locale={ca}
       selected={selected}
       onChange={onChange}
       showTimeSelect
-      selectsStart
+      selectsStart={!!selectsStart}
+      selectsEnd={!!selectsEnd}
       startDate={startDate}
       endDate={endDate}
+      minDate={minDate}
       nextMonthButtonLabel=">"
       previousMonthButtonLabel="<"
       popperClassName="react-datepicker-left"

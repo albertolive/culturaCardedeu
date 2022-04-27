@@ -5,31 +5,13 @@ import {
   LOCATIONS,
   VITAMINED_LOCATIONS,
 } from "./constants";
+import { slug, getFormattedDate } from "./helpers";
 
 const createDOMPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
 
 const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window);
-
-const getFormattedDate = (start, end) => {
-  const startDate = new Date(start.date || start.dateTime);
-  const endDate = new Date(end.date || end.dateTime);
-  const numberDay = new Date(startDate).getDay();
-  const numberMonth = new Date(startDate).getMonth();
-  const nameDay = DAYS[numberDay];
-  const nameMonth = MONTHS[numberMonth];
-
-  const formattedStart = `${startDate.getDate()} de ${nameMonth} del ${startDate.getFullYear()}`;
-  const startTime = `${startDate.getHours()}:${String(
-    startDate.getMinutes()
-  ).padStart(2, "0")}`;
-  const endTime = `${endDate.getHours()}:${String(
-    endDate.getMinutes()
-  ).padStart(2, "0")}`;
-
-  return { formattedStart, startTime, endTime, nameDay };
-};
 
 export const normalizeEvents = (event) => {
   const { formattedStart, startTime, endTime, nameDay } = getFormattedDate(
@@ -71,7 +53,6 @@ export const normalizeEvent = (event) => {
   let locationNormalized = VITAMINED_LOCATIONS["cardedeu"];
 
   Object.keys(LOCATIONS).find((k) => {
-    const newLocation = event.location || "Cardedeu";
     if (
       location
         .toLowerCase()
@@ -80,19 +61,6 @@ export const normalizeEvent = (event) => {
     )
       locationNormalized = VITAMINED_LOCATIONS[k];
   });
-
-  let slug = `${title
-    .toLowerCase()
-    .replace(/ /g, "-")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/"/g, "")
-    .replace(/,/g, "")
-    .replace(/\+/g, "")
-    .replace(/\|/g, "")
-    .replace(/:/g, "")}-${formattedStart.toLowerCase().replace(/ /g, "-")}-${
-    event.id
-  }`;
 
   return {
     title,
@@ -104,7 +72,7 @@ export const normalizeEvent = (event) => {
     startTime,
     endTime,
     tag,
-    slug,
+    slug: slug(title, formattedStart, event.id),
     ...locationNormalized,
   };
 };
