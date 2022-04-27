@@ -9,6 +9,7 @@ const customStyles = {
   }),
   input: (provided, state) => ({
     ...provided,
+    fontSize: "14px",
     borderColor: state.isSelected ? "#D1D5DB !important" : "#D1D5DB !important",
     borderColor: state.isFocused ? "#D1D5DB !important" : "#D1D5DB !important",
   }),
@@ -19,6 +20,14 @@ const customStyles = {
     boxShadow: state.isFocused ? "#D1D5DB !important" : "#D1D5DB !important",
   }),
   placeholder: (provided, state) => ({
+    ...provided,
+    fontSize: "14px",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: "14px",
+  }),
+  singleValue: (provided, state) => ({
     ...provided,
     fontSize: "14px",
   }),
