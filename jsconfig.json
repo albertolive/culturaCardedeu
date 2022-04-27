@@ -8,7 +8,8 @@
       "@content/*": ["content/*"],
       "@utils/*": ["utils/*"],
       "@lib/*": ["lib/*"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@public/*": ["public/*"]
     }
   }
 }

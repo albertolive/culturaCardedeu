@@ -1,18 +1,17 @@
 import { useState } from "react";
 import Image from "next/image";
-
-const DEFAULT_IMAGE = "/static/images/locations/cardedeu/1.jpeg";
+import defaultImage from "@public/static/images/locations/cardedeu/1.jpeg";
 
 export default function ImageComponent({
   title,
-  image = DEFAULT_IMAGE,
+  image = defaultImage,
   width = 200,
   height = 230,
   className,
 }) {
   const [src, setSrc] = useState(image);
 
-  const onError = () => setSrc(DEFAULT_IMAGE);
+  const onError = () => setSrc(defaultImage);
 
   return (
     <div className={`flex-1 h-full next-image-wrapper ${className}`}>

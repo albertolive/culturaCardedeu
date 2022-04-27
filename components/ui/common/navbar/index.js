@@ -3,6 +3,7 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { PlusSmIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import ActiveLink from "@components/ui/common/link";
+import logo from "@public/static/images/logo-cultura-cardedeu.png";
 
 const navigation = [
   { name: "Agenda", href: "/", current: true },
@@ -32,7 +33,7 @@ export default function Example() {
                   <ActiveLink href="/">
                     <a className="flex">
                       <Image
-                        src="/static/images/logo-cultura-cardedeu.png"
+                        src={logo}
                         className="block h-8 cursor-pointer"
                         alt="Logo Cultura Cardedeu"
                         width={120}
