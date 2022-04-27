@@ -37,6 +37,6 @@ export async function getStaticProps() {
 
   return {
     props: { events: normalizedEvents },
-    // revalidate: 1,
+    revalidate: 60,
   };
 }
