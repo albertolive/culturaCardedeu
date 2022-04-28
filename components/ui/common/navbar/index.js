@@ -42,7 +42,10 @@ export default function Example() {
                     </a>
                   </ActiveLink>
                 </div>
-                <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
+              </div>
+
+              <div className="flex items-center">
+                <div className="hidden md:mr-6 md:flex md:items-center md:space-x-4">
                   {navigation.map((item) => (
                     <ActiveLink href={item.href} key={item.name}>
                       <a className="font-medium mr-8 text-white hover:text-stone-200">
@@ -51,9 +54,6 @@ export default function Example() {
                     </ActiveLink>
                   ))}
                 </div>
-              </div>
-
-              <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <ActiveLink href="/publica">
                     <button
