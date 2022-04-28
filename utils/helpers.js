@@ -14,13 +14,12 @@ export const slug = (str, formattedStart, id) =>
     .toLowerCase()
     .replace(/ /g, "-")}-${id}`;
 
-function convertTZ(date, tzString) {
-  return new Date(
+const convertTZ = (date, tzString) =>
+  new Date(
     (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
       timeZone: tzString,
     })
   );
-}
 
 export const getFormattedDate = (start, end) => {
   const startDate = new Date(start.date || start.dateTime || start);

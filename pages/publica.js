@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { slug, getFormattedDate } from "@utils/helpers";
@@ -6,15 +6,17 @@ import {
   DatePicker,
   Input,
   Select,
+  FrequencySelect,
   TextArea,
 } from "@components/ui/common/form";
 
 const defaultForm = {
   title: "",
   description: "",
-  startDate: null,
-  endDate: null,
-  location: null,
+  startDate: "",
+  endDate: "",
+  location: "",
+  frequency: "",
 };
 
 const _createFormState = (
@@ -68,7 +70,6 @@ const createFormState = (
 
 export default function Publica() {
   const router = useRouter();
-  const didMount = useRef(false);
   const [form, setForm] = useState(defaultForm);
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
@@ -88,10 +89,20 @@ export default function Publica() {
   const handleChangeLocation = ({ value }) =>
     handleFormChange("location", value);
 
-  const onSubmit = async () => {
-    setFormState(createFormState(form, formState.isPristine));
+  const handleChangeFrequencyLocation = ({ value }) =>
+    handleFormChange("frequency", value);
 
-    if (!formState.isDisabled) {
+  const onSubmit = async () => {
+    const newFormState = createFormState(
+      form,
+      formState.isPristine,
+      null,
+      true
+    );
+
+    setFormState(newFormState);
+
+    if (!newFormState.isDisabled) {
       setIsLoading(true);
 
       const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
@@ -110,15 +121,6 @@ export default function Publica() {
       router.push(`/${slugifiedTitle}`);
     }
   };
-
-  useEffect(() => {
-    if (!didMount.current) {
-      didMount.current = true;
-      return;
-    }
-
-    onSubmit();
-  }, [formState.isDisabled, onSubmit]);
 
   return (
     <>
@@ -155,6 +157,12 @@ export default function Publica() {
               />
 
               <DatePicker onChange={handleChangeDate} />
+
+              <FrequencySelect
+                id="frequency"
+                title="Repetició"
+                onChange={handleChangeFrequencyLocation}
+              />
             </div>
           </div>
         </div>
