@@ -7,12 +7,7 @@ export const getServerSideProps = async ({ res }) => {
   const baseUrl = server;
 
   const staticPages = fs
-    .readdirSync(
-      {
-        development: "pages",
-        production: "./",
-      }[process.env.NODE_ENV]
-    )
+    .readdirSync("pages")
     .filter((staticPage) => {
       return ![
         "api",
