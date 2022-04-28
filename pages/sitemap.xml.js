@@ -38,10 +38,10 @@ export const getServerSideProps = async ({ res }) => {
   const now = new Date();
   const from = now;
   const until = new Date(now.getFullYear(), now.getMonth() + 3);
-
+  console.log("FROM UNTIL", from, until);
   const { events } = await getCalendarEvents(from, until);
   const normalizedEvents = JSON.parse(JSON.stringify(events));
-  console.log(staticPages);
+  console.log("staticPages", staticPages);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       ${staticPages

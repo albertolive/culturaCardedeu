@@ -22,8 +22,10 @@ const convertTZ = (date, tzString) =>
   );
 
 export const getFormattedDate = (start, end) => {
-  const startDate = new Date(start.date || start.dateTime || start);
-  const endDate = new Date(end.date || end.dateTime || end);
+  const startDate = new Date(
+    (start && start.date) || (start && start.dateTime) || start
+  );
+  const endDate = new Date((end && end.date) || (end && end.dateTime) || end);
 
   const startDateConverted = convertTZ(startDate, "Europe/Madrid");
   const endDateConverted = convertTZ(endDate, "Europe/Madrid");
