@@ -9,6 +9,7 @@ module.exports = {
     "_error.js",
     "sitemap.xml.js",
     "server-sitemap.xml",
+    "server-sitemap.xml.js",
     ".next",
     "___next_launcher.js",
     "___vc",
