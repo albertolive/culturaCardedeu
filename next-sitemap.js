@@ -8,6 +8,7 @@ module.exports = {
     "404.js",
     "_error.js",
     "sitemap.xml.js",
+    "server-sitemap.xml",
     ".next",
     "___next_launcher.js",
     "___vc",
