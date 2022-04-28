@@ -164,7 +164,14 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { getCalendarEvent } = require("@lib/helpers");
   const eventId = params.eventId;
+
   const { event } = await getCalendarEvent(eventId);
+
+  if (!event.id) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: { event },
