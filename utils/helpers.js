@@ -14,20 +14,32 @@ export const slug = (str, formattedStart, id) =>
     .toLowerCase()
     .replace(/ /g, "-")}-${id}`;
 
+function convertTZ(date, tzString) {
+  return new Date(
+    (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
+      timeZone: tzString,
+    })
+  );
+}
+
 export const getFormattedDate = (start, end) => {
   const startDate = new Date(start.date || start.dateTime || start);
   const endDate = new Date(end.date || end.dateTime || end);
-  const numberDay = new Date(startDate).getDay();
-  const numberMonth = new Date(startDate).getMonth();
+
+  const startDateConverted = convertTZ(startDate, "Europe/Madrid");
+  const endDateConverted = convertTZ(endDate, "Europe/Madrid");
+
+  const numberDay = new Date(startDateConverted).getDay();
+  const numberMonth = new Date(startDateConverted).getMonth();
   const nameDay = DAYS[numberDay];
   const nameMonth = MONTHS[numberMonth];
 
-  const formattedStart = `${startDate.getDate()} de ${nameMonth} del ${startDate.getFullYear()}`;
-  const startTime = `${startDate.getHours()}:${String(
-    startDate.getMinutes()
+  const formattedStart = `${startDateConverted.getDate()} de ${nameMonth} del ${startDateConverted.getFullYear()}`;
+  const startTime = `${startDateConverted.getHours()}:${String(
+    startDateConverted.getMinutes()
   ).padStart(2, "0")}`;
-  const endTime = `${endDate.getHours()}:${String(
-    endDate.getMinutes()
+  const endTime = `${endDateConverted.getHours()}:${String(
+    endDateConverted.getMinutes()
   ).padStart(2, "0")}`;
 
   return { formattedStart, startTime, endTime, nameDay };
