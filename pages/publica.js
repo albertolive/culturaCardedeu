@@ -37,12 +37,16 @@ const createFormState = (
     return _createFormState(true, true, "");
   }
 
-  if (!title) {
-    return _createFormState(true, true, "Títol obligatori");
+  if (!title || title.length < 10) {
+    return _createFormState(true, true, "Títol obligatori, mínim 10 caràcters");
   }
 
-  if (!description) {
-    return _createFormState(true, true, "Descripció obligatòria");
+  if (!description.replace(/(<([^>]+)>)/gi, "") || description.length < 15) {
+    return _createFormState(
+      true,
+      true,
+      "Descripció obligatòria, mínim 15 caràcters"
+    );
   }
 
   if (!location) {
@@ -148,18 +152,28 @@ export default function Publica() {
                 onChange={handleChange}
               />
 
-              <TextArea id="description" onChange={handleChange} />
+              <TextArea
+                id="description"
+                value={form.description}
+                onChange={handleChange}
+              />
 
               <Select
                 id="location"
+                value={form.location}
                 title="Localització *"
                 onChange={handleChangeLocation}
               />
 
-              <DatePicker onChange={handleChangeDate} />
+              <DatePicker
+                startDate={form.start}
+                endDate={form.end}
+                onChange={handleChangeDate}
+              />
 
               <FrequencySelect
                 id="frequency"
+                value={form.frequency}
                 title="Repetició"
                 onChange={handleChangeFrequencyLocation}
               />

@@ -3,8 +3,8 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
-export default function TextArea({ id, onChange }) {
-  const [value, setValue] = useState("");
+export default function TextArea({ id, value: initialValue = "", onChange }) {
+  const [value, setValue] = useState(initialValue);
 
   const onChangeContent = (value) => {
     setValue(value);

@@ -3,7 +3,7 @@ import CreatableSelect from "react-select/creatable";
 import { useState } from "react";
 
 const customStyles = {
-  container: (provided, state) => ({
+  container: (provided) => ({
     ...provided,
     borderColor: "#D1D5DB !important",
   }),
@@ -19,22 +19,30 @@ const customStyles = {
     borderColor: state.isFocused ? "#D1D5DB !important" : "#D1D5DB !important",
     boxShadow: state.isFocused ? "#D1D5DB !important" : "#D1D5DB !important",
   }),
-  placeholder: (provided, state) => ({
+  placeholder: (provided) => ({
     ...provided,
     fontSize: "14px",
   }),
-  option: (provided, state) => ({
+  option: (provided) => ({
     ...provided,
     fontSize: "14px",
   }),
-  singleValue: (provided, state) => ({
+  singleValue: (provided) => ({
     ...provided,
     fontSize: "14px",
   }),
 };
 
-export default function SelectComponent({ id, title, onChange }) {
-  const [selectedOption, setSelectedOption] = useState(null);
+export default function SelectComponent({
+  id,
+  title,
+  value: initialValue = null,
+  onChange,
+}) {
+  const [selectedOption, setSelectedOption] = useState({
+    value: initialValue,
+    label: initialValue,
+  });
 
   const handleChange = (value) => {
     setSelectedOption(value);

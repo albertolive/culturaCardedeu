@@ -39,8 +39,8 @@ const options = [
   { value: "ANUALY", label: "Cada any" },
 ];
 
-export default function FrequencySelect({ id, title, onChange }) {
-  const [selectedOption, setSelectedOption] = useState(null);
+export default function FrequencySelect({ id, value, title, onChange }) {
+  const [selectedOption, setSelectedOption] = useState(value);
 
   const handleChange = (value) => {
     if (!value) {

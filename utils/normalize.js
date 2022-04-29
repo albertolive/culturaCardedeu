@@ -1,10 +1,4 @@
-import {
-  DAYS,
-  MONTHS,
-  TAGS,
-  LOCATIONS,
-  VITAMINED_LOCATIONS,
-} from "./constants";
+import { TAGS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
 import { slug, getFormattedDate } from "./helpers";
 
 const createDOMPurify = require("dompurify");
@@ -38,6 +32,8 @@ export const normalizeEvents = (event) => {
 };
 
 export const normalizeEvent = (event) => {
+  if (!event) return null;
+
   const { formattedStart, startTime, endTime, nameDay } = getFormattedDate(
     event.start,
     event.end
@@ -74,5 +70,7 @@ export const normalizeEvent = (event) => {
     tag,
     slug: slug(title, formattedStart, event.id),
     ...locationNormalized,
+    startDate: event.start && event.start.dateTime,
+    endDate: event.end && event.end.dateTime,
   };
 };
