@@ -8,11 +8,20 @@ import setMinutes from "date-fns/setMinutes";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function DatePickerComponent({ onChange }) {
-  const [startDate, setStartDate] = useState(
-    setHours(setMinutes(new Date(), 0), 9)
-  );
-  const [endDate, setEndDate] = useState(setMinutes(new Date(startDate), 60));
+export default function DatePickerComponent({
+  startDate: initialStartDate,
+  endDate: initialEndDate,
+  onChange,
+}) {
+  const startingDate = initialStartDate
+    ? new Date(initialStartDate)
+    : setHours(setMinutes(new Date(), 0), 9);
+  const endingDate = initialEndDate
+    ? new Date(initialEndDate)
+    : setMinutes(new Date(startingDate), 60);
+
+  const [startDate, setStartDate] = useState(startingDate);
+  const [endDate, setEndDate] = useState(endingDate);
 
   useEffect(() => {
     if (startDate > endDate) setEndDate(setMinutes(startDate, 60));

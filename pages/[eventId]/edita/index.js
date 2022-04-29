@@ -53,15 +53,20 @@ const createFormState = (
     return _createFormState(true, true, "Lloc obligatori");
   }
 
-  if (!startDate) {
+  const normalizedStartDate =
+    typeof startDate === "string" ? new Date(startDate) : startDate;
+  const normalizedEndDate =
+    typeof endDate === "string" ? new Date(endDate) : endDate;
+
+  if (!normalizedStartDate) {
     return _createFormState(true, true, "Data inici obligatòria");
   }
 
-  if (!endDate) {
+  if (!normalizedEndDate) {
     return _createFormState(true, true, "Data final obligatòria");
   }
 
-  if (endDate.getTime() <= startDate.getTime()) {
+  if (normalizedEndDate.getTime() <= normalizedStartDate.getTime()) {
     return _createFormState(
       true,
       true,
@@ -72,9 +77,9 @@ const createFormState = (
   return _createFormState(false);
 };
 
-export default function Publica() {
+export default function Edita({ event }) {
   const router = useRouter();
-  const [form, setForm] = useState(defaultForm);
+  const [form, setForm] = useState(event);
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
 
@@ -109,8 +114,8 @@ export default function Publica() {
     if (!newFormState.isDisabled) {
       setIsLoading(true);
 
-      const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
-        method: "POST",
+      const rawResponse = await fetch(process.env.NEXT_PUBLIC_EDIT_EVENT, {
+        method: "PUT",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -129,18 +134,15 @@ export default function Publica() {
   return (
     <>
       <Head>
-        <title>Publica - Cultura Cardedeu</title>
-        <meta
-          name="description"
-          content="Publica un acte cultural - Cultura Cardedeu"
-        />
+        <title>Edita - Cultura Cardedeu</title>
+        <meta name="description" content="Edita - Cultura Cardedeu" />
       </Head>
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         <div className="space-y-8 divide-y divide-gray-200">
           <div className="pt-8">
             <div>
               <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Publica un acte cultural
+                Editar - {form.title}
               </h3>
               <p className="mt-1 text-sm text-gray-500">* camps obligatoris</p>
             </div>
@@ -166,15 +168,15 @@ export default function Publica() {
               />
 
               <DatePicker
-                startDate={form.start}
-                endDate={form.end}
+                startDate={form.startDate}
+                endDate={form.endDate}
                 onChange={handleChangeDate}
               />
 
               <FrequencySelect
                 id="frequency"
                 value={form.frequency}
-                title="Repetició"
+                title="Recurrència"
                 onChange={handleChangeFrequencyLocation}
               />
             </div>
@@ -210,10 +212,10 @@ export default function Publica() {
                       fill="#1C64F2"
                     />
                   </svg>
-                  Publicant ...
+                  Editant ...
                 </>
               ) : (
-                "Publica"
+                "Editar"
               )}
             </button>
           </div>
@@ -221,4 +223,21 @@ export default function Publica() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ params }) {
+  const { getCalendarEvent } = require("@lib/helpers");
+  const eventId = params.eventId;
+
+  const { event } = await getCalendarEvent(eventId);
+
+  if (!event.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: { event },
+  };
 }
