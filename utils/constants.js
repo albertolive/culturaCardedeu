@@ -54,6 +54,7 @@ export const LOCATIONS_ARRAY = [
   { value: "La Terrassa de Viulamúsica", label: "La Terrassa de Viulamúsica" },
   { value: "Museu Arxiu Tomàs Balvey", label: "Museu Arxiu Tomàs Balvey" },
   { value: "Parc Pompeu Fabra", label: "Parc Pompeu Fabra" },
+  { value: "Parc dels Pinetons", label: "Parc dels Pinetons" },
   { value: "Plaça de l'Església", label: "Plaça de l'Església" },
   { value: "Plaça Sant Corneli", label: "Plaça Sant Corneli" },
   { value: "Plaça Sant Joan", label: "Plaça Sant Joan" },
@@ -95,6 +96,7 @@ export const LOCATIONS = {
   terrassaViuLaMusica: ["terrassa"],
   museuArxiuTomasBalvey: ["museu"],
   parcPompeuFabra: ["pompeu"],
+  parcDelsPinetons: ["pinetons"],
   placaContes: ["hospital", "oller", "contes"],
   placaEsglesia: ["l'església"],
   placaSantCorneli: ["corneli"],
@@ -290,6 +292,12 @@ export const VITAMINED_LOCATIONS = {
     images: ["/static/images/locations/parcPompeuFabra/1.jpeg"],
     lat: 41.64187052797948,
     lng: 2.3530121512517255,
+    social: [],
+  },
+  parcDelsPinetons: {
+    images: ["/static/images/locations/parcDelsPinetons/1.jpeg"],
+    lat: 41.6418889903151,
+    lng: 2.3542687426674447,
     social: [],
   },
   placaContes: {
