@@ -29,12 +29,11 @@ function isHTML(text) {
 }
 
 export default function Event(props) {
+  const router = useRouter();
+  const { newEvent } = router.query;
   const { data, error } = useGetEvent(props);
 
   if (error) return <div>failed to load</div>;
-
-  const router = useRouter();
-  const { newEvent } = router.query;
 
   const {
     id,

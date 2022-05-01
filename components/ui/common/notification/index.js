@@ -13,8 +13,8 @@ export default function Notification({ url, title }) {
         </div>
         <div className="ml-3">
           <h3 className="text-sm font-medium text-green-800">
-            Fantàstic!! L'esdeveniment {title} s&apos;ha creat correctament i ja
-            el pot veure tothom!
+            Fantàstic!! L&apos;esdeveniment {title} s&apos;ha creat correctament
+            i ja el pot veure tothom!
           </h3>
           <div className="mt-2 text-sm text-green-700">
             <p>
