@@ -1,4 +1,4 @@
-import { DAYS, MONTHS } from "./constants";
+import { DAYS, MONTHS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
 
 export const slug = (str, formattedStart, id) =>
   `${str
@@ -14,7 +14,7 @@ export const slug = (str, formattedStart, id) =>
     .toLowerCase()
     .replace(/ /g, "-")}-${id}`;
 
-const convertTZ = (date, tzString) =>
+export const convertTZ = (date, tzString) =>
   new Date(
     (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
       timeZone: tzString,
@@ -44,4 +44,20 @@ export const getFormattedDate = (start, end) => {
   ).padStart(2, "0")}`;
 
   return { formattedStart, startTime, endTime, nameDay };
+};
+
+export const getVitaminedLocation = (location) => {
+  let locationNormalized = VITAMINED_LOCATIONS["cardedeu"];
+
+  Object.keys(LOCATIONS).find((k) => {
+    if (
+      location
+        .toLowerCase()
+        .split(" ")
+        .some((word) => LOCATIONS[k].includes(word))
+    )
+      locationNormalized = VITAMINED_LOCATIONS[k];
+  });
+
+  return locationNormalized;
 };
