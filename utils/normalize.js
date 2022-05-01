@@ -72,5 +72,6 @@ export const normalizeEvent = (event) => {
     ...locationNormalized,
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
+    imageUploaded: event.guestsCanModify || false,
   };
 };
