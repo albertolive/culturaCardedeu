@@ -1,5 +1,6 @@
 import Head from "next/head";
-import { Image } from "@components/ui/common";
+import { useRouter } from "next/router";
+import { Image, Notification } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 
 function replaceURLs(text) {
@@ -32,8 +33,12 @@ export default function Event(props) {
 
   if (error) return <div>failed to load</div>;
 
+  const router = useRouter();
+  const { newEvent } = router.query;
+
   const {
     id,
+    slug,
     title,
     description,
     location,
@@ -61,7 +66,7 @@ export default function Event(props) {
           content={`${title} - ${nameDay}, ${formattedStart} - ${location}`}
         />
       </Head>
-
+      {newEvent && <Notification title={title} url={slug} />}
       <div className="bg-white">
         <div className="max-w-2xl mx-auto px-4 md:px-0 lg:max-w-7xl">
           <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
