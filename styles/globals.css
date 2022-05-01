@@ -62,3 +62,7 @@ body {
 .select-container input:focus {
   box-shadow: inset 0px 0px 0px 0px white;
 }
+
+.break-word {
+  word-break: break-word;
+}

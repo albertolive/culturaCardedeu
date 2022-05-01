@@ -100,6 +100,11 @@ export default function Publica() {
   const handleChangeFrequencyLocation = ({ value }) =>
     handleFormChange("frequency", value);
 
+  const goToEventPage = (url) => ({
+    pathname: `/${url}`,
+    query: { newEvent: true },
+  });
+
   const onSubmit = async () => {
     const newFormState = createFormState(
       form,
@@ -128,7 +133,7 @@ export default function Publica() {
 
       imageToUpload
         ? uploadFile(id, slugifiedTitle)
-        : router.push(`/${slugifiedTitle}`);
+        : router.push(goToEventPage(slugifiedTitle));
     }
   };
 
@@ -139,14 +144,13 @@ export default function Publica() {
     xhr.open("POST", url, true);
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
-    // Update progress (can be used to show progress indicator)
     xhr.upload.addEventListener("progress", (e) => {
       setProgress(Math.round((e.loaded * 100.0) / e.total));
     });
 
     xhr.onreadystatechange = (e) => {
       if (xhr.readyState == 4 && xhr.status == 200) {
-        router.push(`/${slugifiedTitle}`);
+        router.push(goToEventPage(slugifiedTitle));
       }
     };
 
