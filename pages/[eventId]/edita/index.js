@@ -8,16 +8,8 @@ import {
   Select,
   FrequencySelect,
   TextArea,
+  ImageUpload,
 } from "@components/ui/common/form";
-
-const defaultForm = {
-  title: "",
-  description: "",
-  startDate: "",
-  endDate: "",
-  location: "",
-  frequency: "",
-};
 
 const _createFormState = (
   isDisabled = true,
@@ -82,6 +74,8 @@ export default function Edita({ event }) {
   const [form, setForm] = useState(event);
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
+  const [imageToUpload, setImageToUpload] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
@@ -120,16 +114,50 @@ export default function Edita({ event }) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, imageUploaded: !!imageToUpload }),
       });
       const { id } = await rawResponse.json();
 
       const { formattedStart } = getFormattedDate(form.startDate, form.endDate);
       const slugifiedTitle = slug(form.title, formattedStart, id);
 
-      router.push(`/${slugifiedTitle}`);
+      imageToUpload
+        ? uploadFile(id, slugifiedTitle)
+        : router.push(`/${slugifiedTitle}`);
     }
   };
+
+  const uploadFile = (id, slugifiedTitle) => {
+    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
+    const xhr = new XMLHttpRequest();
+    const fd = new FormData();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+    // Update progress (can be used to show progress indicator)
+    xhr.upload.addEventListener("progress", (e) => {
+      setProgress(Math.round((e.loaded * 100.0) / e.total));
+    });
+
+    xhr.onreadystatechange = (e) => {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        router.push(`/${slugifiedTitle}`);
+      }
+    };
+
+    fd.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET
+    );
+    fd.append("tags", "browser_upload");
+    fd.append("file", imageToUpload);
+    fd.append("public_id", id);
+    xhr.send(fd);
+  };
+
+  const defaultImage = event.imageUploaded
+    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_250,w_250/v1/culturaCardedeu/${event.id}`
+    : "";
 
   return (
     <>
@@ -159,6 +187,12 @@ export default function Edita({ event }) {
                 value={form.description}
                 onChange={handleChange}
               />
+
+              {/* <ImageUpload
+                value={defaultImage}
+                onUpload={setImageToUpload}
+                progress={progress}
+              /> */}
 
               <Select
                 id="location"

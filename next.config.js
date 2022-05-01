@@ -1,6 +1,6 @@
 const nextConfig = {
   reactStrictMode: false,
-  images: { domains: [""] },
+  images: { domains: ["res.cloudinary.com"] },
   async headers() {
     return [
       {

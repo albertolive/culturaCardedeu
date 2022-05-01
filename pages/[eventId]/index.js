@@ -1,5 +1,4 @@
 import Head from "next/head";
-import ReactHtmlParser from "react-html-parser";
 import { Image } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 
@@ -34,6 +33,7 @@ export default function Event(props) {
   if (error) return <div>failed to load</div>;
 
   const {
+    id,
     title,
     description,
     location,
@@ -45,6 +45,7 @@ export default function Event(props) {
     images = [],
     lat,
     lng,
+    imageUploaded,
   } = data.event;
 
   const descriptionHTML = isHTML(description)
@@ -80,10 +81,35 @@ export default function Event(props) {
                     Descripció
                   </dt>
                   <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
-                    {ReactHtmlParser(descriptionHTML)}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: descriptionHTML }}
+                    />
                   </div>
                 </div>
               </dl>
+
+              {imageUploaded && (
+                <dl className="space-y-10">
+                  <div className="w-1/2">
+                    <div className="rounded-lg bg-gray-100 overflow-hidden">
+                      <a
+                        href={`https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`}
+                        className="pointer"
+                        target="_blank"
+                        rel="image_src"
+                      >
+                        <Image
+                          title={"location"}
+                          height={250}
+                          width={250}
+                          image={`https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_500,w_500/v1/culturaCardedeu/${id}`}
+                          className="w-full h-full object-center object-cover"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </dl>
+              )}
 
               <dl className="mt-6 space-y-10">
                 <div>
