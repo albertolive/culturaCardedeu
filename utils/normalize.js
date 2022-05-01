@@ -1,11 +1,5 @@
 import { TAGS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
-import { slug, getFormattedDate } from "./helpers";
-
-const createDOMPurify = require("dompurify");
-const { JSDOM } = require("jsdom");
-
-const window = new JSDOM("").window;
-const DOMPurify = createDOMPurify(window);
+import { slug, getFormattedDate, getVitaminedLocation } from "./helpers";
 
 export const normalizeEvents = (event) => {
   const { formattedStart, startTime, endTime, nameDay } = getFormattedDate(
@@ -16,11 +10,12 @@ export const normalizeEvents = (event) => {
   let title = event.summary || "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
 
-  if (tag) {
-    title = title.replace(`${tag}:`, "").trim();
-  }
+  if (tag) title = title.replace(`${tag}:`, "").trim();
+
+  const locationNormalized = getVitaminedLocation(location);
 
   return {
+    id: event.id,
     title,
     startTime,
     endTime,
@@ -28,6 +23,8 @@ export const normalizeEvents = (event) => {
     formattedStart,
     nameDay,
     tag,
+    slug: slug(title, formattedStart, event.id),
+    ...locationNormalized,
   };
 };
 
@@ -42,31 +39,19 @@ export const normalizeEvent = (event) => {
   let title = event.summary || "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
 
-  if (tag) {
-    title = title.replace(`${tag}:`, "").trim();
-  }
+  if (tag) title = title.replace(`${tag}:`, "").trim();
 
-  let locationNormalized = VITAMINED_LOCATIONS["cardedeu"];
-
-  Object.keys(LOCATIONS).find((k) => {
-    if (
-      location
-        .toLowerCase()
-        .split(" ")
-        .some((word) => LOCATIONS[k].includes(word))
-    )
-      locationNormalized = VITAMINED_LOCATIONS[k];
-  });
+  const locationNormalized = getVitaminedLocation(location);
 
   return {
-    title,
-    description: DOMPurify.sanitize(event.description) || "",
     id: event.id,
+    title,
+    startTime,
+    endTime,
     location,
     formattedStart,
     nameDay,
-    startTime,
-    endTime,
+    description: event.description || "",
     tag,
     slug: slug(title, formattedStart, event.id),
     ...locationNormalized,

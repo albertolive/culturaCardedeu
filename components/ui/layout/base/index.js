@@ -8,6 +8,12 @@ export default function BaseLayout({ children }) {
         <title>Cultura Cardedeu</title>
         <meta name="description" content="Cultura Cardedeu" />
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="alternative"
+          title="RSS Feed Cultura Cardedeu"
+          type="application/rss+xml"
+          href="/rss.xml"
+        />
       </Head>
       <Navbar />
       <div className="mx-auto">
