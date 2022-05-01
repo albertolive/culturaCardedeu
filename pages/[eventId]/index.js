@@ -96,7 +96,7 @@ export default function Event(props) {
                         href={`https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`}
                         className="pointer"
                         target="_blank"
-                        rel="image_src"
+                        rel="image_src noreferrer"
                       >
                         <Image
                           title={"location"}
