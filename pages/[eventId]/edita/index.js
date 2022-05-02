@@ -188,11 +188,11 @@ export default function Edita({ event }) {
                 onChange={handleChange}
               />
 
-              <ImageUpload
+              {/* <ImageUpload
                 value={defaultImage}
                 onUpload={setImageToUpload}
                 progress={progress}
-              />
+              /> */}
 
               <Select
                 id="location"
