@@ -64,6 +64,10 @@ export default function Event(props) {
           name="description"
           content={`Cultura Cardedeu - ${title} - ${nameDay}, ${formattedStart} - ${location}`}
         />
+        <link
+          rel="canonical"
+          href={`htpps://www.culturacardedeu.com/${slug}`}
+        />
       </Head>
       {newEvent && <Notification title={title} url={slug} />}
       <div className="bg-white">
