@@ -21,7 +21,7 @@ export default function App(props) {
         />
       </Head>
       <div className="reset-this">
-        <h1 className="mb-2">Agenda Cultura 2022</h1>
+        <h1 className="mb-2">Agenda Cardedeu 2022</h1>
       </div>
       <List events={events}>
         {(event) => <Card key={event.id} event={event} />}
