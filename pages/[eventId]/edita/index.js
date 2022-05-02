@@ -175,7 +175,7 @@ export default function Edita({ event }) {
               <p className="mt-1 text-sm text-gray-500">* camps obligatoris</p>
             </div>
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <Input
+              {/* <Input
                 id="title"
                 title="Títol *"
                 value={form.title}
@@ -188,11 +188,11 @@ export default function Edita({ event }) {
                 onChange={handleChange}
               />
 
-              {/* <ImageUpload
+              <ImageUpload
                 value={defaultImage}
                 onUpload={setImageToUpload}
                 progress={progress}
-              /> */}
+              />
 
               <Select
                 id="location"
@@ -212,7 +212,7 @@ export default function Edita({ event }) {
                 value={form.frequency}
                 title="Recurrència"
                 onChange={handleChangeFrequencyLocation}
-              />
+              /> */}
             </div>
           </div>
         </div>
