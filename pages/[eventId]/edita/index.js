@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { slug, getFormattedDate } from "@utils/helpers";
@@ -20,6 +20,16 @@ const _createFormState = (
   isPristine,
   message,
 });
+
+const defaultForm = {
+  title: "",
+  description: "",
+  startDate: "",
+  endDate: "",
+  location: "",
+  frequency: "",
+  imageUploaded: false,
+};
 
 const createFormState = (
   { title, description, startDate, endDate, location },
@@ -71,11 +81,15 @@ const createFormState = (
 
 export default function Edita({ event }) {
   const router = useRouter();
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState(defaultForm);
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    setForm(event);
+  }, []);
 
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
