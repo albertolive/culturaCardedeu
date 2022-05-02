@@ -71,7 +71,7 @@ const createFormState = (
 
 export default function Edita({ event }) {
   const router = useRouter();
-  const [form, setForm] = useState(event);
+  const [form, setForm] = useState({});
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
@@ -182,7 +182,7 @@ export default function Edita({ event }) {
                 onChange={handleChange}
               />
 
-              {/* <TextArea
+              <TextArea
                 id="description"
                 value={form.description}
                 onChange={handleChange}
@@ -212,7 +212,7 @@ export default function Edita({ event }) {
                 value={form.frequency}
                 title="Recurrència"
                 onChange={handleChangeFrequencyLocation}
-              /> */}
+              />
             </div>
           </div>
         </div>
