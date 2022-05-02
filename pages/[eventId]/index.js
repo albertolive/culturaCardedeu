@@ -62,7 +62,7 @@ export default function Event(props) {
         <title>{`${title} - Cultura Cardedeu`}</title>
         <meta
           name="description"
-          content={`${title} - ${nameDay}, ${formattedStart} - ${location}`}
+          content={`Cultura Cardedeu - ${title} - ${nameDay}, ${formattedStart} - ${location}`}
         />
       </Head>
       {newEvent && <Notification title={title} url={slug} />}
@@ -74,9 +74,9 @@ export default function Event(props) {
                 <h2 className="font-bold text-[#ECB84A]">
                   {nameDay}, {formattedStart}
                 </h2>
-                <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                   {title}
-                </p>
+                </h1>
               </div>
 
               <dl className="mt-6 space-y-10">
