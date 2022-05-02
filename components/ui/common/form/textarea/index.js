@@ -3,13 +3,8 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
-export default function TextArea({ id, value: initialValue = "", onChange }) {
-  const [value, setValue] = useState(initialValue);
-
-  const onChangeContent = (value) => {
-    setValue(value);
-    onChange({ target: { name: id, value } });
-  };
+export default function TextArea({ id, value = "", onChange }) {
+  const onChangeContent = (value) => onChange({ target: { name: id, value } });
 
   return (
     <div className="sm:col-span-6">
@@ -23,7 +18,7 @@ export default function TextArea({ id, value: initialValue = "", onChange }) {
         <ReactQuill
           id={id}
           theme="snow"
-          value={value}
+          defaultValue={value}
           onChange={onChangeContent}
           className="shadow-sm block w-full sm:text-sm border-gray-300 rounded-md"
         />
