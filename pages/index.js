@@ -15,9 +15,14 @@ export default function App(props) {
     <>
       <Head>
         <title>Agenda 2022 - Cultura Cardedeu</title>
-        <meta name="description" content="Agenda 2022 - Cultura Cardedeu" />
+        <meta
+          name="description"
+          content="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
+        />
       </Head>
-
+      <div className="reset-this">
+        <h1 className="mb-2">Agenda Cultura 2022</h1>
+      </div>
       <List events={events}>
         {(event) => <Card key={event.id} event={event} />}
       </List>
