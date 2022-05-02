@@ -175,14 +175,14 @@ export default function Edita({ event }) {
               <p className="mt-1 text-sm text-gray-500">* camps obligatoris</p>
             </div>
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              {/* <Input
+              <Input
                 id="title"
                 title="Títol *"
                 value={form.title}
                 onChange={handleChange}
               />
 
-              <TextArea
+              {/* <TextArea
                 id="description"
                 value={form.description}
                 onChange={handleChange}
