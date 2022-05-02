@@ -5,7 +5,10 @@ export default function QuiSom() {
     <>
       <Head>
         <title>Qui som - Cultura Cardedeu</title>
-        <meta name="description" content="Qui som - Cultura Cardedeu" />
+        <meta
+          name="description"
+          content="Qui som? - Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
+        />
       </Head>
       <div className="relative py-16 bg-white overflow-hidden">
         <div className="hidden lg:block lg:absolute lg:inset-y-0 lg:h-full lg:w-full">
