@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { slug, getFormattedDate } from "@utils/helpers";
 import {
   DatePicker,
@@ -8,7 +9,6 @@ import {
   Select,
   FrequencySelect,
   TextArea,
-  ImageUpload,
 } from "@components/ui/common/form";
 
 const _createFormState = (
@@ -202,11 +202,16 @@ export default function Edita({ event }) {
                 onChange={handleChange}
               />
 
-              <ImageUpload
-                value={defaultImage}
-                onUpload={setImageToUpload}
-                progress={progress}
-              />
+              {defaultImage && (
+                <div className="next-image-wrapper">
+                  <Image
+                    height="100"
+                    width="150"
+                    className="object-contain rounded-lg"
+                    src={defaultImage}
+                  />
+                </div>
+              )}
 
               <Select
                 id="location"
