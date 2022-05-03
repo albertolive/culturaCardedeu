@@ -19,6 +19,7 @@ export default function App(props) {
           name="description"
           content="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
         />
+        <link rel="canonical" href="https://www.culturacardedeu.com/" />
       </Head>
       <div className="reset-this">
         <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
