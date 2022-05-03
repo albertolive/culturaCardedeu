@@ -21,7 +21,9 @@ export default function App(props) {
         />
       </Head>
       <div className="reset-this">
-        <h1 className="mb-2">Agenda Cardedeu 2022</h1>
+        <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Agenda Cardedeu 2022
+        </h1>
       </div>
       <List events={events}>
         {(event) => <Card key={event.id} event={event} />}
