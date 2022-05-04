@@ -9,6 +9,7 @@ import {
   Select,
   FrequencySelect,
   TextArea,
+  ImageUpload,
 } from "@components/ui/common/form";
 
 const _createFormState = (
@@ -202,33 +203,46 @@ export default function Edita({ event }) {
                 onChange={handleChange}
               />
 
-              {defaultImage && (
-                <div className="next-image-wrapper">
-                  <Image
-                    height="100"
-                    width="150"
-                    className="object-contain rounded-lg"
-                    src={defaultImage}
-                  />
+              {defaultImage ? (
+                <div className="sm:col-span-6">
+                  <div className="next-image-wrapper">
+                    <Image
+                      height="100"
+                      width="150"
+                      className="object-contain rounded-lg"
+                      src={defaultImage}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-gray-500">
+                    * Si voleu canviar la imatge, poseu-vos en contacte amb
+                    nosaltres. Estem treballant perquè es pugui fer des del
+                    formulari.
+                  </p>
                 </div>
+              ) : (
+                <ImageUpload
+                  value={imageToUpload}
+                  onUpload={setImageToUpload}
+                  progress={progress}
+                />
               )}
 
               <Select
                 id="location"
-                value={form.location}
+                value={form.location || event.location}
                 title="Localització *"
                 onChange={handleChangeLocation}
               />
 
               <DatePicker
-                startDate={form.startDate}
-                endDate={form.endDate}
+                startDate={form.startDate || event.startDate}
+                endDate={form.endDate || event.endDate}
                 onChange={handleChangeDate}
               />
 
               <FrequencySelect
                 id="frequency"
-                value={form.frequency}
+                value={form.frequency || event.frequency}
                 title="Recurrència"
                 onChange={handleChangeFrequencyLocation}
               />
