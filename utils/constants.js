@@ -23,7 +23,14 @@ export const MONTHS = [
   "Desembre",
 ];
 
-export const TAGS = ["Familiar", "Tertúlia Literària"];
+export const TAGS = [
+  "Familiar",
+  "Tertúlia Literària",
+  "Vermut",
+  "Cinema",
+  "Concert",
+  "Teatre",
+];
 
 export const LOCATIONS_ARRAY = [
   { value: "Ajuntament de Cardedeu", label: "Ajuntament de Cardedeu" },
@@ -33,6 +40,7 @@ export const LOCATIONS_ARRAY = [
     value: "Capella de Sant Corneli i Sant Cebrià",
     label: "Capella de Sant Corneli i Sant Cebrià",
   },
+  { value: "Ca Espavil", label: "Ca l'Espavil" },
   { value: "Casa Corbella", label: "Casa Corbella" },
   { value: "Casa Viader", label: "Casa Viader" },
   {
@@ -80,6 +88,7 @@ export const LOCATIONS = {
   cambridgeSchool: ["cambridge"],
   capellaSantCorneli: ["corneli"],
   casaCorbella: ["corbella"],
+  caEspavil: ["l'espavil"],
   casaViader: ["viader"],
   casalAjuntamentCardedeu: ["gent gran"],
   canBorras: ["eureka"],
@@ -172,6 +181,12 @@ export const VITAMINED_LOCATIONS = {
     images: ["/static/images/locations/casaCorbella/1.jpeg"],
     lat: 41.64260842131494,
     lng: 2.3563093806627684,
+    social: [],
+  },
+  caEspavil: {
+    images: ["/static/images/locations/caEspavil/1.jpeg"],
+    lat: 41.637327097133934,
+    lng: 2.3577802372875993,
     social: [],
   },
   casaViader: {
