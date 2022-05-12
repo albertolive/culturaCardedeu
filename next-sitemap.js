@@ -1,4 +1,5 @@
 const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
+
 module.exports = {
   siteUrl,
   exclude: [
@@ -10,6 +11,10 @@ module.exports = {
     "sitemap.xml.js",
     "server-sitemap.xml",
     "server-sitemap.xml.js",
+    "/server-sitemap.xml",
+    "/server-sitemap.xml.js",
+    "rss.xml",
+    "/rss.xml",
     ".next",
     "___next_launcher.js",
     "___vc",
