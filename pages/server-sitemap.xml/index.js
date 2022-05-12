@@ -13,7 +13,7 @@ export const getServerSideProps = async (ctx) => {
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   const fields = normalizedEvents?.map((data) => ({
-    loc: `${siteUrl}${data.slug}`,
+    loc: `${siteUrl}/${data.slug}`,
     lastmod: new Date().toISOString(),
     changefreq: "weekly",
     "image:image": `
