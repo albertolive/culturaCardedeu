@@ -100,6 +100,7 @@ export default function Event(props) {
   return (
     <>
       <Script
+        id={id}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
