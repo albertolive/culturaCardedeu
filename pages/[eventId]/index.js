@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Script from "next/script";
 import { useRouter } from "next/router";
 import { Image, Notification } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
@@ -50,14 +51,58 @@ export default function Event(props) {
     lat,
     lng,
     imageUploaded,
+    startDate,
+    endDate,
   } = data.event;
 
   const descriptionHTML = isHTML(description)
     ? description
     : replaceURLs(description);
 
+  const uploadedImage =
+    imageUploaded &&
+    `https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`;
+
+  const jsonData = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: title,
+    startDate,
+    endDate,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "Place",
+      name: location,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: location,
+        lat,
+        lng,
+        addressLocality: "Cardedeu",
+        postalCode: "08440",
+        addressCountry: "ES",
+      },
+    },
+    image: [uploadedImage, ...images],
+    description,
+    performer: {
+      "@type": "PerformingGroup",
+      name: location,
+    },
+    organizer: {
+      "@type": "Organization",
+      name: location,
+      url: "https://www.culturacardedeu.com",
+    },
+  };
+
   return (
     <>
+      <Script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
+      />
       <Head>
         <title>{`${title} - Cultura Cardedeu`}</title>
         <meta
