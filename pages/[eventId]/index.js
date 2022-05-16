@@ -118,6 +118,9 @@ export default function Event(props) {
       "@type": "Offer",
       price: 0,
       isAccessibleForFree: true,
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+      url: `https://www.culturacardedeu.com/${slug}`,
     },
   };
 
