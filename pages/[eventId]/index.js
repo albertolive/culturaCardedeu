@@ -41,7 +41,7 @@ export default function Event(props) {
       const frame = document.createElement("iframe");
       frame.src = map.getAttribute("data-src");
       map.appendChild(frame);
-    }, 1000);
+    }, 1500);
   }, []);
 
   useEffect(() => {
