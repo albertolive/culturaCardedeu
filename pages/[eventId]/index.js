@@ -114,6 +114,11 @@ export default function Event(props) {
       name: location,
       url: "https://www.culturacardedeu.com",
     },
+    offers: {
+      "@type": "Offer",
+      price: 0,
+      isAccessibleForFree: true,
+    },
   };
 
   return (
