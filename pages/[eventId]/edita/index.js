@@ -90,7 +90,7 @@ export default function Edita({ event }) {
 
   useEffect(() => {
     setForm(event);
-  }, []);
+  }, [event]);
 
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
@@ -207,6 +207,8 @@ export default function Edita({ event }) {
                 <div className="sm:col-span-6">
                   <div className="next-image-wrapper">
                     <Image
+                      alt={form.title}
+                      title={form.title}
                       height="100"
                       width="150"
                       className="object-contain rounded-lg"

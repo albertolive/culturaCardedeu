@@ -66,3 +66,13 @@ body {
 .break-word {
   word-break: break-word;
 }
+
+#mymap {
+  background: url(/static/images/gMaps.webp);
+  background-size: auto;
+  overflow: hidden;
+}
+
+#mymap iframe {
+  border: 0;
+}

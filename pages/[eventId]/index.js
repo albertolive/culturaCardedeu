@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from "react";
 import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
@@ -33,6 +34,24 @@ export default function Event(props) {
   const router = useRouter();
   const { newEvent } = router.query;
   const { data, error } = useGetEvent(props);
+
+  const handleMapLoad = useCallback(() => {
+    setTimeout(() => {
+      const map = document.getElementById("mymap");
+      const frame = document.createElement("iframe");
+      frame.src = map.getAttribute("data-src");
+      map.appendChild(frame);
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    if (document.readyState === "complete") {
+      handleMapLoad();
+    } else {
+      window.addEventListener("load", handleMapLoad);
+      return () => document.removeEventListener("load", handleMapLoad);
+    }
+  }, [handleMapLoad]);
 
   if (error) return <div>failed to load</div>;
 
@@ -114,6 +133,13 @@ export default function Event(props) {
           rel="canonical"
           href={`https://www.culturacardedeu.com/${slug}`}
         />
+        <link
+          rel="preload"
+          href="/static/images/gMaps.webp"
+          as="image"
+          type="image/webp"
+          crossOrigin
+        ></link>
       </Head>
       {newEvent && <Notification title={title} url={slug} />}
       <div className="bg-white">
@@ -153,7 +179,8 @@ export default function Event(props) {
                         rel="image_src noreferrer"
                       >
                         <Image
-                          title={"location"}
+                          alt={location}
+                          title={location}
                           height={250}
                           width={250}
                           image={`https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_500,w_500/v1/culturaCardedeu/${id}`}
@@ -195,12 +222,11 @@ export default function Event(props) {
 
             <div>
               <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
-                <iframe
-                  style={{ border: 0 }}
-                  loading="lazy"
-                  allowFullScreen
-                  src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
-                ></iframe>
+                <div
+                  className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
+                  data-src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
+                  id="mymap"
+                ></div>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-4 sm:gap-6 sm:mt-6 lg:gap-8 lg:mt-8">
                 {images.length > 0 &&
@@ -210,6 +236,7 @@ export default function Event(props) {
                       className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
                     >
                       <Image
+                        alt={location}
                         title={location}
                         image={image}
                         className="w-full h-full object-center object-cover"
