@@ -32,6 +32,7 @@ export default function ImageUploader({ value, onUpload, progress }) {
       {imgData && (
         <div className="next-image-wrapper">
           <Image
+            alt="Imatge"
             height="100"
             width="150"
             className="object-contain rounded-lg"

@@ -14,7 +14,7 @@ export default function Card({ event }) {
       <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">
-            <Image title={event.title} image={image} />
+            <Image title={event.title} image={image} alt={event.title} />
           </div>
           <div className="p-4 flex-2">
             <div className="flex items-center">
