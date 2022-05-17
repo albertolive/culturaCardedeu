@@ -121,6 +121,7 @@ export default function Event(props) {
       priceCurrency: "EUR",
       availability: "https://schema.org/InStock",
       url: `https://www.culturacardedeu.com/${slug}`,
+      validFrom: startDate,
     },
   };
 
