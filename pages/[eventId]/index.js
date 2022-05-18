@@ -39,6 +39,8 @@ export default function Event(props) {
     setTimeout(() => {
       const map = document.getElementById("mymap");
       const frame = document.createElement("iframe");
+      if (!map) return;
+
       frame.src = map.getAttribute("data-src");
       map.appendChild(frame);
     }, 1500);
@@ -49,7 +51,7 @@ export default function Event(props) {
       handleMapLoad();
     } else {
       window.addEventListener("load", handleMapLoad);
-      return () => document.removeEventListener("load", handleMapLoad);
+      return () => window.removeEventListener("load", handleMapLoad);
     }
   }, [handleMapLoad]);
 
