@@ -8,7 +8,8 @@ export const slug = (str, formattedStart, id) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/"/g, "")
     .replace(/,/g, "")
-    .replace(/’/g, "")
+    .replace(/’/g, "'")
+    .replace(".", "")
     .replace(/\+/g, "")
     .replace(/\|/g, "")
     .replace(/:/g, "")}-${formattedStart
