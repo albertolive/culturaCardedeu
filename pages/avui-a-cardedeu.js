@@ -1,62 +1,53 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { SubMenu } from "@components/ui/common";
-import { monthsName } from "@utils/helpers";
 
 export default function App(props) {
+  const router = useRouter();
   const {
     data: { events = [] },
     error,
-  } = useGetEvents(props, "all");
+  } = useGetEvents(props, "today");
 
   if (error) return <div>failed to load</div>;
 
   return (
     <>
       <Head>
-        <title>Agenda 2022 - Cultura Cardedeu</title>
+        <title>Que fer avui a Cardedeu - Cultura Cardedeu</title>
         <meta
           name="description"
-          content="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu. L'agenda és col·laborativa."
+          content="Què fer avui a Cardedeu. Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
         />
         <link rel="canonical" href="https://www.culturacardedeu.com/" />
       </Head>
       <SubMenu />
       <div className="reset-this">
         <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Agenda Cardedeu 2022
+          Què fer avui a Cardedeu
         </h1>
       </div>
       <p className="mb-4 font-bold">
-        Les millors coses per fer a Cardedeu: mercats, exposicions,
-        descobriments, passejades, concerts, museus, teatre... Aquests són els
-        millors plans per gaudir de Cardedeu al{" "}
-        {monthsName[new Date().getMonth()]}!
+        Aprofita el teu temps i troba el que necessites: el millor del dia al
+        teu abast.
       </p>
       <p className="mb-4">
-        Us donem un ventall de possibilitats perquè no us quedi temps per
-        avorrir-vos. La cultura no descansa. Podeu veure què passa{" "}
-        <a className="font-medium text-black underline" href="/avui-a-cardedeu">
-          avui
-        </a>
-        ,{" "}
+        Les coses per fer a Cardedeu no descansen ni un dia.{" "}
         <a
           className="font-medium text-black underline"
           href="/setmana-a-cardedeu"
         >
-          aquesta setmana
-        </a>
-        , o ve,{" "}
-        <a
-          className="font-medium text-black underline"
-          href="/cap-de-setmana-a-cardedeu"
-        >
-          el cap de setmana
+          Cada setmana, descobrireu centenars d'activitats increïbles
         </a>{" "}
-        a Cardedeu. Ja no teniu cap excusa, per no estar al dia, de tot el que
-        passa a Cardedeu vinculat a la cultura!
+        per tots els racons del poble. Perquè us sigui més fàcil la tria, us
+        ajudem a trobar el pla ideal per a vosaltres: cinema alternatiu,
+        l'exposició imperdible, l'obra de teatre de la qual tothom parla,
+        mercats, activitats familiars... Us oferim tota la informació per gaudir
+        de Cardedeu i de la seva enorme activitat cultural. No cal moderació, la
+        podeu gaudir a l'engròs.
       </p>
       <List events={events}>
         {(event) => <Card key={event.id} event={event} />}
@@ -68,9 +59,12 @@ export default function App(props) {
 export async function getStaticProps() {
   const { getCalendarEvents } = require("@lib/helpers");
 
-  const now = new Date();
   const from = new Date();
-  const until = new Date(now.setDate(now.getDate() + 15));
+  from.setHours(8);
+  from.setMinutes(0);
+  const until = new Date();
+  until.setHours(24);
+  until.setMinutes(0);
 
   const { events } = await getCalendarEvents(from, until);
   const normalizedEvents = JSON.parse(JSON.stringify(events));

@@ -9,5 +9,7 @@ export const useGetEvent = (props) => {
   return useSWR([eventId ? `/api/getEvent` : null, eventId], fetchWithId, {
     fallbackData: props,
     refreshInterval: 60000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
   });
 };
