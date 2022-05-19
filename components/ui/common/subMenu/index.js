@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-const renderButton = (text, goTo) => {
+const RenderButton = ({ text, goTo }) => {
   const router = useRouter();
   const pathname = router.pathname;
   const isActiveLink = pathname === goTo ? "bg-[#ECB84A]" : "bg-gray-800";
@@ -19,10 +19,13 @@ const renderButton = (text, goTo) => {
 export default function SubMenu() {
   return (
     <div className="flex justify-center mb-4">
-      {renderButton("Agenda", "/")}
-      {renderButton("Avui", "/avui-a-cardedeu")}
-      {renderButton("El cap de setmana", "/cap-de-setmana-a-cardedeu")}
-      {renderButton("Aquesta setmana", "/setmana-a-cardedeu")}
+      <RenderButton text="Agenda" goTo="/" />
+      <RenderButton text="Avui" goTo="/avui-a-cardedeu" />
+      <RenderButton
+        text="El cap de setmana"
+        goTo="/cap-de-setmana-a-cardedeu"
+      />
+      <RenderButton text="Aquesta setmana" goTo="/setmana-a-cardedeu" />
     </div>
   );
 }

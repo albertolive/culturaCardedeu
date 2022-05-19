@@ -38,8 +38,8 @@ export default function App(props) {
         Cardedeu, de divendres a diumenge.
       </p>
       <p className="mb-4">
-        Hem bussejat en l'agenda cultural de Cardedeu i us portem una tria del
-        milloret que podreu fer aquest cap de setmana al poble. Art, cinema,
+        Hem bussejat en l&apos;agenda cultural de Cardedeu i us portem una tria
+        del milloret que podreu fer aquest cap de setmana al poble. Art, cinema,
         teatre... No teniu excusa, us espera un cap de setmana increïble sense
         moure-us de Cardedeu.{" "}
       </p>
