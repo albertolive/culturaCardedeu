@@ -63,3 +63,31 @@ export const getVitaminedLocation = (location) => {
 
   return locationNormalized;
 };
+
+export const nextDay = (x) => {
+  let now = new Date();
+  now.setDate(now.getDate() + ((x + (7 - now.getDay())) % 7));
+
+  return now;
+};
+
+export const isWeekend = () => {
+  const now = new Date();
+
+  return now.getDay() === 0 || now.getDay() === 5 || now.getDay() === 6;
+};
+
+export const monthsName = [
+  "Gener",
+  "Febrer",
+  "Març",
+  "Abril",
+  "Maig",
+  "Juny",
+  "Juliol",
+  "Agost",
+  "Septembre",
+  "Octubre",
+  "Novembre",
+  "Desembre",
+];

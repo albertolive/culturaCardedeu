@@ -1,10 +1,13 @@
 import useSWR from "swr";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+const fetcher = (url, pageIndex) =>
+  fetch(`${url}?page=${pageIndex}`).then((res) => res.json());
 
-export const useGetEvents = (props) => {
-  return useSWR("/api/getEvents", fetcher, {
+export const useGetEvents = (props, pageIndex) => {
+  return useSWR(["/api/getEvents", pageIndex], fetcher, {
     fallbackData: props,
     refreshInterval: 60000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
   });
 };
