@@ -80,9 +80,9 @@ export default function Event(props) {
     ? description
     : replaceURLs(description);
 
-  const uploadedImage =
-    imageUploaded &&
-    `https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`;
+  const uploadedImage = imageUploaded
+    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`
+    : null;
 
   const jsonData = {
     "@context": "https://schema.org",
@@ -105,7 +105,7 @@ export default function Event(props) {
         addressCountry: "ES",
       },
     },
-    image: [uploadedImage, ...images],
+    image: [uploadedImage, ...images].filter(Boolean),
     description,
     performer: {
       "@type": "PerformingGroup",
