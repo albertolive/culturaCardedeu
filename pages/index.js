@@ -37,8 +37,8 @@ export async function getStaticProps() {
   const { getCalendarEvents } = require("@lib/helpers");
 
   const now = new Date();
-  const from = now;
-  const until = new Date(now.getFullYear(), now.getMonth() + 1);
+  const from = new Date();
+  const until = new Date(now.setDate(now.getDate() + 15));
 
   const { events } = await getCalendarEvents(from, until);
   const normalizedEvents = JSON.parse(JSON.stringify(events));
