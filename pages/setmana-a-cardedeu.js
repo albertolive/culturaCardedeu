@@ -32,13 +32,13 @@ export default function App(props) {
         </h1>
       </div>
       <p className="mb-4 font-bold">
-        Us proposem activitats d'oci i cultura a Cardedeu per a tots els gustos
-        i butxaques.
+        Us proposem activitats d&apos;oci i cultura a Cardedeu per a tots els
+        gustos i butxaques.
       </p>
       <p className="mb-4">
         Teniu ganes de gaudir del poble? Esteu en el lloc correcte! Us hem fet
-        una selecció dels plans d'aquesta setmana que engloben el millor de tots
-        els àmbits i per a tots els públics. Teatre, cinema, música, art i
+        una selecció dels plans d&apos;aquesta setmana que engloben el millor de
+        tots els àmbits i per a tots els públics. Teatre, cinema, música, art i
         altres excuses per no parar de descobrir Cardedeu!
       </p>
       <List events={events}>

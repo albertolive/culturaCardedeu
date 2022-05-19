@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
@@ -36,18 +37,17 @@ export default function App(props) {
       </p>
       <p className="mb-4">
         Les coses per fer a Cardedeu no descansen ni un dia.{" "}
-        <a
-          className="font-medium text-black underline"
-          href="/setmana-a-cardedeu"
-        >
-          Cada setmana, descobrireu centenars d'activitats increïbles
-        </a>{" "}
+        <Link href="/setmana-a-cardedeu">
+          <a className="font-medium text-black underline">
+            Cada setmana, descobrireu centenars d&apos;activitats increïbles
+          </a>
+        </Link>{" "}
         per tots els racons del poble. Perquè us sigui més fàcil la tria, us
         ajudem a trobar el pla ideal per a vosaltres: cinema alternatiu,
-        l'exposició imperdible, l'obra de teatre de la qual tothom parla,
-        mercats, activitats familiars... Us oferim tota la informació per gaudir
-        de Cardedeu i de la seva enorme activitat cultural. No cal moderació, la
-        podeu gaudir a l'engròs.
+        l&apos;exposició imperdible, l&apos;obra de teatre de la qual tothom
+        parla, mercats, activitats familiars... Us oferim tota la informació per
+        gaudir de Cardedeu i de la seva enorme activitat cultural. No cal
+        moderació, la podeu gaudir a l&apos;engròs.
       </p>
       <List events={events}>
         {(event) => <Card key={event.id} event={event} />}
