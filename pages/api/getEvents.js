@@ -1,10 +1,10 @@
 import { getCalendarEvents } from "@lib/helpers";
-import { nextDay, isWeekend, convertTZ } from "@utils/helpers";
+import { nextDay, isWeekend } from "@utils/helpers";
 
 const dayLightSaving = 2;
 
 export default async function handler(req, res) {
-  const { page } = req.query;
+  const { page, q } = req.query;
 
   let events = [];
 
@@ -48,12 +48,16 @@ export default async function handler(req, res) {
 
       events = await getCalendarEvents(fromWeekend, toWeekend);
       break;
+    case "search":
+      const fromSearch = new Date();
+      events = await getCalendarEvents(fromSearch, null, false, q);
+      break;
     default:
       const now = new Date();
       const from = new Date();
       const until = new Date(now.setDate(now.getDate() + 15));
 
-      events = await getCalendarEvents(from, until);
+      events = await getCalendarEvents(from, until, false, q);
   }
 
   try {
