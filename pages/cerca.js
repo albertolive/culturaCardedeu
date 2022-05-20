@@ -72,12 +72,7 @@ export default function Search() {
   const handleChange = (e) => {
     const value = e.target.value;
 
-    if (value.length === 0) {
-      setStartFetching(false);
-    } else {
-      sendSearchTermGA(value);
-      setSearchTerm(value);
-    }
+    value.length === 0 ? setStartFetching(false) : setSearchTerm(value);
   };
 
   const handleChangeWithDebounce = debounce((e) => {
@@ -91,7 +86,12 @@ export default function Search() {
     }
   }, 800);
 
-  const searchEvents = () => searchTerm.length > 0 && setStartFetching(true);
+  const searchEvents = () => {
+    if (searchTerm.length > 0) {
+      setStartFetching(true);
+      sendSearchTermGA(searchTerm);
+    }
+  };
 
   const clearSearchTerm = () => setSearchTerm("");
 
