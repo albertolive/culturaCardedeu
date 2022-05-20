@@ -67,8 +67,9 @@ export const getVitaminedLocation = (location) => {
 export const nextDay = (x) => {
   let now = new Date();
   now.setDate(now.getDate() + ((x + (7 - now.getDay())) % 7));
+  const covertDate = convertTZ(now, "Europe/Madrid");
 
-  return now;
+  return covertDate;
 };
 
 export const isWeekend = () => {
