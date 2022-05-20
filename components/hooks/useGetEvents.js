@@ -9,5 +9,6 @@ export const useGetEvents = (props, pageIndex) => {
     refreshInterval: 60000,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
+    refreshWhenOffline: true,
   });
 };
