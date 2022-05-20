@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
@@ -7,7 +6,6 @@ import { useGetEvents } from "@components/hooks/useGetEvents";
 import { SubMenu } from "@components/ui/common";
 
 export default function App(props) {
-  const router = useRouter();
   const {
     data: { events = [] },
     error,

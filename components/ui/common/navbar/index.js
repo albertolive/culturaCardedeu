@@ -1,6 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { PlusSmIcon } from "@heroicons/react/solid";
+import { PlusSmIcon, SearchIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import ActiveLink from "@components/ui/common/link";
 import logo from "@public/static/images/logo-cultura-cardedeu.png";
@@ -48,11 +48,16 @@ export default function Example() {
                 <div className="hidden md:mr-6 md:flex md:items-center md:space-x-4">
                   {navigation.map((item) => (
                     <ActiveLink href={item.href} key={item.name}>
-                      <a className="font-medium mr-8 text-white hover:text-stone-200">
+                      <a className="font-medium mr-3 text-white hover:text-stone-200">
                         {item.name}
                       </a>
                     </ActiveLink>
                   ))}
+                </div>
+                <div className="flex-shrink-0 cursor-pointer">
+                  <ActiveLink href="/cerca">
+                    <SearchIcon className="-ml-1 mr-6 h-6 w-6 text-white" />
+                  </ActiveLink>
                 </div>
                 <div className="flex-shrink-0">
                   <ActiveLink href="/publica">

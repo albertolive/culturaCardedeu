@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
@@ -7,7 +6,6 @@ import { SubMenu } from "@components/ui/common";
 import { nextDay, isWeekend } from "@utils/helpers";
 
 export default function App(props) {
-  const router = useRouter();
   const {
     data: { events = [] },
     error,
