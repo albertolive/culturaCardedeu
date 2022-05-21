@@ -114,6 +114,7 @@ export default function Search() {
               placeholder="Cerca..."
               onChange={startFetching ? handleChangeWithDebounce : handleChange}
               onKeyPress={handleKeyPress}
+              autoFocus
             />
 
             {false && (

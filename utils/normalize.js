@@ -1,4 +1,4 @@
-import { TAGS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
+import { TAGS } from "./constants";
 import { slug, getFormattedDate, getVitaminedLocation } from "./helpers";
 
 export const normalizeEvents = (event) => {
@@ -51,7 +51,9 @@ export const normalizeEvent = (event) => {
     location,
     formattedStart,
     nameDay,
-    description: event.description || "",
+    description: event.description
+      ? event.description
+      : "Cap descripció. Vols afegir-ne una? Escriu-nos i et direm com fer-ho!",
     tag,
     slug: slug(title, formattedStart, event.id),
     ...locationNormalized,
