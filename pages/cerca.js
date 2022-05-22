@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchIcon, XIcon } from "@heroicons/react/solid";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
@@ -6,18 +6,18 @@ import List from "@components/ui/list";
 import Head from "next/head";
 
 function debounce(func, wait, immediate) {
-  var timeout;
+  let timeout;
 
   return function executedFunction() {
-    var context = this;
-    var args = arguments;
+    const context = this;
+    const args = arguments;
 
-    var later = function () {
+    const later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
 
-    var callNow = immediate && !timeout;
+    const callNow = immediate && !timeout;
 
     clearTimeout(timeout);
 
@@ -52,18 +52,34 @@ const SearchResults = ({ keyword }) => {
 
 const sendSearchTermGA = (searchTerm) => {
   if (typeof window !== "undefined") {
-    window.gtag("event", "search", {
-      event_category: "search",
-      event_label: searchTerm,
-      search_term: searchTerm,
-      value: searchTerm,
-    });
+    window.gtag &&
+      window.gtag("event", "search", {
+        event_category: "search",
+        event_label: searchTerm,
+        search_term: searchTerm,
+        value: searchTerm,
+      });
   }
 };
 
 export default function Search() {
   const [startFetching, setStartFetching] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (searchTerm.length > 0) {
+      localStorage.setItem("searchTerm", JSON.stringify(searchTerm));
+    }
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const searchTerm = JSON.parse(localStorage.getItem("searchTerm"));
+
+    if (searchTerm) {
+      setSearchTerm(searchTerm);
+      searchEvents(searchTerm);
+    }
+  }, []);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") searchEvents();
@@ -79,18 +95,30 @@ export default function Search() {
     const value = e.target.value;
 
     if (value.length === 0) {
+      setSearchTerm("");
+      localStorage.setItem("searchTerm", JSON.stringify(""));
       setStartFetching(false);
     } else {
       sendSearchTermGA(value);
       setSearchTerm(value);
     }
-  }, 800);
+  }, 1500);
 
-  const searchEvents = () => {
-    if (searchTerm.length > 0) {
+  const searchEvents = (searchInLocalStorage) => {
+    if (
+      (searchInLocalStorage && searchInLocalStorage.length > 0) ||
+      searchTerm.length > 0
+    ) {
       setStartFetching(true);
-      sendSearchTermGA(searchTerm);
+      sendSearchTermGA(searchInLocalStorage || searchTerm);
     }
+  };
+
+  const onFocus = (e) => {
+    const val =
+      JSON.parse(localStorage.getItem("searchTerm")) || e.target.value;
+    e.target.value = "";
+    e.target.value = val;
   };
 
   const clearSearchTerm = () => setSearchTerm("");
@@ -112,9 +140,11 @@ export default function Search() {
               type="text"
               className="shadow-sm focus:ring-gray-300 focus:border-gray-300 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="Cerca..."
+              defaultValue={searchTerm}
               onChange={startFetching ? handleChangeWithDebounce : handleChange}
               onKeyPress={handleKeyPress}
               autoFocus
+              onFocus={onFocus}
             />
 
             {false && (
