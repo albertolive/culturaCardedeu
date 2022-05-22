@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 
 export default function QuiSom() {
   return (
@@ -132,7 +133,11 @@ export default function QuiSom() {
           <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
             <p>
               L&apos;agenda és col·laborativa, i cada persona que organitzi un
-              acte cultural podrà publicar-lo aquí pel seu compte.
+              acte cultural podrà publicar-lo{" "}
+              <Link href="/publica">
+                <a className="font-medium text-black underline">aquí</a>
+              </Link>{" "}
+              pel seu compte.
             </p>
             <p className="mt-6 prose prose-lg text-gray-500 mx-auto">
               Podreu seguir l&apos;agenda cultural en aquesta pàgina web i/o:
