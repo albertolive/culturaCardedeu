@@ -10,6 +10,7 @@ export const slug = (str, formattedStart, id) =>
     .replace(/,/g, "")
     .replace(/’/g, "'")
     .replace(".", "")
+    .replace("%", "")
     .replace(/\+/g, "")
     .replace(/\|/g, "")
     .replace(/:/g, "")}-${formattedStart
