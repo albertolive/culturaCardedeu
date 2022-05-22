@@ -44,7 +44,6 @@ export default function ImageComponent({
           placeholder="blur"
           blurDataURL="/static/images/blur.png"
           onError={onError}
-          priority
         />
       </div>
     </>
