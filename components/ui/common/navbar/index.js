@@ -38,6 +38,7 @@ export default function Example() {
                         alt="Logo Cultura Cardedeu"
                         width={120}
                         height={60}
+                        layout="fixed"
                       />
                     </a>
                   </ActiveLink>
