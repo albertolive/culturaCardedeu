@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import defaultImage from "@public/static/images/locations/cardedeu/1.jpeg";
+import Head from "next/head";
 
 export default function ImageComponent({
   title,
@@ -14,18 +15,37 @@ export default function ImageComponent({
   const onError = () => setSrc(defaultImage);
 
   return (
-    <div className={`flex-1 h-full next-image-wrapper ${className}`}>
-      <Image
-        className="object-cover"
-        src={src}
-        layout="responsive"
-        width={width}
-        height={height}
-        alt={title}
-        placeholder="blur"
-        blurDataURL="/static/images/blur.png"
-        onError={onError}
-      />
-    </div>
+    <>
+      <Head>
+        <link
+          rel="preload"
+          href={image}
+          as="image"
+          imagesrcset={`${image} 1200w,
+     ${image}?w=200 200w, 
+     ${image}?w=400 400w, 
+     ${image}?w=800 800w, 
+     ${image}?w=1024 1024w`}
+        />
+      </Head>
+      <div className={`flex-1 h-full next-image-wrapper ${className}`}>
+        <Image
+          className="object-cover"
+          src={src}
+          srcSet={`${src} 1200w, 
+             ${src}?w=200 200w,
+             ${src}?w=400 400w, 
+             ${src}?w=800 800w, 
+             ${src}?w=1024 1024w`}
+          layout="responsive"
+          width={width}
+          height={height}
+          alt={title}
+          placeholder="blur"
+          blurDataURL="/static/images/blur.png"
+          onError={onError}
+        />
+      </div>
+    </>
   );
 }
