@@ -18,7 +18,7 @@ export default function Card({ event }) {
               title={event.title}
               image={image}
               alt={event.title}
-              layout="fixed"
+              layout="responsive"
             />
           </div>
           <div className="p-4 flex-2">
