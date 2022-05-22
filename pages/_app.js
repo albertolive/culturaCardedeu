@@ -1,8 +1,35 @@
 import "@styles/globals.css";
 import Script from "next/script";
 import { BaseLayout } from "@components/ui/layout";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 function CulturaCardedeuMainEntry({ Component, pageProps }) {
+  const { events } = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      if (
+        (typeof window !== "undefined" &&
+          localStorage.getItem("searchTerm") &&
+          url === "/") ||
+        url === "/avui-a-cardedeu" ||
+        url === "/setmana-a-cardedeu" ||
+        url === "/cap-de-setmana-a-cardedeu" ||
+        url === "/qui-som" ||
+        url === "/publica"
+      ) {
+        localStorage.setItem("searchTerm", JSON.stringify(""));
+      }
+    };
+
+    events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, []);
+
   return (
     <>
       <Script
