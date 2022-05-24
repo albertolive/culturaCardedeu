@@ -3,7 +3,7 @@ import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Image, Notification } from "@components/ui/common";
+import { Image, Notification, Social } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 
 function replaceURLs(text) {
@@ -75,6 +75,7 @@ export default function Event(props) {
     imageUploaded,
     startDate,
     endDate,
+    social,
   } = data.event;
 
   const descriptionHTML = isHTML(description)
@@ -263,9 +264,16 @@ export default function Event(props) {
               {tag && (
                 <dl className="mt-6 space-y-10">
                   <div>
-                    <dt className="text-md font-medium text-gray-900">Tags:</dt>
+                    <dt className="text-md font-bold text-gray-900">Tags</dt>
                     <dd className="mt-3 text-sm text-gray-500">{tag}</dd>
                   </div>
+                </dl>
+              )}
+
+              {social && (
+                <dl className="mt-6">
+                  <dt className="text-md font-bold text-gray-900">Enllaços</dt>
+                  <Social links={social} />
                 </dl>
               )}
             </div>
