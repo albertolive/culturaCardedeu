@@ -1,10 +1,10 @@
 import { useEffect, useCallback } from "react";
-import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Image, Notification, Social } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
+import Meta from "@components/partials/seo-meta";
 
 function replaceURLs(text) {
   if (!text) return;
@@ -136,24 +136,14 @@ export default function Event(props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
-      <Head>
-        <title>{`${title} - Cultura Cardedeu`}</title>
-        <meta
-          name="description"
-          content={`Cultura Cardedeu - ${title} - ${nameDay}, ${formattedStart} - ${location}`}
-        />
-        <link
-          rel="canonical"
-          href={`https://www.culturacardedeu.com/${slug}`}
-        />
-        <link
-          rel="preload"
-          href="/static/images/gMaps.webp"
-          as="image"
-          type="image/webp"
-          crossOrigin
-        ></link>
-      </Head>
+      <Meta
+        title={`${title} - Cultura Cardedeu`}
+        description={`${title} - ${nameDay}, ${formattedStart} - ${location} - Cultura Cardedeu`}
+        canonical={`https://www.culturacardedeu.com/${slug}`}
+        image={images[0]}
+        newsKeywords={`${title} - ${nameDay}, ${formattedStart} - ${location}`}
+        preload="/static/images/gMaps.webp"
+      />
       {newEvent && <Notification title={title} url={slug} />}
       <nav className="flex" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">

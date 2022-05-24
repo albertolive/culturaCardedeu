@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { slug, getFormattedDate } from "@utils/helpers";
@@ -11,6 +10,7 @@ import {
   TextArea,
   ImageUpload,
 } from "@components/ui/common/form";
+import Meta from "@components/partials/seo-meta";
 
 const _createFormState = (
   isDisabled = true,
@@ -176,10 +176,13 @@ export default function Edita({ event }) {
 
   return (
     <>
-      <Head>
-        <title>Edita - Cultura Cardedeu</title>
-        <meta name="description" content="Edita - Cultura Cardedeu" />
-      </Head>
+      <Meta
+        title="Edita - Cultura Cardedeu"
+        description="Edita - Cultura Cardedeu"
+        canonical="https://www.culturacardedeu.com/edita"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Edita - Cultura Cardedeu"
+      />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         <div className="space-y-8 divide-y divide-gray-200">
           <div className="pt-8">

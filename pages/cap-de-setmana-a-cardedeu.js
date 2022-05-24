@@ -1,9 +1,9 @@
-import Head from "next/head";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { SubMenu } from "@components/ui/common";
 import { nextDay, isWeekend } from "@utils/helpers";
+import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
   const {
@@ -15,19 +15,13 @@ export default function App(props) {
 
   return (
     <>
-      <Head>
-        <title>
-          Què fer aquest cap de setmana a Cardedeu - Cultura Cardedeu
-        </title>
-        <meta
-          name="description"
-          content="Què fer aquest cap de setmana a Cardedeu. Les millors propostes culturals per esprémer al màxim el cap de setmana, de divendres a diumenge."
-        />
-        <link
-          rel="canonical"
-          href="https://www.culturacardedeu.com/cap-de-setmana-a-cardedeu"
-        />
-      </Head>
+      <Meta
+        title="Què fer aquest cap de setmana a Cardedeu - Cultura Cardedeu"
+        description="Què fer aquest cap de setmana a Cardedeu. Les millors propostes culturals per esprémer al màxim el cap de setmana, de divendres a diumenge."
+        canonical="https://www.culturacardedeu.com/cap-de-setmana-a-cardedeu"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Les millors propostes per esprémer al màxim el cap de setmana a Cardedeu, de divendres a diumenge."
+      />
       <SubMenu />
       <div className="reset-this">
         <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">

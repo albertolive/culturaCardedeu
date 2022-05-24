@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { slug, getFormattedDate } from "@utils/helpers";
 import {
@@ -10,6 +9,7 @@ import {
   TextArea,
   ImageUpload,
 } from "@components/ui/common/form";
+import Meta from "@components/partials/seo-meta";
 
 const defaultForm = {
   title: "",
@@ -150,6 +150,8 @@ export default function Publica() {
 
     xhr.onreadystatechange = (e) => {
       if (xhr.readyState == 4 && xhr.status == 200) {
+        const public_id = JSON.parse(xhr.responseText).public_id;
+        console.log(public_id);
         router.push(goToEventPage(slugifiedTitle));
       }
     };
@@ -166,13 +168,13 @@ export default function Publica() {
 
   return (
     <>
-      <Head>
-        <title>Publica - Cultura Cardedeu</title>
-        <meta
-          name="description"
-          content="Publica un acte cultural - Cultura Cardedeu"
-        />
-      </Head>
+      <Meta
+        title="Publica - Cultura Cardedeu"
+        description="Publica un acte cultural - Cultura Cardedeu"
+        canonical="https://www.culturacardedeu.com/publica"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Publica un acte cultural - Cultura Cardedeu"
+      />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         <div className="space-y-8 divide-y divide-gray-200">
           <div className="pt-8">
