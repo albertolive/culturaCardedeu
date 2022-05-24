@@ -19,9 +19,12 @@ export default function App(props) {
         <title>Que fer avui a Cardedeu - Cultura Cardedeu</title>
         <meta
           name="description"
-          content="Què fer avui a Cardedeu. Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
+          content="Què fer avui a Cardedeu. Us oferim tota la informació per gaudir de Cardedeu i de la seva enorme activitat cultural: cinema, museus, teatre, mercats, familiar."
         />
-        <link rel="canonical" href="https://www.culturacardedeu.com/" />
+        <link
+          rel="canonical"
+          href="https://www.culturacardedeu.com/avui-a-cardedeu"
+        />
       </Head>
       <SubMenu />
       <div className="reset-this">
