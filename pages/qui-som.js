@@ -1,16 +1,16 @@
-import Head from "next/head";
 import Link from "next/link";
+import Meta from "@components/partials/seo-meta";
 
 export default function QuiSom() {
   return (
     <>
-      <Head>
-        <title>Qui som - Cultura Cardedeu</title>
-        <meta
-          name="description"
-          content="Qui som? - Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
-        />
-      </Head>
+      <Meta
+        title="Qui som - Cultura Cardedeu"
+        description="Qui som? - Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
+        canonical="https://www.culturacardedeu.com/qui-som"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Qui som? - Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
+      />
       <div className="relative py-16 bg-white overflow-hidden">
         <div className="hidden lg:block lg:absolute lg:inset-y-0 lg:h-full lg:w-full">
           <div

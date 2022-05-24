@@ -1,9 +1,9 @@
-import Head from "next/head";
 import Link from "next/link";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { SubMenu } from "@components/ui/common";
+import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
   const {
@@ -15,17 +15,13 @@ export default function App(props) {
 
   return (
     <>
-      <Head>
-        <title>Que fer avui a Cardedeu - Cultura Cardedeu</title>
-        <meta
-          name="description"
-          content="Què fer avui a Cardedeu. Us oferim tota la informació per gaudir de Cardedeu i de la seva enorme activitat cultural: cinema, museus, teatre, mercats, familiar."
-        />
-        <link
-          rel="canonical"
-          href="https://www.culturacardedeu.com/avui-a-cardedeu"
-        />
-      </Head>
+      <Meta
+        title="Que fer avui a Cardedeu - Cultura Cardedeu"
+        description="Què fer avui a Cardedeu. Us oferim tota la informació per gaudir de Cardedeu i de la seva enorme activitat cultural: cinema, museus, teatre, mercats, familiar."
+        canonical="https://www.culturacardedeu.com/avui-a-cardedeu"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Què fer avui a Cardedeu. Aprofita el teu temps i troba el que necessites: el millor del dia al teu abast."
+      />
       <SubMenu />
       <div className="reset-this">
         <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">

@@ -3,7 +3,7 @@ import { SearchIcon, XIcon } from "@heroicons/react/solid";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
-import Head from "next/head";
+import Meta from "@components/partials/seo-meta";
 
 function debounce(func, wait, immediate) {
   let timeout;
@@ -125,14 +125,13 @@ export default function Search() {
 
   return (
     <>
-      <Head>
-        <title>Cerca - Cultura Cardedeu</title>
-        <meta
-          name="description"
-          content="Cerca esdeveniments a Cardedeu. Cultura i esdeveniments a Cardedeu. Cultura Cardedeu"
-        />
-        <link rel="canonical" href={`https://www.culturacardedeu.com/cerca`} />
-      </Head>
+      <Meta
+        title="Cerca - Cultura Cardedeu"
+        description="Cerca esdeveniments a Cardedeu. Cultura i esdeveniments a Cardedeu. Cultura Cardedeu"
+        canonical="https://www.culturacardedeu.com/cerca"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Cerca esdeveniments a Cardedeu. Cultura i esdeveniments a Cardedeu. Cultura Cardedeu"
+      />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto mb-4">
         <div className="space-y-8 divide-y divide-gray-200">
           <div className="relative">

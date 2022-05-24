@@ -1,10 +1,10 @@
-import Head from "next/head";
 import Link from "next/link";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { SubMenu } from "@components/ui/common";
 import { monthsName } from "@utils/helpers";
+import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
   const {
@@ -16,15 +16,13 @@ export default function App(props) {
 
   return (
     <>
-      <Head>
-        <html lang="ca" />
-        <title>Agenda 2022 - Cultura Cardedeu</title>
-        <meta
-          name="description"
-          content="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu. L'agenda és col·laborativa."
-        />
-        <link rel="canonical" href="https://www.culturacardedeu.com/" />
-      </Head>
+      <Meta
+        title="Agenda 2022 - Cultura Cardedeu"
+        description="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu. L'agenda és col·laborativa."
+        canonical="https://www.culturacardedeu.com/"
+        image="/static/images/logo-cultura-cardedeu.png"
+        newsKeywords="Les millors coses per fer a Cardedeu: mercats, exposicions, descobriments, passejades, concerts, museus, teatre.."
+      />
       <SubMenu />
       <div className="reset-this">
         <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
