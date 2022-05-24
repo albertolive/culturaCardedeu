@@ -19,8 +19,8 @@ const Meta = (props) => (
     <meta property="og:image" content={props.image} />
     <meta property="og:url" content={props.canonical} />
     <meta property="og:site_name" content="Cultura Cardedeu" />
-    <meta property="og:locale" content="es_ES" />
-    <meta name="language" content="Catalan" />
+    <meta property="og:locale" content="ca_CT" />
+    <meta name="language" content="catalan" />
     <meta name="revisit-after" content="1 days" />
     <meta name="author" content="Cultura Cardedeu" />
     <meta name="news_keywords" content={props.newsKeywords} />
