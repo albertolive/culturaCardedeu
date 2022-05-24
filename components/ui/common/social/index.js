@@ -74,11 +74,15 @@ const renderInstagram = (link) => (
 export default function Social({ links }) {
   return (
     <div className="mt-2">
-      <div className="flex items-center space-x-3">
-        {links.web && renderWeb(links.web)}
-        {links.instagram && renderInstagram(links.instagram)}
-        {links.twitter && renderTwitter(links.twitter)}
-        {links.facebook && renderFacebook(links.facebook)}
+      <div className="flex flex-col xs:flex-row items-center space-x-3">
+        <div className="">{links.web && renderWeb(links.web)}</div>
+        <div className="">
+          {links.instagram && renderInstagram(links.instagram)}
+        </div>
+        <div className="">{links.twitter && renderTwitter(links.twitter)}</div>
+        <div className="">
+          {links.facebook && renderFacebook(links.facebook)}
+        </div>
       </div>
     </div>
   );
