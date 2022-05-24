@@ -17,6 +17,7 @@ export default function App(props) {
   return (
     <>
       <Head>
+        <html lang="ca" />
         <title>Agenda 2022 - Cultura Cardedeu</title>
         <meta
           name="description"

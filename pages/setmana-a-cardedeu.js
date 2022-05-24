@@ -19,9 +19,12 @@ export default function App(props) {
         <title>Què fer aquesta setmana a Cardedeu - Cultura Cardedeu</title>
         <meta
           name="description"
-          content="Què fer aquesta setmana a Cardedeu. Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
+          content="Què fer aquesta setmana a Cardedeu. Teniu ganes de gaudir del poble? Teatre, cinema, música, art i altres excuses per no parar de descobrir Cardedeu!"
         />
-        <link rel="canonical" href="https://www.culturacardedeu.com/" />
+        <link
+          rel="canonical"
+          href="https://www.culturacardedeu.com/setmana-a-cardedeu"
+        />
       </Head>
       <SubMenu />
       <div className="reset-this">
