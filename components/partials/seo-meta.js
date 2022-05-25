@@ -11,7 +11,8 @@ const Meta = (props) => (
     <meta name="title" content={props.title} />
     <meta name="description" content={props.description} />
     <link rel="canonical" href={`${props.canonical}`} />
-    <meta property="og:type" content="article" />
+    <meta property="og:ttl" content="777600" />
+    <meta property="og:type" content="website" />
     <meta name="og:title" property="og:title" content={props.title} />
     <meta
       name="og:description"
@@ -24,7 +25,6 @@ const Meta = (props) => (
     <meta property="og:locale" content="ca_ES" />
     <meta name="revisit-after" content="1 days" />
     <meta name="author" content="Cultura Cardedeu" />
-    <meta name="news_keywords" content={props.newsKeywords} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={props.title} />
     <meta name="twitter:description" content={props.description} />
@@ -35,6 +35,7 @@ const Meta = (props) => (
     <meta property="fb:app_id" content="103738478742219" />
     <meta property="fb:pages" content="103738478742219" />
     <meta name="twitter:image" content={`${siteUrl}${props.image}`} />
+    <meta name="twitter:image:src" content={`${siteUrl}${props.image}`} />
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/favicon.ico" />
     <link rel="shortcut icon" href="/favicon.ico" />
