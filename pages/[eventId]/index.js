@@ -105,6 +105,7 @@ export default function Event(props) {
         addressLocality: "Cardedeu",
         postalCode: "08440",
         addressCountry: "ES",
+        addressRegion: "CT",
       },
     },
     image: [uploadedImage, ...images].filter(Boolean),
