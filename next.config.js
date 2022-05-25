@@ -1,7 +1,7 @@
 const nextConfig = {
   i18n: {
-    locales: ["ca"],
-    defaultLocale: "ca",
+    locales: ["ca_ES"],
+    defaultLocale: "ca_ES",
   },
   reactStrictMode: false,
   images: { domains: ["res.cloudinary.com"] },
