@@ -100,12 +100,15 @@ export default function Event(props) {
       address: {
         "@type": "PostalAddress",
         streetAddress: location,
-        lat,
-        lng,
         addressLocality: "Cardedeu",
         postalCode: "08440",
         addressCountry: "ES",
         addressRegion: "CT",
+      },
+      geo: {
+        latitude: lat,
+        "@type": "GeoCoordinates",
+        longitude: lng,
       },
     },
     image: [uploadedImage, ...images].filter(Boolean),
