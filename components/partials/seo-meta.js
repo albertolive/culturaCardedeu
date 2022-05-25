@@ -18,7 +18,7 @@ const Meta = (props) => (
       property="og:description"
       content={props.description}
     />
-    <meta property="og:image" content={`${siteUrl}/${props.image}`} />
+    <meta property="og:image" content={`${siteUrl}${props.image}`} />
     <meta property="og:url" content={props.canonical} />
     <meta property="og:site_name" content="Cultura Cardedeu" />
     <meta property="og:locale" content="ca_ES" />
@@ -34,7 +34,7 @@ const Meta = (props) => (
     <meta name="twitter:image:alt" content={props.title} />
     <meta property="fb:app_id" content="103738478742219" />
     <meta property="fb:pages" content="103738478742219" />
-    <meta name="twitter:image" content={`${siteUrl}/${props.image}`} />
+    <meta name="twitter:image" content={`${siteUrl}${props.image}`} />
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/favicon.ico" />
     <link rel="shortcut icon" href="/favicon.ico" />
