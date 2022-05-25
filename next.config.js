@@ -1,4 +1,8 @@
 const nextConfig = {
+  i18n: {
+    locales: ["ca"],
+    defaultLocale: "ca",
+  },
   reactStrictMode: false,
   images: { domains: ["res.cloudinary.com"] },
   async headers() {
