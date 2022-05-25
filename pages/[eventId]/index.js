@@ -90,6 +90,7 @@ export default function Event(props) {
     "@context": "https://schema.org",
     "@type": "Event",
     name: title,
+    url: `https://www.culturacardedeu.com/${slug}`,
     startDate,
     endDate,
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
