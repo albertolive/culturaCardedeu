@@ -2,7 +2,7 @@ import Link from "next/link";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
-import { SubMenu } from "@components/ui/common";
+import { NoEventsFound, SubMenu } from "@components/ui/common";
 import { nextDay, isWeekend } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 import { CalendarIcon } from "@heroicons/react/solid";
@@ -39,28 +39,12 @@ export default function App(props) {
         teatre... No teniu excusa, us espera un cap de setmana increïble sense
         moure-us de Cardedeu.{" "}
       </p>
-      {events.length > 0 ? (
+      {events.length ? (
         <List events={events}>
           {(event) => <Card key={event.id} event={event} />}
         </List>
       ) : (
-        <div className="rounded-md bg-blue-50 p-4 mb-4 break-word space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto mt-16 font-bold text-center">
-          <div className="flex align-middle justify-center content-center">
-            <div className="flex-shrink-0 self-center">
-              <CalendarIcon className="h-5 w-5 text-black" aria-hidden="true" />
-            </div>
-            <div className="ml-3">
-              No hi ha esdeveniments aquest cap de setmana a Cardedeu. Creus que
-              en falta algun?{" "}
-              <Link href="/publica">
-                <a className="font-medium text-black hover:underline">
-                  Afegeix-lo
-                </a>
-              </Link>{" "}
-              tu mateix/a!
-            </div>
-          </div>
-        </div>
+        <NoEventsFound title="Ho sentim, però no hi ha esdeveniments aquest cap de setmana a Cardedeu. Hem rebuscat en l'agenda i pot ser que també t'agradin aquestes altres opcions." />
       )}
     </>
   );

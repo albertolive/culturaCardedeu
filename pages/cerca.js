@@ -4,6 +4,7 @@ import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import Meta from "@components/partials/seo-meta";
+import { NoEventsFound } from "@components/ui/common";
 
 function debounce(func, wait, immediate) {
   let timeout;
@@ -32,21 +33,22 @@ const SearchResults = ({ keyword }) => {
     data: { events = [] },
     error,
     isValidating,
-  } = useGetEvents({}, "search", keyword);
+  } = useGetEvents({}, "search", keyword, false);
 
   if (error) return <div className="">failed to load</div>;
 
-  if (!events.length && !isValidating)
-    return (
-      <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto mb-4 font-bold text-center">
-        No s&apos;ha trobat cap esdeveniment. Intenteu una altre cerca.
-      </div>
-    );
-
   return (
-    <List events={events}>
-      {(event) => <Card key={event.id} event={event} />}
-    </List>
+    <>
+      {events.length ? (
+        <List events={events}>
+          {(event) => <Card key={event.id} event={event} />}
+        </List>
+      ) : (
+        !isValidating && (
+          <NoEventsFound title="Res ha coincidit amb la teva cerca, però pot ser que t'agradin aquestes altres opcions." />
+        )
+      )}
+    </>
   );
 };
 

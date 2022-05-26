@@ -4,7 +4,7 @@ import { nextDay, isWeekend } from "@utils/helpers";
 const dayLightSaving = 2;
 
 export default async function handler(req, res) {
-  const { page, q } = req.query;
+  const { page, q, maxResults } = req.query;
 
   let events = [];
 
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
       const from = new Date();
       const until = new Date(now.setDate(now.getDate() + 15));
 
-      events = await getCalendarEvents(from, until, false, q);
+      events = await getCalendarEvents(from, until, false, q, maxResults);
   }
 
   try {
