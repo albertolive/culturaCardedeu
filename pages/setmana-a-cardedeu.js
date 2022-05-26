@@ -1,4 +1,4 @@
-import Head from "next/head";
+import Link from "next/link";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
