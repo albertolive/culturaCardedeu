@@ -68,6 +68,19 @@ export default function Search() {
   const [startFetching, setStartFetching] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const searchEvents = useCallback(
+    (searchInLocalStorage) => {
+      if (
+        (searchInLocalStorage && searchInLocalStorage.length > 0) ||
+        searchTerm.length > 0
+      ) {
+        setStartFetching(true);
+        sendSearchTermGA(searchInLocalStorage || searchTerm);
+      }
+    },
+    [searchTerm]
+  );
+
   useEffect(() => {
     if (searchTerm.length > 0) {
       localStorage.setItem("searchTerm", JSON.stringify(searchTerm));
@@ -81,7 +94,7 @@ export default function Search() {
       setSearchTerm(searchTerm);
       searchEvents(searchTerm);
     }
-  }, [searchEvents]);
+  }, []);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") searchEvents();
@@ -105,19 +118,6 @@ export default function Search() {
       setSearchTerm(value);
     }
   }, 1500);
-
-  const searchEvents = useCallback(
-    (searchInLocalStorage) => {
-      if (
-        (searchInLocalStorage && searchInLocalStorage.length > 0) ||
-        searchTerm.length > 0
-      ) {
-        setStartFetching(true);
-        sendSearchTermGA(searchInLocalStorage || searchTerm);
-      }
-    },
-    [searchTerm]
-  );
 
   const onFocus = (e) => {
     const val =
