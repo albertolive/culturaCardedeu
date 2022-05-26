@@ -1,5 +1,7 @@
 import { DAYS, MONTHS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
 
+const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
+
 export const slug = (str, formattedStart, id) =>
   `${str
     .toLowerCase()
@@ -94,3 +96,67 @@ export const monthsName = [
   "Novembre",
   "Desembre",
 ];
+
+const transformImagestoAbsoluteUrl = (images) =>
+  images.map((image) => `${siteUrl}${image}`);
+
+export const generateJsonData = ({
+  title,
+  slug,
+  description,
+  startDate,
+  endDate,
+  location,
+  lat,
+  lng,
+  uploadedImage,
+  images,
+}) => ({
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: title,
+  url: `${siteUrl}/${slug}`,
+  startDate,
+  endDate,
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  eventStatus: "https://schema.org/EventScheduled",
+  location: {
+    "@type": "Place",
+    name: location,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: location,
+      addressLocality: "Cardedeu",
+      postalCode: "08440",
+      addressCountry: "ES",
+      addressRegion: "CT",
+    },
+    geo: {
+      latitude: lat,
+      "@type": "GeoCoordinates",
+      longitude: lng,
+    },
+  },
+  image: [uploadedImage, ...transformImagestoAbsoluteUrl(images)].filter(
+    Boolean
+  ),
+  description,
+  performer: {
+    "@type": "PerformingGroup",
+    name: location,
+  },
+  organizer: {
+    "@type": "Organization",
+    name: location,
+    url: siteUrl,
+  },
+  offers: {
+    "@type": "Offer",
+    price: 0,
+    isAccessibleForFree: true,
+    priceCurrency: "EUR",
+    availability: "https://schema.org/InStock",
+    url: `${siteUrl}/${slug}`,
+    validFrom: startDate,
+  },
+});

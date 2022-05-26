@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Image, Notification, Social } from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
+import { generateJsonData } from "@utils/helpers";
 
 function replaceURLs(text) {
   if (!text) return;
@@ -73,8 +74,6 @@ export default function Event(props) {
     lat,
     lng,
     imageUploaded,
-    startDate,
-    endDate,
     social,
   } = data.event;
 
@@ -86,53 +85,7 @@ export default function Event(props) {
     ? `https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`
     : null;
 
-  const jsonData = {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    name: title,
-    url: `https://www.culturacardedeu.com/${slug}`,
-    startDate,
-    endDate,
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    eventStatus: "https://schema.org/EventScheduled",
-    location: {
-      "@type": "Place",
-      name: location,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: location,
-        addressLocality: "Cardedeu",
-        postalCode: "08440",
-        addressCountry: "ES",
-        addressRegion: "CT",
-      },
-      geo: {
-        latitude: lat,
-        "@type": "GeoCoordinates",
-        longitude: lng,
-      },
-    },
-    image: [uploadedImage, ...images].filter(Boolean),
-    description,
-    performer: {
-      "@type": "PerformingGroup",
-      name: location,
-    },
-    organizer: {
-      "@type": "Organization",
-      name: location,
-      url: "https://www.culturacardedeu.com",
-    },
-    offers: {
-      "@type": "Offer",
-      price: 0,
-      isAccessibleForFree: true,
-      priceCurrency: "EUR",
-      availability: "https://schema.org/InStock",
-      url: `https://www.culturacardedeu.com/${slug}`,
-      validFrom: startDate,
-    },
-  };
+  const jsonData = generateJsonData({ ...data.event, uploadedImage });
 
   return (
     <>
