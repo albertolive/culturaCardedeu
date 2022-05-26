@@ -28,7 +28,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
     return () => {
       events.off("routeChangeComplete", handleRouteChange);
     };
-  }, []);
+  }, [events]);
 
   return (
     <>

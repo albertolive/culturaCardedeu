@@ -3,7 +3,7 @@ import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 
-export default function noEventsFound(props) {
+export default function NoEventsFound(props) {
   const {
     data: { events = [] },
     error,

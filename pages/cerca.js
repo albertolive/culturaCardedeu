@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SearchIcon, XIcon } from "@heroicons/react/solid";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
@@ -81,7 +81,7 @@ export default function Search() {
       setSearchTerm(searchTerm);
       searchEvents(searchTerm);
     }
-  }, []);
+  }, [searchEvents]);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") searchEvents();
@@ -106,15 +106,18 @@ export default function Search() {
     }
   }, 1500);
 
-  const searchEvents = (searchInLocalStorage) => {
-    if (
-      (searchInLocalStorage && searchInLocalStorage.length > 0) ||
-      searchTerm.length > 0
-    ) {
-      setStartFetching(true);
-      sendSearchTermGA(searchInLocalStorage || searchTerm);
-    }
-  };
+  const searchEvents = useCallback(
+    (searchInLocalStorage) => {
+      if (
+        (searchInLocalStorage && searchInLocalStorage.length > 0) ||
+        searchTerm.length > 0
+      ) {
+        setStartFetching(true);
+        sendSearchTermGA(searchInLocalStorage || searchTerm);
+      }
+    },
+    [searchTerm]
+  );
 
   const onFocus = (e) => {
     const val =
