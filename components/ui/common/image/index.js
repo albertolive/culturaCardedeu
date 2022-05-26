@@ -21,7 +21,7 @@ export default function ImageComponent({
           rel="preload"
           href={image}
           as="image"
-          imagesrcset={`${image} 1200w,
+          imageSrcSet={`${image} 1200w,
      ${image}?w=200 200w, 
      ${image}?w=400 400w, 
      ${image}?w=800 800w, 
