@@ -1,9 +1,10 @@
 import Link from "next/link";
+import Script from "next/script";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { SubMenu } from "@components/ui/common";
-import { monthsName } from "@utils/helpers";
+import { monthsName, generateJsonData } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
@@ -14,8 +15,15 @@ export default function App(props) {
 
   if (error) return <div>failed to load</div>;
 
+  const jsonData = events.map((event) => generateJsonData(event));
+
   return (
     <>
+      <Script
+        id="agenda-script"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
+      />
       <Meta
         title="Agenda 2022 - Cultura Cardedeu"
         description="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu. L'agenda és col·laborativa."

@@ -25,6 +25,11 @@ export const normalizeEvents = (event) => {
     tag,
     slug: slug(title, formattedStart, event.id),
     ...locationNormalized,
+    startDate: event.start && event.start.dateTime,
+    endDate: event.end && event.end.dateTime,
+    description: event.description
+      ? event.description
+      : "Cap descripció. Vols afegir-ne una? Escriu-nos i et direm com fer-ho!",
   };
 };
 
