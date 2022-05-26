@@ -31,6 +31,7 @@ const Meta = (props) => (
     <meta name="twitter:site" content="@culturaCardedeu" />
     <meta name="twitter:creator" content="Cultura Cardedeu" />
     <meta name="twitter:url" content={props.canonical} />
+    <meta name="twitter:domain" content={siteUrl} />
     <meta name="twitter:image:alt" content={props.title} />
     <meta property="fb:app_id" content="103738478742219" />
     <meta property="fb:pages" content="103738478742219" />
