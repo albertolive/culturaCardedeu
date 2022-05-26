@@ -19,8 +19,7 @@ export default function App(props) {
         title="Què fer aquest cap de setmana a Cardedeu - Cultura Cardedeu"
         description="Què fer aquest cap de setmana a Cardedeu. Les millors propostes culturals per esprémer al màxim el cap de setmana, de divendres a diumenge."
         canonical="https://www.culturacardedeu.com/cap-de-setmana-a-cardedeu"
-        image="/static/images/logo-cultura-cardedeu.png"
-        newsKeywords="Les millors propostes per esprémer al màxim el cap de setmana a Cardedeu, de divendres a diumenge."
+        image="/static/images/banner-cultura-cardedeu.jpeg"
       />
       <SubMenu />
       <div className="reset-this">

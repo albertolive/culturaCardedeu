@@ -172,8 +172,7 @@ export default function Publica() {
         title="Publica - Cultura Cardedeu"
         description="Publica un acte cultural - Cultura Cardedeu"
         canonical="https://www.culturacardedeu.com/publica"
-        image="/static/images/logo-cultura-cardedeu.png"
-        newsKeywords="Publica un acte cultural - Cultura Cardedeu"
+        image="/static/images/banner-cultura-cardedeu.jpeg"
       />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         <div className="space-y-8 divide-y divide-gray-200">

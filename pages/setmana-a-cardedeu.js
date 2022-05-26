@@ -20,8 +20,7 @@ export default function App(props) {
         title="Què fer aquesta setmana a Cardedeu - Cultura Cardedeu"
         description="Què fer aquesta setmana a Cardedeu. Teniu ganes de gaudir del poble? Teatre, cinema, música, art i altres excuses per no parar de descobrir Cardedeu!"
         canonical="https://www.culturacardedeu.com/setmana-a-cardedeu"
-        image="/static/images/logo-cultura-cardedeu.png"
-        newsKeywords="Coses per fer a Cardedeu aquesta setmana. Us proposem activitats d'oci i cultura a Cardedeu per a tots els gustos i butxaques."
+        image="/static/images/banner-cultura-cardedeu.jpeg"
       />
       <SubMenu />
       <div className="reset-this">
