@@ -19,8 +19,7 @@ export default function App(props) {
         title="Que fer avui a Cardedeu - Cultura Cardedeu"
         description="Què fer avui a Cardedeu. Us oferim tota la informació per gaudir de Cardedeu i de la seva enorme activitat cultural: cinema, museus, teatre, mercats, familiar."
         canonical="https://www.culturacardedeu.com/avui-a-cardedeu"
-        image="/static/images/logo-cultura-cardedeu.png"
-        newsKeywords="Què fer avui a Cardedeu. Aprofita el teu temps i troba el que necessites: el millor del dia al teu abast."
+        image="/static/images/banner-cultura-cardedeu.jpeg"
       />
       <SubMenu />
       <div className="reset-this">

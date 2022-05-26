@@ -99,7 +99,6 @@ export default function Event(props) {
         description={`${title} - ${nameDay}, ${formattedStart} - ${location} - Cultura Cardedeu`}
         canonical={`https://www.culturacardedeu.com/${slug}`}
         image={images[0]}
-        newsKeywords={`${title} - ${nameDay}, ${formattedStart} - ${location}`}
         preload="/static/images/gMaps.webp"
       />
       {newEvent && <Notification title={title} url={slug} />}
