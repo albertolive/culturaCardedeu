@@ -111,6 +111,7 @@ export const generateJsonData = ({
   lng,
   uploadedImage,
   images,
+  social,
 }) => ({
   "@context": "https://schema.org",
   "@type": "Event",
@@ -148,7 +149,7 @@ export const generateJsonData = ({
   organizer: {
     "@type": "Organization",
     name: location,
-    url: siteUrl,
+    url: social ? social.web : siteUrl,
   },
   offers: {
     "@type": "Offer",
