@@ -33,9 +33,14 @@ function isHTML(text) {
 }
 
 export default function Event(props) {
-  const router = useRouter();
-  const { newEvent } = router.query;
+  const { push, query, asPath } = useRouter();
+  const { newEvent } = query;
   const { data, error } = useGetEvent(props);
+  const slug = data.event ? data.event.slug : "";
+
+  useEffect(() => {
+    if (slug && asPath !== `/${slug}`) push(slug, undefined, { shallow: true });
+  }, [asPath, data, push, slug]);
 
   const handleMapLoad = useCallback(() => {
     setTimeout(() => {
@@ -61,7 +66,6 @@ export default function Event(props) {
 
   const {
     id,
-    slug,
     title,
     description,
     location,
