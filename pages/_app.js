@@ -5,8 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 function CulturaCardedeuMainEntry({ Component, pageProps }) {
-  const { events, query } = useRouter();
-  const { noTracking } = query;
+  const { events } = useRouter();
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -31,26 +30,12 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
     };
   }, [events]);
 
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      !localStorage.getItem("noTracking") &&
-      noTracking
-    ) {
-      localStorage.setItem("noTracking", JSON.stringify(true));
-    }
-  }, [noTracking]);
-
   return (
     <>
       <Script
         id="google-analytics-gtag"
         strategy="lazyOnload"
-        src={
-          noTracking
-            ? ""
-            : `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`
-        }
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
       />
 
       <Script id="google-analytics-lazy-load" strategy="lazyOnload">
@@ -58,9 +43,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${
-          noTracking ? "" : process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS
-        }', {
+        gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
         page_path: window.location.pathname,
         });
     `}
