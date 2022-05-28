@@ -15,7 +15,7 @@ export const getServerSideProps = async (ctx) => {
   const fields = normalizedEvents?.map((data) => ({
     loc: `${siteUrl}/${data.slug}`,
     lastmod: new Date().toISOString(),
-    changefreq: "weekly",
+    changefreq: "daily",
     "image:image": `
     <image:loc>${siteUrl}${data.images[0]}</image:loc>
     <image:title>${data.title}</image:title>

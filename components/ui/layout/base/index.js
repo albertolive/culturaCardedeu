@@ -2,8 +2,6 @@ import Head from "next/head";
 import { Navbar, Footer } from "@components/ui/common";
 
 export default function BaseLayout({ children }) {
-  console.log(process.env.VERCEL_ENV);
-  console.log(process.env.NEXT_PUBLIC_VERCEL_ENV);
   return (
     <>
       <Head>
