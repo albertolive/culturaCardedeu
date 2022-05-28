@@ -6,6 +6,7 @@ export default function BaseLayout({ children }) {
     <>
       <Head>
         <title>Cultura Cardedeu</title>
+        <meta name="robots" content="noindex, nofollow"></meta>
         <meta name="description" content="Cultura Cardedeu" />
         <link rel="icon" href="/favicon.ico" />
         <link
