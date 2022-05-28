@@ -7,7 +7,7 @@ const Meta = (props) => (
     <title>{props.title}</title>
     <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="title" content={props.title} />
     <meta name="description" content={props.description} />
     <link rel="canonical" href={`${props.canonical}`} />
