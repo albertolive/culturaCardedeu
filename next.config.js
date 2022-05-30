@@ -32,6 +32,11 @@ const nextConfig = {
         destination: "/",
         permanent: true,
       },
+      {
+        source: "/publica-un-acte",
+        destination: "/publica",
+        permanent: true,
+      },
     ];
   },
 };
