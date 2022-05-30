@@ -118,7 +118,7 @@ export default function NoEventsFound(props) {
             </svg>
           </div>
         </div>
-        <div className="ml-3 text-sm italic mt-0 lg:-mt-6 text-left md:text-center">
+        <div className="ml-3 text-sm italic mt-0 lg:-mt-4 text-left md:text-center">
           Trobes a faltar algun esdeveniment? Fes clic{" "}
           <Link href="/publica">
             <a className="font-bold text-black hover:underline">aquí</a>
