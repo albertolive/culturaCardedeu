@@ -1,11 +1,11 @@
-import Link from "next/link";
+import Script from "next/script";
+import { generateJsonData } from "@utils/helpers";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { NoEventsFound, SubMenu } from "@components/ui/common";
 import { nextDay } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
-import { CalendarIcon } from "@heroicons/react/solid";
 
 export default function App(props) {
   const {
@@ -15,8 +15,15 @@ export default function App(props) {
 
   if (error) return <div>failed to load</div>;
 
+  const jsonData = events.map((event) => generateJsonData(event));
+
   return (
     <>
+      <Script
+        id="setmana-script"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
+      />
       <Meta
         title="Què fer aquesta setmana a Cardedeu - Cultura Cardedeu"
         description="Què fer aquesta setmana a Cardedeu. Teniu ganes de gaudir del poble? Teatre, cinema, música, art i altres excuses per no parar de descobrir Cardedeu!"

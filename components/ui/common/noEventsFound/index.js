@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Script from "next/script";
+import { generateJsonData } from "@utils/helpers";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
@@ -11,8 +13,15 @@ export default function NoEventsFound(props) {
 
   if (error) return <div>failed to load</div>;
 
+  const jsonData = events.map((event) => generateJsonData(event));
+
   return (
     <>
+      <Script
+        id="no-events-script"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
+      />
       <div className="py-8">
         <div className="w-full border-t border-gray-100"></div>
       </div>

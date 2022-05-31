@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import Script from "next/script";
+import { generateJsonData } from "@utils/helpers";
 import { SearchIcon, XIcon } from "@heroicons/react/solid";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
@@ -37,8 +39,15 @@ const SearchResults = ({ keyword }) => {
 
   if (error) return <div className="">failed to load</div>;
 
+  const jsonData = events.map((event) => generateJsonData(event));
+
   return (
     <>
+      <Script
+        id="cerca-script"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
+      />
       {events.length ? (
         <List events={events}>
           {(event) => <Card key={event.id} event={event} />}
