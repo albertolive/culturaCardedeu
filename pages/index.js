@@ -28,7 +28,6 @@ export default function App(props) {
         title="Agenda 2022 - Cultura Cardedeu"
         description="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu. L'agenda és col·laborativa."
         canonical="https://www.culturacardedeu.com/"
-        image="/static/images/banner-cultura-cardedeu.jpeg"
       />
       <SubMenu />
       <div className="reset-this">
