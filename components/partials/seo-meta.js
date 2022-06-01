@@ -5,11 +5,10 @@ const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 const getRandomImage = Math.floor(Math.random() * 9);
 
 const Meta = (props) => {
-  console.log(getRandomImage);
   const image =
     props.image ||
     `/static/images/banners/cultura-cardedeu-banner-${getRandomImage}.jpeg`;
-  console.log(image);
+
   return (
     <Head>
       <title>{props.title}</title>
