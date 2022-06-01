@@ -180,7 +180,6 @@ export default function Edita({ event }) {
         title="Edita - Cultura Cardedeu"
         description="Edita - Cultura Cardedeu"
         canonical="https://www.culturacardedeu.com/edita"
-        image="/static/images/banner-cultura-cardedeu.jpeg"
       />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         <div className="space-y-8 divide-y divide-gray-200">
