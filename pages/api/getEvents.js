@@ -26,6 +26,14 @@ export default async function handler(req, res) {
       const fromSearch = new Date();
 
       events = await getCalendarEvents(fromSearch, null, false, q);
+
+      if (events.noEventsFound) {
+        const { from, until } = twoWeeksDefault();
+
+        events = await getCalendarEvents(from, until, false, "", 7);
+        events = { ...events, noEventsFound: true };
+      }
+
       break;
     default:
       const { from, until } = twoWeeksDefault();
@@ -34,7 +42,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    res.status(200).json({ ...events, noEventsFound: events.length === 0 });
+    res.status(200).json({
+      ...events,
+      noEventsFound: events.noEventsFound
+        ? events.noEventsFound
+        : events.length === 0,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
