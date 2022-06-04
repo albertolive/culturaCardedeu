@@ -12,6 +12,9 @@ export const useGetEvents = (
   refreshInterval = true,
   maxResults = 50
 ) => {
+  if (props.noEventsFound)
+    return { data: { events: props.events, noEventsFound: true } };
+
   return useSWR(["/api/getEvents", pageIndex, q, maxResults], fetcher, {
     fallbackData: props,
     refreshInterval: refreshInterval ? 60000 : 0,

@@ -4,12 +4,11 @@ import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import { NoEventsFound, SubMenu } from "@components/ui/common";
-import { nextDay } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
   const {
-    data: { events = [] },
+    data: { events = [], noEventsFound = false },
     error,
   } = useGetEvents(props, "week");
 
@@ -45,24 +44,41 @@ export default function App(props) {
         tots els àmbits i per a tots els públics. Teatre, cinema, música, art i
         altres excuses per no parar de descobrir Cardedeu!
       </p>
-      {events.length ? (
-        <List events={events}>
-          {(event) => <Card key={event.id} event={event} />}
-        </List>
-      ) : (
-        <NoEventsFound title="Ho sentim, però no hi ha esdeveniments aquesta setmana a Cardedeu. Hem rebuscat en l'agenda i pot ser que també t'agradin aquestes altres opcions." />
+      {noEventsFound && (
+        <NoEventsFound title="Ho sentim, però no hi ha esdeveniments avui a Cardedeu. Hem rebuscat en l'agenda i pot ser que també t'agradin aquestes altres opcions." />
       )}
+      <List events={events}>
+        {(event) => <Card key={event.id} event={event} />}
+      </List>
     </>
   );
 }
 
 export async function getStaticProps() {
   const { getCalendarEvents } = require("@lib/helpers");
+  const { week, twoWeeksDefault } = require("@lib/dates");
 
-  const from = new Date();
-  const until = nextDay(0);
+  const { from, until } = week();
+  const { events: weekEvents } = await getCalendarEvents(from, until);
 
-  const { events } = await getCalendarEvents(from, until);
+  let events = weekEvents;
+  let noEventsFound = false;
+
+  if (events.length === 0) {
+    const { from, until } = twoWeeksDefault();
+
+    const { events: nextEvents } = await getCalendarEvents(
+      from,
+      until,
+      false,
+      "",
+      7
+    );
+
+    noEventsFound = true;
+    events = nextEvents;
+  }
+
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return {

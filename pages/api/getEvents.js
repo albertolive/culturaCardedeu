@@ -1,7 +1,5 @@
+import { today, week, weekend, twoWeeksDefault } from "@lib/dates";
 import { getCalendarEvents } from "@lib/helpers";
-import { nextDay, isWeekend } from "@utils/helpers";
-
-const dayLightSaving = 2;
 
 export default async function handler(req, res) {
   const { page, q, maxResults } = req.query;
@@ -10,52 +8,27 @@ export default async function handler(req, res) {
 
   switch (page) {
     case "today":
-      const fromToday = new Date();
-      const untilToday = new Date();
-
-      untilToday.setHours(24 + dayLightSaving);
-      untilToday.setMinutes(0);
-      untilToday.setSeconds(0);
+      const { from: fromToday, until: untilToday } = today();
 
       events = await getCalendarEvents(fromToday, untilToday);
       break;
     case "week":
-      const fromWeek = new Date();
-      const toWeek = nextDay(0);
-
-      toWeek.setHours(24 + dayLightSaving);
-      toWeek.setMinutes(0);
-      toWeek.setSeconds(0);
+      const { from: fromWeek, until: toWeek } = week();
 
       events = await getCalendarEvents(fromWeek, toWeek);
       break;
     case "weekend":
-      let fromWeekend = nextDay(5);
-
-      if (isWeekend()) {
-        fromWeekend = new Date();
-      } else {
-        fromWeekend.setHours(6 + dayLightSaving);
-        fromWeekend.setMinutes(0);
-        fromWeekend.setSeconds(0);
-      }
-
-      const toWeekend = nextDay(0);
-
-      toWeekend.setHours(24 + dayLightSaving);
-      toWeekend.setMinutes(0);
-      toWeekend.setSeconds(0);
+      const { from: fromWeekend, until: toWeekend } = weekend();
 
       events = await getCalendarEvents(fromWeekend, toWeekend);
       break;
     case "search":
       const fromSearch = new Date();
+
       events = await getCalendarEvents(fromSearch, null, false, q);
       break;
     default:
-      const now = new Date();
-      const from = new Date();
-      const until = new Date(now.setDate(now.getDate() + 15));
+      const { from, until } = twoWeeksDefault();
 
       events = await getCalendarEvents(from, until, false, q, maxResults);
   }
