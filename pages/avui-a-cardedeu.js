@@ -9,7 +9,7 @@ import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
   const {
-    data: { events = [] },
+    data: { events = [], noEventsFound = false },
     error,
   } = useGetEvents(props, "today");
 
@@ -53,32 +53,45 @@ export default function App(props) {
         gaudir de Cardedeu i de la seva enorme activitat cultural. No cal
         moderació, la podeu gaudir a l&apos;engròs.
       </p>
-      {events.length ? (
-        <List events={events}>
-          {(event) => <Card key={event.id} event={event} />}
-        </List>
-      ) : (
+      {noEventsFound && (
         <NoEventsFound title="Ho sentim, però no hi ha esdeveniments avui a Cardedeu. Hem rebuscat en l'agenda i pot ser que també t'agradin aquestes altres opcions." />
       )}
+      <List events={events}>
+        {(event) => <Card key={event.id} event={event} />}
+      </List>
     </>
   );
 }
 
 export async function getStaticProps() {
   const { getCalendarEvents } = require("@lib/helpers");
+  const { today, twoWeeksDefault } = require("@lib/dates");
 
-  const from = new Date();
-  from.setHours(8);
-  from.setMinutes(0);
-  const until = new Date();
-  until.setHours(24);
-  until.setMinutes(0);
+  const { from, until } = today();
+  const { events: todayEvents } = await getCalendarEvents(from, until);
 
-  const { events } = await getCalendarEvents(from, until);
+  let events = todayEvents;
+  let noEventsFound = false;
+
+  if (events.length === 0) {
+    const { from, until } = twoWeeksDefault();
+
+    const { events: nextEvents } = await getCalendarEvents(
+      from,
+      until,
+      false,
+      "",
+      7
+    );
+
+    noEventsFound = true;
+    events = nextEvents;
+  }
+
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return {
-    props: { events: normalizedEvents },
+    props: { events: normalizedEvents, noEventsFound },
     revalidate: 60,
   };
 }

@@ -67,10 +67,9 @@ export default function App(props) {
 
 export async function getStaticProps() {
   const { getCalendarEvents } = require("@lib/helpers");
+  const { twoWeeksDefault } = require("@lib/dates");
 
-  const now = new Date();
-  const from = new Date();
-  const until = new Date(now.setDate(now.getDate() + 15));
+  const { from, until } = twoWeeksDefault();
 
   const { events } = await getCalendarEvents(from, until);
   const normalizedEvents = JSON.parse(JSON.stringify(events));

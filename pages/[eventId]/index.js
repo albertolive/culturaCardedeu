@@ -262,12 +262,9 @@ export default function Event(props) {
 }
 
 export async function getStaticPaths() {
-  const { getCalendarEvents } = require("@lib/helpers");
+  const { twoWeeksDefault } = require("@lib/dates");
 
-  const now = new Date();
-  const from = new Date();
-  const until = new Date(now.setDate(now.getDate() + 15));
-
+  const { from, until } = twoWeeksDefault();
   const { events } = await getCalendarEvents(from, until);
   const eventsSlug = events.map((c) => ({ params: { eventId: c.slug } }));
 

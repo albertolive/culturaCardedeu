@@ -1,34 +1,15 @@
 import Link from "next/link";
-import Script from "next/script";
-import { generateJsonData } from "@utils/helpers";
-import Card from "@components/ui/card";
-import List from "@components/ui/list";
-import { useGetEvents } from "@components/hooks/useGetEvents";
 
-export default function NoEventsFound(props) {
-  const {
-    data: { events = [] },
-    error,
-  } = useGetEvents(props, "all", "", false, 6);
-
-  if (error) return <div>failed to load</div>;
-
-  const jsonData = events.map((event) => generateJsonData(event));
-
+export default function NoEventsFound({ title }) {
   return (
     <>
-      <Script
-        id="no-events-script"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
-      />
       <div className="py-8">
         <div className="w-full border-t border-gray-100"></div>
       </div>
       <div className="text-center mb-4">
         <div className="flex justify-center content-center items-center	">
           <h2 className=" block text-md leading-8 font-extrabold tracking-tight text-gray-900 xs:text-xl">
-            {props.title}
+            {title}
           </h2>
           <div className="flex-shrink-0 ml-4 w-20 h-20 item self-center">
             <svg viewBox="0 0 120 122">
@@ -135,25 +116,6 @@ export default function NoEventsFound(props) {
           per afegir-lo!
         </div>
       </div>
-      <List events={events}>
-        {(event) => <Card key={event.id} event={event} />}
-      </List>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const { getCalendarEvents } = require("@lib/helpers");
-
-  const now = new Date();
-  const from = new Date();
-  const until = new Date(now.setDate(now.getDate() + 15));
-
-  const { events } = await getCalendarEvents(from, until, false, "", 7);
-  const normalizedEvents = JSON.parse(JSON.stringify(events));
-
-  return {
-    props: { events: normalizedEvents },
-    revalidate: 60,
-  };
 }
