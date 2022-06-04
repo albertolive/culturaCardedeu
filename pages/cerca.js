@@ -32,7 +32,7 @@ function debounce(func, wait, immediate) {
 
 const SearchResults = ({ keyword }) => {
   const {
-    data: { events = [] },
+    data: { events = [], noEventsFound },
     error,
     isValidating,
   } = useGetEvents({}, "search", keyword, false);
@@ -48,15 +48,12 @@ const SearchResults = ({ keyword }) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
-      {events.length ? (
-        <List events={events}>
-          {(event) => <Card key={event.id} event={event} />}
-        </List>
-      ) : (
-        !isValidating && (
-          <NoEventsFound title="Res ha coincidit amb la teva cerca, però pot ser que t'agradin aquestes altres opcions." />
-        )
+      {noEventsFound && !isValidating && (
+        <NoEventsFound title="Res ha coincidit amb la teva cerca, però pot ser que t'agradin aquestes altres opcions." />
       )}
+      <List events={events}>
+        {(event) => <Card key={event.id} event={event} />}
+      </List>
     </>
   );
 };
