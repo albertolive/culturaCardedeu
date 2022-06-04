@@ -32,7 +32,7 @@ function debounce(func, wait, immediate) {
 
 const SearchResults = ({ keyword }) => {
   const {
-    data: { events = [], noEventsFound },
+    data: { events = [], noEventsFound = false },
     error,
     isValidating,
   } = useGetEvents({}, "search", keyword, false);
