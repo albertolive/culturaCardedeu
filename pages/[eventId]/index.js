@@ -262,6 +262,7 @@ export default function Event(props) {
 }
 
 export async function getStaticPaths() {
+  const { getCalendarEvents } = require("@lib/helpers");
   const { twoWeeksDefault } = require("@lib/dates");
 
   const { from, until } = twoWeeksDefault();
