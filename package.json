@@ -2,12 +2,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build:development": "NODE_ENV=production env-cmd -f env/.env.development next build",
-    "start:development": "env-cmd -f env/.env.development next start",
-    "build:staging": "NODE_ENV=production env-cmd -f env/.env.staging next build",
-    "start:staging": "env-cmd -f env/.env.staging next start",
-    "build:production": "NODE_ENV=production env-cmd -f env/.env.production next build",
-    "start:production": "NODE_ENV=production env-cmd -f env/.env.production next start",
+    "build:development": "NODE_ENV=production env-cmd -f .env.development next build",
+    "start:development": "env-cmd -f .env.development next start",
+    "build:staging": "NODE_ENV=production env-cmd -f .env.staging next build",
+    "start:staging": "env-cmd -f .env.staging next start",
+    "build:production": "NODE_ENV=production env-cmd -f .env.production next build",
+    "start:production": "NODE_ENV=production env-cmd -f .env.production next start",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint"
