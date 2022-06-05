@@ -99,8 +99,8 @@ export default function Event(props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
       <Meta
-        title={`${title} - Cultura Cardedeu`}
-        description={`${title} - ${nameDay}, ${formattedStart} - ${location} - Cultura Cardedeu`}
+        title={`${title} el ${nameDay} ${formattedStart} - Cultura Cardedeu`}
+        description={`${title} el ${nameDay} ${formattedStart} a ${location} - Cultura Cardedeu`}
         canonical={`https://www.culturacardedeu.com/${slug}`}
         image={images[0]}
         preload="/static/images/gMaps.webp"
