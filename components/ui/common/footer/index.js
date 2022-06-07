@@ -17,6 +17,8 @@ export default function Footer() {
                 Segueix-nos a:&nbsp;
                 <div>
                   <a
+                    rel="noopener noreferrer"
+                    target="_blank"
                     className="hover:text-[#ECB84A]"
                     href="https://twitter.com/culturacardedeu"
                   >
@@ -26,6 +28,8 @@ export default function Footer() {
                 <div>
                   |&nbsp;&nbsp;
                   <a
+                    rel="noopener noreferrer"
+                    target="_blank"
                     className="hover:text-[#ECB84A]"
                     href="https://t.me/culturacardedeu"
                   >
@@ -35,6 +39,8 @@ export default function Footer() {
                 <div>
                   |&nbsp;&nbsp;
                   <a
+                    rel="noopener noreferrer"
+                    target="_blank"
                     className="hover:text-[#ECB84A]"
                     href="https://www.facebook.com/culturacardedeu"
                   >
