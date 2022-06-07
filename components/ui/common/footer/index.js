@@ -6,6 +6,7 @@ export default function Footer() {
           <div className="py-4">
             <div className="text-white text-sm text-primary-2 font-bold text-center">
               © {new Date().getFullYear()} Cultura Cardedeu <br />
+              Contacte:&nbsp;
               <a
                 className="hover:text-[#ECB84A]"
                 href="mailto:hola@culturacardedeu.com"
@@ -13,24 +14,33 @@ export default function Footer() {
                 hola@culturacardedeu.com
               </a>
               <div className="flex space-x-2">
-                <a
-                  className="hover:text-[#ECB84A]"
-                  href="https://twitter.com/culturacardedeu"
-                >
-                  Twitter
-                </a>
-                <a
-                  className="hover:text-[#ECB84A]"
-                  href="https://t.me/culturacardedeu"
-                >
-                  Telegram
-                </a>
-                <a
-                  className="hover:text-[#ECB84A]"
-                  href="https://www.facebook.com/culturacardedeu"
-                >
-                  Facebook
-                </a>
+                Segueix-nos a:&nbsp;
+                <div>
+                  <a
+                    className="hover:text-[#ECB84A]"
+                    href="https://twitter.com/culturacardedeu"
+                  >
+                    Twitter
+                  </a>
+                </div>
+                <div>
+                  |&nbsp;&nbsp;
+                  <a
+                    className="hover:text-[#ECB84A]"
+                    href="https://t.me/culturacardedeu"
+                  >
+                    Telegram
+                  </a>
+                </div>
+                <div>
+                  |&nbsp;&nbsp;
+                  <a
+                    className="hover:text-[#ECB84A]"
+                    href="https://www.facebook.com/culturacardedeu"
+                  >
+                    Facebook
+                  </a>
+                </div>
               </div>
             </div>
           </div>
