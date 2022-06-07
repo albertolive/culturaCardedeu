@@ -175,6 +175,12 @@ export const VITAMINED_LOCATIONS = {
     ],
     lat: 41.638586306071716,
     lng: 2.356506032558306,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   canBorras: {
     images: ["/static/images/locations/canBorras/1.jpeg"],
@@ -191,11 +197,23 @@ export const VITAMINED_LOCATIONS = {
     ],
     lat: 41.6394024,
     lng: 2.3591531,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   casaCorbella: {
     images: ["/static/images/locations/casaCorbella/1.jpeg"],
     lat: 41.64260842131494,
     lng: 2.3563093806627684,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   caEspavil: {
     images: ["/static/images/locations/caEspavil/1.jpeg"],
@@ -212,6 +230,12 @@ export const VITAMINED_LOCATIONS = {
     ],
     lat: 41.63822360236233,
     lng: 2.356717062164755,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   casalAjuntamentCardedeu: {
     images: [
@@ -372,11 +396,23 @@ export const VITAMINED_LOCATIONS = {
     images: ["/static/images/locations/parcPompeuFabra/1.jpeg"],
     lat: 41.64187052797948,
     lng: 2.3530121512517255,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   parcDelsPinetons: {
     images: ["/static/images/locations/parcDelsPinetons/1.jpeg"],
     lat: 41.6418889903151,
     lng: 2.3542687426674447,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   placaContes: {
     images: [
@@ -385,26 +421,56 @@ export const VITAMINED_LOCATIONS = {
     ],
     lat: 41.63836142146722,
     lng: 2.357423235796843,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   placaEsglesia: {
     images: ["/static/images/locations/placaEsglesia/1.jpeg"],
     lat: 41.63853798978688,
     lng: 2.355840838823934,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   placaSantCorneli: {
     images: ["/static/images/locations/placaSantCorneli/1.jpeg"],
     lat: 41.63872635026174,
     lng: 2.356437313664736,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   placaSantJoan: {
     images: ["/static/images/locations/placaSantJoan/1.jpeg"],
     lat: 41.63816747322217,
     lng: 2.355029169716503,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   placaJoanAlsina: {
     images: ["/static/images/locations/placaJoanAlsina/1.jpeg"],
     lat: 41.64200225558534,
     lng: 2.36117166518075,
+    social: {
+      twitter: "https://www.twitter.com/culturacardedeu",
+      instagram: "https://www.instagram.com/culturacardedeu",
+      telegram: "htpps://t.me/culturacardedeu",
+      facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
   },
   salaSarau: {
     images: ["/static/images/locations/salaSarau/1.jpeg"],
