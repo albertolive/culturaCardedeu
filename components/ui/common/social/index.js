@@ -71,18 +71,33 @@ const renderInstagram = (link) => (
   </Link>
 );
 
+const renderTelegram = (link) => (
+  <Link href={link}>
+    <a className="no-underline" rel="noopener noreferrer" target="_blank">
+      <button className="bg-[#2AABEE] hover:bg-[#2AABEE]/80 px-2 py-2 text-sm font-semibold text-white inline-flex items-center space-x-2 rounded">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-5 h-5 fill-current"
+          role="img"
+          viewBox="0 0 24 24"
+        >
+          <path d="M18.384 22.779a1.19 1.19 0 0 0 1.107.145 1.16 1.16 0 0 0 .724-.84C21.084 18 23.192 7.663 23.983 3.948a.78.78 0 0 0-.26-.758.8.8 0 0 0-.797-.14C18.733 4.602 5.82 9.447.542 11.4a.827.827 0 0 0-.542.799c.012.354.25.661.593.764 2.367.708 5.474 1.693 5.474 1.693s1.452 4.385 2.209 6.615c.095.28.314.5.603.576a.866.866 0 0 0 .811-.207l3.096-2.923s3.572 2.619 5.598 4.062Zm-11.01-8.677 1.679 5.538.373-3.507 10.185-9.186a.277.277 0 0 0 .033-.377.284.284 0 0 0-.376-.064L7.374 14.102Z" />
+        </svg>
+        <span>Telegram</span>
+      </button>
+    </a>
+  </Link>
+);
+
 export default function Social({ links }) {
   return (
     <div className="mt-2">
       <div className="flex flex-col xs:flex-row items-start xs:items-center space-x-0 xs:space-x-3">
-        <div className="">{links.web && renderWeb(links.web)}</div>
-        <div className="">
-          {links.instagram && renderInstagram(links.instagram)}
-        </div>
-        <div className="">{links.twitter && renderTwitter(links.twitter)}</div>
-        <div className="">
-          {links.facebook && renderFacebook(links.facebook)}
-        </div>
+        {links.web && renderWeb(links.web)}
+        {links.twitter && renderTwitter(links.twitter)}
+        {links.instagram && renderInstagram(links.instagram)}
+        {links.telegram && renderTelegram(links.telegram)}
+        {links.facebook && renderFacebook(links.facebook)}
       </div>
     </div>
   );
