@@ -20,7 +20,7 @@ const renderWeb = (link) => (
 const renderFacebook = (link) => (
   <Link href={link}>
     <a className="no-underline" rel="noopener noreferrer" target="_blank">
-      <button className="bg-blue-500 hover:bg-blue-500/80 px-2 py-2 text-sm font-semibold text-white inline-flex items-center space-x-2 rounded">
+      <button className="bg-[#1B74E4] hover:bg-[#1B74E4]/80 px-2 py-2 text-sm font-semibold text-white inline-flex items-center space-x-2 rounded">
         <svg
           className="w-5 h-5 fill-current"
           role="img"
@@ -38,7 +38,7 @@ const renderFacebook = (link) => (
 const renderTwitter = (link) => (
   <Link href={link}>
     <a className="no-underline" rel="noopener noreferrer" target="_blank">
-      <button className="bg-blue-300 hover:bg-blue-300/80 px-2 py-2 text-sm font-semibold text-white inline-flex items-center space-x-2 rounded">
+      <button className="bg-[#1d9bf0] hover:bg-[#1d9bf0]/80 px-2 py-2 text-sm font-semibold text-white inline-flex items-center space-x-2 rounded">
         <svg
           className="w-5 h-5 fill-current"
           role="img"
