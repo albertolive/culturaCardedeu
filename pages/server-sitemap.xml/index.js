@@ -6,10 +6,10 @@ export const getServerSideProps = async (ctx) => {
   const { getCalendarEvents } = require("@lib/helpers");
 
   const now = new Date();
-  const from = now;
+  const from = new Date(now.getFullYear(), now.getMonth() - 4);
   const until = new Date(now.getFullYear(), now.getMonth() + 4);
 
-  const { events } = await getCalendarEvents(from, until, true);
+  const { events } = await getCalendarEvents(from, until, true, "", 2500);
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   const fields = normalizedEvents?.map((data) => ({
