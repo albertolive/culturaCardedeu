@@ -36,7 +36,7 @@ const Meta = (props) => {
       <meta property="og:image" content={`${siteUrl}${image}`} />
       <meta property="og:url" content={props.canonical} />
       <meta property="og:site_name" content="Cultura Cardedeu" />
-      <meta property="og:locale" content="ca_ES" />
+      <meta property="og:locale" content="ca-ES" />
       <meta name="revisit-after" content="1 days" />
       <meta name="author" content="Cultura Cardedeu" />
       <meta name="twitter:card" content="summary_large_image" />

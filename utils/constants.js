@@ -410,7 +410,7 @@ export const VITAMINED_LOCATIONS = {
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
-      telegram: "htpps://t.me/culturacardedeu",
+      telegram: "https://t.me/culturacardedeu",
       facebook: "https://www.facebook.com/agendaculturacardedeu",
     },
   },
