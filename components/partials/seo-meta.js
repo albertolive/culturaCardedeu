@@ -12,9 +12,7 @@ const Meta = (props) => {
   return (
     <Head>
       <title>{props.title}</title>
-      <meta charset="utf-8" />
-      <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-      <meta httpEquiv="Content-Language" content="ca" />
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta
         name="robots"

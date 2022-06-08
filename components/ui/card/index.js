@@ -40,9 +40,9 @@ export default function Card({ event }) {
             <div className="mt-2 mb-4 text-sm sm:text-base text-gray-500 ">
               <span className="inline-flex p-1 px-2 rounded-full bg-slate-200 items-center border border-transparent shadow-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 shadow-grey-500/40">
                 <ClockIcon className="h-6 w-6" />
-                <p className="ml-2 ">
+                <span className="ml-2">
                   {event.startTime} - {event.endTime}
-                </p>
+                </span>
               </span>
             </div>
             {event.tag && (
