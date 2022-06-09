@@ -66,6 +66,7 @@ export const LOCATIONS_ARRAY = [
   { value: "Plaça de l'Església", label: "Plaça de l'Església" },
   { value: "Plaça Sant Corneli", label: "Plaça Sant Corneli" },
   { value: "Plaça Sant Joan", label: "Plaça Sant Joan" },
+  { value: "Pla de la calma", label: "Pla de la calma" },
   { value: "Sala Sarau", label: "Sala Sarau" },
   { value: "Sant Hilari", label: "Sant Hilari" },
   { value: "Tarambana", label: "Tarambana" },
@@ -111,6 +112,7 @@ export const LOCATIONS = {
   placaSantCorneli: ["corneli"],
   placaSantJoan: ["joan"],
   placaJoanAlsina: ["alsina"],
+  plaCalma: ["calma"],
   salaSarau: ["sarau"],
   santHilari: ["hilari"],
   tarambana: ["tarambana"],
@@ -470,6 +472,17 @@ export const VITAMINED_LOCATIONS = {
       instagram: "https://www.instagram.com/culturacardedeu",
       telegram: "htpps://t.me/culturacardedeu",
       facebook: "https://www.facebook.com/agendaculturacardedeu",
+    },
+  },
+  plaCalma: {
+    images: [
+      "/static/images/locations/plaCalma/1.jpeg",
+      "/static/images/locations/plaCalma/2.jpeg",
+    ],
+    lat: 41.63830233290612,
+    lng: 2.356343940659575,
+    social: {
+      facebook: "https://www.facebook.com/barpladelacalma/",
     },
   },
   salaSarau: {
