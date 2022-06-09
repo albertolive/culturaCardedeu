@@ -8,7 +8,7 @@ export default function ImageComponent({
   image = defaultImage,
   width = 200,
   height = 230,
-  className,
+  className = "",
 }) {
   const [src, setSrc] = useState(image);
 
