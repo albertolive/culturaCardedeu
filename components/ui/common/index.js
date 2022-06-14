@@ -6,3 +6,4 @@ export { default as Notification } from "./notification";
 export { default as SubMenu } from "./subMenu";
 export { default as Social } from "./social";
 export { default as NoEventsFound } from "./noEventsFound";
+export { default as NoEventFound } from "./noEventFound";
