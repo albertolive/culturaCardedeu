@@ -2,7 +2,12 @@ import { useEffect, useCallback } from "react";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Image, Notification, Social } from "@components/ui/common";
+import {
+  Image,
+  NoEventFound,
+  Notification,
+  Social,
+} from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
 import { generateJsonData } from "@utils/helpers";
@@ -91,10 +96,12 @@ export default function Event(props) {
   const { newEvent } = query;
   const { data, error } = useGetEvent(props);
   const slug = data.event ? data.event.slug : "";
+  const title = data.event ? data.event.title : "";
 
   useEffect(() => {
-    if (slug && asPath !== `/${slug}`) push(slug, undefined, { shallow: true });
-  }, [asPath, data, push, slug]);
+    if (title !== "CANCELLED" && slug && asPath !== `/${slug}`)
+      push(slug, undefined, { shallow: true });
+  }, [asPath, data, push, slug, title]);
 
   const handleMapLoad = useCallback(() => {
     setTimeout(() => {
@@ -120,7 +127,6 @@ export default function Event(props) {
 
   const {
     id,
-    title,
     description,
     location,
     startTime,
@@ -144,6 +150,8 @@ export default function Event(props) {
     : null;
 
   const jsonData = generateJsonData({ ...data.event, uploadedImage });
+
+  if (title === "CANCELLED") return <NoEventFound />;
 
   return (
     <>

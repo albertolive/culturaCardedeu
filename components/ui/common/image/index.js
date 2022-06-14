@@ -9,6 +9,7 @@ export default function ImageComponent({
   width = 200,
   height = 230,
   className = "",
+  layout = "responsive",
 }) {
   const [src, setSrc] = useState(image);
 
@@ -37,7 +38,7 @@ export default function ImageComponent({
              ${src}?w=400 400w, 
              ${src}?w=800 800w, 
              ${src}?w=1024 1024w`}
-          layout="responsive"
+          layout={layout}
           width={width}
           height={height}
           alt={title}
