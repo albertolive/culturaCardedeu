@@ -32,6 +32,60 @@ function isHTML(text) {
   return text.match(/<[a-z][\s\S]*>/i);
 }
 
+function truncate(source, size, addDots = false) {
+  return source.slice(0, size - 3) + (addDots ? "..." : "");
+}
+
+function generateMetaDescription(title, description) {
+  const titleSanitized = title.replace(/(<([^>]+)>)/gi, "");
+  let text = titleSanitized;
+
+  if (text.length < 156) {
+    const descriptionSanitized = description
+      .replace(/(<([^>]+)>)/gi, "")
+      .replace(/&nbsp;/gi, " ")
+      .replace(/"/gi, "")
+      .replace(/^\s+|\s+$/g, "");
+
+    text += ` - ${descriptionSanitized}`;
+  }
+
+  text = text.replace(/^(.{156}[^\s]*).*/, "$1");
+
+  if (text.length > 156 - 3) {
+    text = truncate(text, 156, true);
+  }
+
+  return text;
+}
+
+function generateMetaTitle(title, alternativeText, location) {
+  const titleSanitized = title.replace(/(<([^>]+)>)/gi, "");
+  let text = titleSanitized;
+
+  text = text.replace(/^(.{60}[^\s]*).*/, "$1");
+
+  if (text.length > 60) {
+    text = truncate(text, 37);
+    text = `${text} - ${alternativeText}`;
+    text = truncate(text, 60);
+  } else if (text.length !== 60) {
+    text = truncate(text, 37);
+    text = `${text} - ${alternativeText}`;
+
+    if (text.length > 60) text = truncate(text, 60);
+  }
+
+  if (text.length < 60) {
+    text = `${text} - ${location}`;
+    text = truncate(text, 60);
+  }
+
+  text = text.replace(/^(.{53}[^\s]*).*/, "$1");
+
+  return text;
+}
+
 export default function Event(props) {
   const { push, query, asPath } = useRouter();
   const { newEvent } = query;
@@ -99,8 +153,11 @@ export default function Event(props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
       <Meta
-        title={`${title} - ${formattedStart} - ${location}`}
-        description={`${title} - ${nameDay} ${formattedStart} a les ${startTime}h - ${location} - Cultura Cardedeu`}
+        title={generateMetaTitle(title, "Cultura Cardedeu", location)}
+        description={generateMetaDescription(
+          `${title} - ${nameDay} ${formattedStart} - ${location}`,
+          description
+        )}
         canonical={`https://www.culturacardedeu.com/${slug}`}
         image={images[0]}
         preload="/static/images/gMaps.webp"
