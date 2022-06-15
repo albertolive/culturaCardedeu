@@ -150,15 +150,15 @@ export const generateJsonData = ({
   organizer: {
     "@type": "Organization",
     name: location,
-    url: social ? social.web : siteUrl,
+    url: siteUrl,
   },
   offers: {
     "@type": "Offer",
     price: 0,
-    isAccessibleForFree: true,
     priceCurrency: "EUR",
     availability: "https://schema.org/InStock",
     url: `${siteUrl}/${slug}`,
     validFrom: startDate,
   },
+  isAccessibleForFree: true,
 });
