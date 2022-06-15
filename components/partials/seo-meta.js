@@ -60,7 +60,7 @@ const Meta = (props) => {
           href={props.preload}
           as="image"
           type="image/webp"
-          crossOrigin="true"
+          crossOrigin="anonymous"
         />
       )}
     </Head>
