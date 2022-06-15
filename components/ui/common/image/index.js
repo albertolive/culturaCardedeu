@@ -19,7 +19,7 @@ export default function ImageComponent({
     <>
       <Head>
         <link
-          rel="preload"
+          rel="prefetch"
           href={image}
           as="image"
           crossOrigin="true"

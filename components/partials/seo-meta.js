@@ -56,7 +56,7 @@ const Meta = (props) => {
       <link rel="shortcut icon" href="/favicon.ico" />
       {props.preload && (
         <link
-          rel="preload"
+          rel="prefetch"
           href={props.preload}
           as="image"
           type="image/webp"
