@@ -4,8 +4,6 @@ Disallow: /404
 User-agent: *
 Allow: /
 
-Disallow: /api/*
-
 # Host
 Host: https://www.culturacardedeu.com
 
