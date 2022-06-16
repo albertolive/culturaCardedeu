@@ -8,6 +8,7 @@ import logo from "@public/static/images/logo-cultura-cardedeu.png";
 const navigation = [
   { name: "Agenda", href: "/", current: true },
   { name: "Qui som", href: "/qui-som", current: false },
+  { name: "Arxiu", href: "/sitemaps", current: false },
 ];
 
 export default function Example() {
@@ -47,10 +48,10 @@ export default function Example() {
               </div>
 
               <div className="flex items-center">
-                <div className="hidden md:mr-6 md:flex md:items-center md:space-x-4">
+                <div className="hidden md:flex md:items-center">
                   {navigation.map((item) => (
                     <ActiveLink href={item.href} key={item.name}>
-                      <a className="font-medium mr-3 text-white hover:text-stone-200">
+                      <a className="font-medium mr-4 text-white hover:text-stone-200">
                         {item.name}
                       </a>
                     </ActiveLink>
@@ -83,7 +84,7 @@ export default function Example() {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navigation.map((item) => (
                 <ActiveLink href={item.href} key={item.name}>
-                  <a className="font-medium mr-8 text-white hover:text-stone-200">
+                  <a className="font-medium mr-4 text-white hover:text-stone-200">
                     {item.name}
                   </a>
                 </ActiveLink>
