@@ -17,8 +17,8 @@ export default function Sitemaps() {
   return (
     <>
       <Meta
-        title={`Sitemap. Descobreix tot el que passa a Cardedeu - Cultura Cardedeu`}
-        description="Descobreix tot el què ha passat a Cardedeu cada any. Les millors propostes culturals per esprémer al màxim de Cardedeu - Sitemap - Cultura Cardedeu"
+        title={`Arxiu. Descobreix tot el que passa a Cardedeu - Cultura Cardedeu`}
+        description="Descobreix tot el què ha passat a Cardedeu cada any. Les millors propostes culturals per esprémer al màxim de Cardedeu - Arxiu - Cultura Cardedeu"
         canonical="https://www.culturacardedeu.com/sitemaps"
       />
       <div className="grid overflow-hidden grid-cols-2 lg:grid-cols-4 auto-rows-auto gap-2 grid-flow-row w-auto">

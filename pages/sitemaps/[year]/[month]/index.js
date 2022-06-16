@@ -19,8 +19,8 @@ export default function Month({ events }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
       <Meta
-        title={`Sitemap del ${month} del ${year} - Cultura Cardedeu`}
-        description={`Descobreix què va passar a Cardedeu el ${month} del ${year}. Teatre, cinema, música, art i altres excuses per no parar de descobrir Cardedeu - Sitemap - Cultura Cardedeu`}
+        title={`Arxiu del ${month} del ${year} - Cultura Cardedeu`}
+        description={`Descobreix què va passar a Cardedeu el ${month} del ${year}. Teatre, cinema, música, art i altres excuses per no parar de descobrir Cardedeu - Arxiu - Cultura Cardedeu`}
         canonical={`https://www.culturacardedeu.com/sitemaps/${year}/${month}`}
       />
       <div className="reset-this mb-2">
