@@ -39,6 +39,7 @@ export default function Example() {
                         width={120}
                         height={60}
                         layout="fixed"
+                        priority
                       />
                     </a>
                   </ActiveLink>
