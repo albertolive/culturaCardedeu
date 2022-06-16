@@ -13,6 +13,7 @@ export const slug = (str, formattedStart, id) =>
     .replace(/’/g, "'")
     .replace(".", "")
     .replace("%", "")
+    .replace("&", "")
     .replace("ª", "a")
     .replace(/\+/g, "")
     .replace(/\|/g, "")
