@@ -21,7 +21,7 @@ export default function Sitemaps() {
         description="Descobreix tot el què ha passat a Cardedeu cada any. Les millors propostes culturals per esprémer al màxim de Cardedeu - Sitemap - Cultura Cardedeu"
         canonical="https://www.culturacardedeu.com/sitemaps"
       />
-      <div className="grid overflow-hidden grid-cols-4 auto-rows-auto gap-2 grid-flow-row w-auto">
+      <div className="grid overflow-hidden grid-cols-2 lg:grid-cols-4 auto-rows-auto gap-2 grid-flow-row w-auto">
         {years.map((year) => (
           <div key={year} className="box">
             <div className="reset-this">
@@ -35,7 +35,7 @@ export default function Sitemaps() {
                   </a>
                 </Link>
               </div>
-            ))}
+            )).reverse()}
           </div>
         ))}
       </div>
