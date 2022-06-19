@@ -2,6 +2,23 @@ import { getServerSideSitemap } from "next-sitemap";
 
 const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
+const sanitizeText = (text) =>
+  `${text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/"/g, "")
+    .replace(/,/g, "")
+    .replace(/’/g, "'")
+    .replace(".", "")
+    .replace("%", "")
+    .replace("&", "")
+    .replace("ª", "a")
+    .replace(/\+/g, "")
+    .replace(/\|/g, "")
+    .replace(/•|/g, "")
+    .replace(/:/g, "")}`;
+
 export const getServerSideProps = async (ctx) => {
   const { getCalendarEvents } = require("@lib/helpers");
 
@@ -18,7 +35,7 @@ export const getServerSideProps = async (ctx) => {
     changefreq: "daily",
     "image:image": `
     <image:loc>${siteUrl}${data.images[0]}</image:loc>
-    <image:title>${data.title}</image:title>
+    <image:title>${sanitizeText(data.title)}</image:title>
   `,
   }));
 
