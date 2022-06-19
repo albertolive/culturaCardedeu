@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { generateJsonData } from "@utils/helpers";
-import { useGetEvents } from "@components/hooks/useGetEvents";
 import Meta from "@components/partials/seo-meta";
 import Link from "next/link";
+import { MONTHS } from "@utils/constants";
 
 export default function Month({ events }) {
   const { query } = useRouter();
@@ -43,7 +43,30 @@ export default function Month({ events }) {
   );
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+  const { getAllYears } = require("@lib/dates");
+
+  const years = getAllYears();
+  let params = [];
+
+  years.map((year) => {
+    MONTHS.map((month) => {
+      params.push({
+        params: {
+          year: year.toString(),
+          month: month.toLowerCase(),
+        },
+      });
+    });
+  });
+
+  return {
+    paths: params,
+    fallback: "blocking",
+  };
+}
+
+export async function getStaticProps({ params }) {
   const { getCalendarEvents } = require("@lib/helpers");
   const { getHistoricDates } = require("@lib/dates");
   const { year, month } = params;
