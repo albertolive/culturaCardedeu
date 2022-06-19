@@ -1,15 +1,7 @@
 import Meta from "@components/partials/seo-meta";
+import { getAllYears } from "@lib/dates";
 import { MONTHS } from "@utils/constants";
 import Link from "next/link";
-
-const getAllYears = () => {
-  const currentYear = new Date().getFullYear();
-
-  return Array.from(
-    { length: (currentYear - 1 - currentYear) / -1 + 1 },
-    (_, i) => currentYear + i * -1
-  );
-};
 
 export default function Sitemaps() {
   const years = getAllYears();
