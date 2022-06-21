@@ -215,7 +215,7 @@ export default function Event(props) {
           <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
             <div className="prose prose-lg">
               {isEventFinished && (
-                <div className="-mb-4">
+                <div className="-mb-8 lg:-mb-4 mt-8 lg:mt-0">
                   <span className="font-bold text-black rounded-full p-2 px-2 bg-[#ECB84A] text-sm">
                     Esdeveniment finalitzat
                   </span>
