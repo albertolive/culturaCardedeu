@@ -139,6 +139,7 @@ export default function Event(props) {
     lng,
     imageUploaded,
     social,
+    isEventFinished,
   } = data.event;
 
   const descriptionHTML = isHTML(description)
@@ -213,6 +214,13 @@ export default function Event(props) {
         <div className="max-w-2xl mx-auto px-4 md:px-0 lg:max-w-7xl">
           <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
             <div className="prose prose-lg">
+              {isEventFinished && (
+                <div className="-mb-4">
+                  <span className="font-bold text-black rounded-full p-2 px-2 bg-[#ECB84A] text-sm">
+                    Esdeveniment finalitzat
+                  </span>
+                </div>
+              )}
               <div className="border-b border-gray-200">
                 <h2 className="font-bold text-[#ECB84A]">
                   {nameDay}, {formattedStart}
@@ -221,7 +229,6 @@ export default function Event(props) {
                   {title}
                 </h1>
               </div>
-
               <dl className="mt-6 space-y-10">
                 <div>
                   <dt className="text-md font-bold text-gray-900">
