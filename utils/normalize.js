@@ -65,5 +65,8 @@ export const normalizeEvent = (event) => {
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
     imageUploaded: event.guestsCanModify || false,
+    isEventFinished: event.end
+      ? new Date(event.end.dateTime) < new Date()
+      : false,
   };
 };
