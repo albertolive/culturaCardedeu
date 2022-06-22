@@ -146,8 +146,10 @@ export default function Event(props) {
     ? description
     : replaceURLs(description);
 
+  const imageId = id.split("_")[0];
+
   const uploadedImage = imageUploaded
-    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`
+    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${imageId}`
     : null;
 
   const jsonData = generateJsonData({ ...data.event, uploadedImage });
@@ -247,7 +249,7 @@ export default function Event(props) {
                   <div className="w-1/2">
                     <div className="rounded-lg bg-gray-100 overflow-hidden">
                       <a
-                        href={`https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`}
+                        href={`https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${imageId}`}
                         className="pointer"
                         target="_blank"
                         rel="image_src noreferrer"
@@ -257,7 +259,7 @@ export default function Event(props) {
                           title={location}
                           height={250}
                           width={250}
-                          image={`https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_500,w_500/v1/culturaCardedeu/${id}`}
+                          image={`https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_500,w_500/v1/culturaCardedeu/${imageId}`}
                           className="w-full h-full object-center object-cover"
                         />
                       </a>
