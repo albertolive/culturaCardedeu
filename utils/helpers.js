@@ -18,6 +18,7 @@ export const slug = (str, formattedStart, id) =>
     .replace(/\+/g, "")
     .replace(/\|/g, "")
     .replace(/•|/g, "")
+    .replace(/·|/g, "")
     .replace(/:/g, "")}-${formattedStart
     .toLowerCase()
     .replace(/ /g, "-")}-${id}`;
