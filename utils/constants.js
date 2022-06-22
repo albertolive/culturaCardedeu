@@ -80,6 +80,7 @@ export const LOCATIONS_ARRAY = [
     value: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
     label: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
   },
+  { value: "Espai Totsona", label: "Espai Totsona" },
 ];
 
 export const LOCATIONS = {
@@ -119,6 +120,7 @@ export const LOCATIONS = {
   teatreAuditoriCardedeu: ["teatre", "auditori"],
   textilRase: ["textil", "rase"],
   vilaPaquita: ["paquita"],
+  totsona: ["totsona"],
 };
 
 export const VITAMINED_LOCATIONS = {
@@ -554,6 +556,17 @@ export const VITAMINED_LOCATIONS = {
     lng: 2.360924223825777,
     social: {
       web: "https://www.cardedeu.cat/serveis-i-tramits/oficines-municipals-punts-dinformacio-ciutadana/villa-paquita-cultura-participacio-i-joventut.html",
+    },
+  },
+  totsona: {
+    images: ["/static/images/locations/totsona/1.jpeg"],
+    lat: 41.63693779243355,
+    lng: 2.3658255878361234,
+    social: {
+      web: "https://www.totsona.com/",
+      facebook: "https://www.facebook.com/damarisgelabert",
+      twitter: "https://twitter.com/damarisgelabert",
+      instagram: "https://open.spotify.com/artist/3FGL9zcXC0ZcBFui2S9PxK",
     },
   },
 };
