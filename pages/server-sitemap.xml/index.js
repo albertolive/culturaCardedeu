@@ -17,6 +17,7 @@ const sanitizeText = (text) =>
     .replace(/\+/g, "")
     .replace(/\|/g, "")
     .replace(/•|/g, "")
+    .replace(/·|/g, "")
     .replace(/:/g, "")}`;
 
 export const getServerSideProps = async (ctx) => {
