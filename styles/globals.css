@@ -13,6 +13,7 @@ body {
   -o-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 #map {
   height: 100%;
 }
