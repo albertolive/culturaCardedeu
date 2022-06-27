@@ -1,10 +1,10 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { CheckCircleIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
 
 export default function Notification({
   url,
   title,
   customNotification = true,
+  hideNotification,
 }) {
   if (customNotification) {
     return (
@@ -40,7 +40,17 @@ export default function Notification({
   }
 
   return (
-    <div className="rounded-md bg-green-50 p-4 mb-4 break-word">
+    <div className="relative rounded-md bg-green-50 p-4 mb-4 break-word">
+      <div className="absolute top-0 right-0 pt-4 pr-4">
+        <button
+          type="button"
+          className=" rounded-md text-gray-400 hover:text-gray-500"
+          onClick={() => hideNotification && hideNotification()}
+        >
+          <span className="sr-only">Close</span>
+          <XIcon className="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
       <div className="flex">
         <div className="flex-shrink-0">
           <CheckCircleIcon

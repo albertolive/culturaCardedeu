@@ -1,4 +1,4 @@
-export default function Input({ register, id, title, value, onChange }) {
+export default function Input({ id, title, value, onChange }) {
   return (
     <div className="sm:col-span-6">
       <label

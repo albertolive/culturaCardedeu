@@ -85,7 +85,8 @@ export default function Edita({ event }) {
   const router = useRouter();
   const [form, setForm] = useState(defaultForm);
   const [formState, setFormState] = useState(_createFormState());
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingEdit, setIsLoadingEdit] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
   const [progress, setProgress] = useState(0);
@@ -102,6 +103,11 @@ export default function Edita({ event }) {
     });
   }, [showDeleteMessage]);
 
+  const goToEventPage = (url) => ({
+    pathname: `/${url}`,
+    query: { edit_suggested: true },
+  });
+
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
 
@@ -117,28 +123,28 @@ export default function Edita({ event }) {
   const handleChangeLocation = ({ value }) =>
     handleFormChange("location", value);
 
-  const handleChangeFrequencyLocation = ({ value }) =>
-    handleFormChange("frequency", value);
+  // const handleChangeFrequencyLocation = ({ value }) =>
+  //   handleFormChange("frequency", value);
 
-  const onDelate = async () => {
-    const { id, title } = form;
-    setIsLoading(true);
+  // const onDelate = async () => {
+  //   const { id, title } = form;
+  //   setIsLoadingDelete(true);
 
-    const rawResponse = await fetch(process.env.NEXT_PUBLIC_DELETE_EVENT, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, title }),
-    });
+  //   const rawResponse = await fetch(process.env.NEXT_PUBLIC_DELETE_EVENT, {
+  //     method: "DELETE",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ id, title }),
+  //   });
 
-    const { success } = await rawResponse.json();
+  //   const { success } = await rawResponse.json();
 
-    if (success) setShowDeleteMessage(true);
+  //   if (success) setShowDeleteMessage(true);
 
-    setIsLoading(false);
-  };
+  //   setIsLoadingDelete(false);
+  // };
 
   const onSubmit = async () => {
     const newFormState = createFormState(
@@ -151,7 +157,7 @@ export default function Edita({ event }) {
     setFormState(newFormState);
 
     if (!newFormState.isDisabled) {
-      setIsLoading(true);
+      setIsLoadingEdit(true);
 
       const rawResponse = await fetch(process.env.NEXT_PUBLIC_EDIT_EVENT, {
         method: "PUT",
@@ -161,14 +167,15 @@ export default function Edita({ event }) {
         },
         body: JSON.stringify({ ...form, imageUploaded: !!imageToUpload }),
       });
-      const { id } = await rawResponse.json();
+
+      await rawResponse.json();
 
       const { formattedStart } = getFormattedDate(form.startDate, form.endDate);
-      const slugifiedTitle = slug(form.title, formattedStart, id);
+      const slugifiedTitle = slug(form.title, formattedStart, form.id);
 
       imageToUpload
-        ? uploadFile(id, slugifiedTitle)
-        : router.push(`/${slugifiedTitle}`);
+        ? uploadFile(form.id, slugifiedTitle)
+        : router.push(goToEventPage(`/${slugifiedTitle}`));
     }
   };
 
@@ -200,8 +207,10 @@ export default function Edita({ event }) {
     xhr.send(fd);
   };
 
+  const imageId = event.id.split("_")[0];
+
   const defaultImage = event.imageUploaded
-    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_250,w_250/v1/culturaCardedeu/${event.id}`
+    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_250,w_250/v1/culturaCardedeu/${imageId}`
     : "";
 
   return (
@@ -214,6 +223,7 @@ export default function Edita({ event }) {
       {showDeleteMessage && (
         <Notification
           customNotification={false}
+          hideNotification={setShowDeleteMessage}
           title="Estem revisant la teva sol·licitud. Si en menys de 24 hores no ha estat eliminat. Si us plau, posa't en contacte amb nosaltres a:"
           url="hola@culturacardedeu.com"
         />
@@ -223,7 +233,7 @@ export default function Edita({ event }) {
           <div className="pt-8">
             <div>
               <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Editar - {form.title}
+                Editar - {form.title || event.title}
               </h3>
               <p className="mt-1 text-sm text-gray-500">* camps obligatoris</p>
             </div>
@@ -231,13 +241,13 @@ export default function Edita({ event }) {
               <Input
                 id="title"
                 title="Títol *"
-                value={form.title}
+                value={form.title || event.title}
                 onChange={handleChange}
               />
 
               <TextArea
                 id="description"
-                value={form.description}
+                value={form.description || event.description}
                 onChange={handleChange}
               />
 
@@ -245,8 +255,8 @@ export default function Edita({ event }) {
                 <div className="sm:col-span-6">
                   <div className="next-image-wrapper">
                     <Image
-                      alt={form.title}
-                      title={form.title}
+                      alt={form.title || event.title}
+                      title={form.title || event.title}
                       height="100"
                       width="150"
                       className="object-contain rounded-lg"
@@ -280,12 +290,12 @@ export default function Edita({ event }) {
                 onChange={handleChangeDate}
               />
 
-              <FrequencySelect
+              {/* <FrequencySelect
                 id="frequency"
                 value={form.frequency || event.frequency}
                 title="Recurrència"
                 onChange={handleChangeFrequencyLocation}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -296,12 +306,12 @@ export default function Edita({ event }) {
         )}
         <div className="pt-5">
           <div className="flex justify-end">
-            <button
-              disabled={isLoading}
+            {/* <button
+              disabled={isLoadingDelete || isLoadingEdit}
               onClick={onDelate}
               className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
             >
-              {isLoading ? (
+              {isLoadingDelete ? (
                 <>
                   <svg
                     role="status"
@@ -324,13 +334,13 @@ export default function Edita({ event }) {
               ) : (
                 "Eliminar"
               )}
-            </button>
+            </button> */}
             <button
-              disabled={isLoading}
+              disabled={isLoadingEdit || isLoadingDelete}
               onClick={onSubmit}
               className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
             >
-              {isLoading ? (
+              {isLoadingEdit ? (
                 <>
                   <svg
                     role="status"
