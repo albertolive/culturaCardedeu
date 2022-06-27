@@ -1,9 +1,10 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
   Image,
+  Modal,
   NoEventFound,
   Notification,
   Social,
@@ -11,6 +12,7 @@ import {
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
 import { generateJsonData } from "@utils/helpers";
+import { PencilIcon, XCircleIcon } from "@heroicons/react/outline";
 
 function replaceURLs(text) {
   if (!text) return;
@@ -93,7 +95,12 @@ function generateMetaTitle(title, alternativeText, location) {
 
 export default function Event(props) {
   const { push, query, asPath } = useRouter();
-  const { newEvent } = query;
+  const { newEvent, edit_suggested = false } = query;
+  const [openModal, setOpenModal] = useState(false);
+  const [openDeleteReasonModal, setOpenModalDeleteReasonModal] =
+    useState(false);
+  const [showThankYouBanner, setShowThankYouBanner] = useState(edit_suggested);
+  const [reasonToDelete, setReasonToDelete] = useState(null);
   const { data, error } = useGetEvent(props);
   const slug = data.event ? data.event.slug : "";
   const title = data.event ? data.event.title : "";
@@ -122,6 +129,24 @@ export default function Event(props) {
       return () => window.removeEventListener("load", handleMapLoad);
     }
   }, [handleMapLoad]);
+
+  const onSendDeleteReason = async () => {
+    const { id, title } = data.event;
+    setOpenModalDeleteReasonModal(false);
+
+    const rawResponse = await fetch(process.env.NEXT_PUBLIC_DELETE_EVENT, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, title, reason: reasonToDelete }),
+    });
+
+    const { success } = await rawResponse.json();
+
+    if (success) setShowThankYouBanner(true);
+  };
 
   if (error) return <div>failed to load</div>;
 
@@ -174,6 +199,13 @@ export default function Event(props) {
         preload="/static/images/gMaps.webp"
       />
       {newEvent && <Notification title={title} url={slug} />}
+      {showThankYouBanner && (
+        <Notification
+          customNotification={false}
+          hideNotification={setShowThankYouBanner}
+          title="Gràcies per contribuir a millorar el contingut de Cultura Cardedeu!!"
+        />
+      )}
       <nav className="flex" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">
           <li className="inline-flex items-center">
@@ -217,8 +249,8 @@ export default function Event(props) {
           <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
             <div className="prose prose-lg">
               {isEventFinished && (
-                <div className="-mb-8 lg:-mb-4 mt-8 lg:mt-0">
-                  <span className="font-bold text-black rounded-full p-2 px-2 bg-[#ECB84A] text-sm">
+                <div className="-mb-8 lg:-mb-4 mt-8">
+                  <span className="font-bold text-black rounded-full p-2 px-4 bg-[#ECB84A] text-sm">
                     Esdeveniment finalitzat
                   </span>
                 </div>
@@ -233,9 +265,24 @@ export default function Event(props) {
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
-                  <dt className="text-md font-bold text-gray-900">
-                    Descripció
-                  </dt>
+                  <div className="flex items-center">
+                    <dt className="text-md font-bold text-gray-900">
+                      Descripció
+                    </dt>
+                    <div className="ml-auto">
+                      <button
+                        onClick={() => setOpenModal(true)}
+                        type="button"
+                        className="relative inline-flex items-center px-4 py-2 border border-slate-200  text-xs font-medium rounded-full text-gray-800 bg-white hover:border-[#ECB84A] focus:outline-none"
+                      >
+                        <PencilIcon
+                          className="-ml-1 mr-2 h-5 w-5 text-[#ECB84A] text-xs"
+                          aria-hidden="true"
+                        />
+                        <span className="text-gray-800">Suggerir un canvi</span>
+                      </button>
+                    </div>
+                  </div>
                   <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
                     <div
                       dangerouslySetInnerHTML={{ __html: descriptionHTML }}
@@ -331,6 +378,170 @@ export default function Event(props) {
           </div>
         </div>
       </div>
+      <Modal
+        open={openModal}
+        setOpen={setOpenModal}
+        title="Suggereix una edició"
+      >
+        <ul role="list" className="divide-y divide-gray-200 text-left">
+          <li key="edit" className="py-4 flex">
+            <Link href={`/${slug}/edita`}>
+              <a>
+                <div className="flex items-center">
+                  <PencilIcon
+                    className="h-7 w-7 text-[#ECB84A] text-xs"
+                    aria-hidden="true"
+                  />
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">
+                      Canvia el títol o altres detalls
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Edita el títol, la ubicació, l'horari, etc.
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Link>
+          </li>
+          <li key="remove" className="py-4 flex">
+            <div
+              className="cursor-pointer"
+              as="button"
+              onClick={() => {
+                setOpenModalDeleteReasonModal(true);
+                setOpenModal(false);
+              }}
+            >
+              <div className="flex items-center">
+                <XCircleIcon
+                  className="h-7 w-7 text-[#ECB84A] text-xs"
+                  aria-hidden="true"
+                />
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">Eliminar</p>
+                  <p className="text-sm text-gray-500">
+                    L&apos;esdeveniment no existeix, està duplicat, etc.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </Modal>
+      <Modal
+        open={openDeleteReasonModal}
+        setOpen={setOpenModalDeleteReasonModal}
+        title="Suggereix una el·liminació"
+      >
+        <>
+          <div className="text-sm font-medium text-gray-900">
+            Motiu de l&apos;el·liminació suggerida
+          </div>
+          <fieldset className="space-y-5">
+            <legend className="sr-only">Sol·licitud d'eliminació</legend>
+            <div className="relative flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="not-exist"
+                  checked={reasonToDelete === "not-exist"}
+                  onChange={() => setReasonToDelete("not-exist")}
+                  aria-describedby="not-exist-description"
+                  name="not-exist"
+                  type="checkbox"
+                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label
+                  htmlFor="not-exist"
+                  className="font-medium text-gray-700"
+                >
+                  No existeix
+                </label>
+              </div>
+            </div>
+            <div className="relative flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="duplicated"
+                  checked={reasonToDelete === "duplicated"}
+                  onChange={() => setReasonToDelete("duplicated")}
+                  aria-describedby="duplicated-description"
+                  name="duplicated"
+                  type="checkbox"
+                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label
+                  htmlFor="duplicated"
+                  className="font-medium text-gray-700"
+                >
+                  Duplicat
+                </label>
+              </div>
+            </div>
+            <div className="relative flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="offensive"
+                  checked={reasonToDelete === "offensive"}
+                  onChange={() => setReasonToDelete("offensive")}
+                  aria-describedby="offensive-description"
+                  name="offensive"
+                  type="checkbox"
+                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label
+                  htmlFor="offensive"
+                  className="font-medium text-gray-700"
+                >
+                  Ofensiu, nociu o enganyós
+                </label>
+              </div>
+            </div>
+            <div className="relative flex items-start text-left">
+              <div className="flex items-center h-5">
+                <input
+                  id="others"
+                  checked={reasonToDelete === "others"}
+                  onChange={() => setReasonToDelete("others")}
+                  aria-describedby="others-description"
+                  name="others"
+                  type="checkbox"
+                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label htmlFor="others" className="font-medium text-gray-700">
+                  Altres
+                </label>
+                <p id="offers-description" className="text-gray-500">
+                  Envieu un correu amb el motiu a:{" "}
+                  <a
+                    className="hover:text-[#ECB84A]"
+                    href="mailto:hola@culturacardedeu.com"
+                  >
+                    hola@culturacardedeu.com
+                  </a>
+                </p>
+              </div>
+            </div>
+          </fieldset>
+          <div className="flex mt-3 justify-end">
+            <button
+              disabled={!reasonToDelete}
+              onClick={onSendDeleteReason}
+              className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
+            >
+              Enviar
+            </button>
+          </div>
+        </>
+      </Modal>
     </>
   );
 }
