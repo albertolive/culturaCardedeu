@@ -397,7 +397,7 @@ export default function Event(props) {
                       Canvia el títol o altres detalls
                     </p>
                     <p className="text-sm text-gray-500">
-                      Edita el títol, la ubicació, l'horari, etc.
+                      Edita el títol, la ubicació, l&apos;horari, etc.
                     </p>
                   </div>
                 </div>
@@ -439,7 +439,7 @@ export default function Event(props) {
             Motiu de l&apos;el·liminació suggerida
           </div>
           <fieldset className="space-y-5">
-            <legend className="sr-only">Sol·licitud d'eliminació</legend>
+            <legend className="sr-only">Sol·licitud d&apos;eliminació</legend>
             <div className="relative flex items-start">
               <div className="flex items-center h-5">
                 <input
