@@ -203,7 +203,7 @@ export default function Event(props) {
         <Notification
           customNotification={false}
           hideNotification={setShowThankYouBanner}
-          title="Gràcies per contribuir a millorar el contingut de Cultura Cardedeu!!"
+          title="Gràcies per contribuir a millorar el contingut de Cultura Cardedeu! En menys de 24 hores estarà disponible el canvi."
         />
       )}
       <nav className="flex" aria-label="Breadcrumb">
@@ -449,7 +449,7 @@ export default function Event(props) {
                   aria-describedby="not-exist-description"
                   name="not-exist"
                   type="checkbox"
-                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                  className="focus:outline-none h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -470,7 +470,7 @@ export default function Event(props) {
                   aria-describedby="duplicated-description"
                   name="duplicated"
                   type="checkbox"
-                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                  className="focus:outline-none h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -491,7 +491,7 @@ export default function Event(props) {
                   aria-describedby="offensive-description"
                   name="offensive"
                   type="checkbox"
-                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                  className="focus:outline-none h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -512,7 +512,7 @@ export default function Event(props) {
                   aria-describedby="others-description"
                   name="others"
                   type="checkbox"
-                  className="focus:ring-[#ECB84A] h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
+                  className="focus:outline-none h-4 w-4 text-[#ECB84A] border-gray-300 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -535,7 +535,7 @@ export default function Event(props) {
             <button
               disabled={!reasonToDelete}
               onClick={onSendDeleteReason}
-              className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
+              className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
             >
               Enviar
             </button>
