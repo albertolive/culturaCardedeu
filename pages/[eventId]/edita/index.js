@@ -104,7 +104,7 @@ export default function Edita({ event }) {
   }, [showDeleteMessage]);
 
   const goToEventPage = (url) => ({
-    pathname: `/${url}`,
+    pathname: `${url}`,
     query: { edit_suggested: true },
   });
 
