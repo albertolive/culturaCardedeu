@@ -409,8 +409,8 @@ export default function Event(props) {
               className="cursor-pointer"
               as="button"
               onClick={() => {
-                setOpenModalDeleteReasonModal(true);
                 setOpenModal(false);
+                setTimeout(() => setOpenModalDeleteReasonModal(true), 300);
               }}
             >
               <div className="flex items-center">
