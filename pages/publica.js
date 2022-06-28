@@ -101,7 +101,7 @@ export default function Publica() {
     handleFormChange("frequency", value);
 
   const goToEventPage = (url) => ({
-    pathname: `/${url}`,
+    pathname: `${url}`,
     query: { newEvent: true },
   });
 
