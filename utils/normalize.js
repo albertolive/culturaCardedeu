@@ -35,7 +35,7 @@ export const normalizeEvents = (event) => {
 };
 
 export const normalizeEvent = (event) => {
-  if (!event) return null;
+  if (!event || event.error) return null;
 
   const { formattedStart, startTime, endTime, nameDay } = getFormattedDate(
     event.start,
