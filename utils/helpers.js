@@ -10,7 +10,8 @@ export const slug = (str, formattedStart, id) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/"/g, "")
     .replace(/,/g, "")
-    .replace(/’/g, "'")
+    .replace(/’/g, "")
+    .replace(/'/g, "")
     .replace(".", "")
     .replace("%", "")
     .replace("&", "")
@@ -21,7 +22,9 @@ export const slug = (str, formattedStart, id) =>
     .replace(/·|/g, "")
     .replace(/:/g, "")}-${formattedStart
     .toLowerCase()
-    .replace(/ /g, "-")}-${id}`;
+    .replace(/ /g, "-")
+    .replace("---", "-")
+    .replace(/--/g, "-")}-${id}`;
 
 export const convertTZ = (date, tzString) =>
   new Date(
