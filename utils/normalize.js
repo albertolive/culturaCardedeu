@@ -6,7 +6,6 @@ export const normalizeEvents = (event) => {
     event.start,
     event.end
   );
-  const eventId = event.id.split("_")[0];
   const location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary || "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
@@ -24,7 +23,7 @@ export const normalizeEvents = (event) => {
     formattedStart,
     nameDay,
     tag,
-    slug: slug(title, formattedStart, eventId),
+    slug: slug(title, formattedStart, event.id),
     ...locationNormalized,
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
@@ -48,12 +47,12 @@ export const normalizeEvent = (event) => {
   if (tag) title = title.replace(`${tag}:`, "").trim();
 
   const imageUploaded = event.guestsCanModify || false;
-  const eventId = event.id.split("_")[0];
+  const imageId = event.id.split("_")[0];
 
   const locationNormalized = getVitaminedLocation(location);
 
   return {
-    id: eventId,
+    id: event.id,
     title,
     startTime,
     endTime,
@@ -64,12 +63,12 @@ export const normalizeEvent = (event) => {
       ? event.description
       : "Cap descripció. Vols afegir-ne una? Escriu-nos i et direm com fer-ho!",
     tag,
-    slug: slug(title, formattedStart, eventId),
+    slug: slug(title, formattedStart, event.id),
     ...locationNormalized,
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
     imageUploaded: imageUploaded
-      ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${eventId}`
+      ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${imageId}`
       : null,
     isEventFinished: event.end
       ? new Date(event.end.dateTime) < new Date()
