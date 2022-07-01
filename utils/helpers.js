@@ -113,7 +113,7 @@ export const generateJsonData = ({
   location,
   lat,
   lng,
-  uploadedImage,
+  imageUploaded,
   images,
   social,
 }) => ({
@@ -142,7 +142,7 @@ export const generateJsonData = ({
       longitude: lng,
     },
   },
-  image: [uploadedImage, ...transformImagestoAbsoluteUrl(images)].filter(
+  image: [imageUploaded, ...transformImagestoAbsoluteUrl(images)].filter(
     Boolean
   ),
   description,

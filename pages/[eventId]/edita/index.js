@@ -206,12 +206,6 @@ export default function Edita({ event }) {
     xhr.send(fd);
   };
 
-  const imageId = event.id.split("_")[0];
-
-  const defaultImage = event.imageUploaded
-    ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill,h_250,w_250/v1/culturaCardedeu/${imageId}`
-    : "";
-
   return (
     <>
       <Meta
@@ -250,7 +244,7 @@ export default function Edita({ event }) {
                 onChange={handleChange}
               />
 
-              {defaultImage ? (
+              {event.imageUploaded ? (
                 <div className="sm:col-span-6">
                   <div className="next-image-wrapper">
                     <Image
@@ -259,7 +253,7 @@ export default function Edita({ event }) {
                       height="100"
                       width="150"
                       className="object-contain rounded-lg"
-                      src={defaultImage}
+                      src={form.imageUploaded || event.imageUploaded}
                     />
                   </div>
                   <p className="mt-2 text-xs text-gray-500">
