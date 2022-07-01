@@ -192,9 +192,8 @@ export default function Edita({ event }) {
     });
 
     xhr.onreadystatechange = (e) => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        router.push(`/${slugifiedTitle}`);
-      }
+      if (xhr.readyState == 4 && xhr.status == 200)
+        router.push(goToEventPage(`/${slugifiedTitle}`));
     };
 
     fd.append(
