@@ -93,6 +93,11 @@ function generateMetaTitle(title, alternativeText, location) {
   return text;
 }
 
+const sendGoogleEvent = (event, obj) =>
+  typeof window !== "undefined" &&
+  window.gtag &&
+  window.gtag("event", event, { ...obj });
+
 export default function Event(props) {
   const { push, query, asPath } = useRouter();
   const { newEvent, edit_suggested = false } = query;
@@ -106,9 +111,19 @@ export default function Event(props) {
   const title = data.event ? data.event.title : "";
 
   useEffect(() => {
+    if (newEvent || edit_suggested) return;
+
     if (title !== "CANCELLED" && slug && asPath !== `/${slug}`)
       push(slug, undefined, { shallow: true });
-  }, [asPath, data, push, slug, title]);
+  }, [asPath, data, edit_suggested, newEvent, push, slug, title]);
+
+  useEffect(() => {
+    sendGoogleEvent("open-change-modal");
+  }, [openModal]);
+
+  useEffect(() => {
+    sendGoogleEvent("open-delete-modal");
+  }, [openDeleteReasonModal]);
 
   const handleMapLoad = useCallback(() => {
     setTimeout(() => {
@@ -146,6 +161,10 @@ export default function Event(props) {
     const { success } = await rawResponse.json();
 
     if (success) setShowThankYouBanner(true);
+
+    sendGoogleEvent("send-delete", {
+      value: reasonToDelete,
+    });
   };
 
   if (error) return <div>failed to load</div>;

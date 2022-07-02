@@ -2,10 +2,9 @@ import { Feed } from "feed";
 
 const getAllArticles = async () => {
   const { getCalendarEvents } = require("@lib/helpers");
+  const { twoWeeksDefault } = require("@lib/dates");
 
-  const now = new Date();
-  const from = now;
-  const until = new Date(now.getFullYear(), now.getMonth() + 2);
+  const { from, until } = twoWeeksDefault();
 
   const { events } = await getCalendarEvents(from, until, true);
   const normalizedEvents = JSON.parse(JSON.stringify(events));
