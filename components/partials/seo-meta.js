@@ -51,6 +51,10 @@ const Meta = (props) => {
       <meta property="fb:pages" content="103738478742219" />
       <meta name="twitter:image" content={`${siteUrl}${image}`} />
       <meta name="twitter:image:src" content={`${siteUrl}${image}`} />
+      <meta
+        name="google-site-verification"
+        content="ujWqRwOYsTEmYofWVJcDeMp54QW4PGivj2yUaBRevls"
+      />
       <link rel="icon" type="image/png" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/favicon.ico" />
       <link rel="shortcut icon" href="/favicon.ico" />
