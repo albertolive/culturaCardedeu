@@ -1,6 +1,7 @@
+import { withSentry } from "@sentry/nextjs";
 import { getCalendarEvent } from "@lib/helpers";
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   try {
     const event = await getCalendarEvent(req.query.eventId);
 
@@ -9,4 +10,6 @@ export default async function handler(req, res) {
     console.error(error);
     res.status(500).json({ error });
   }
-}
+};
+
+export default withSentry(handler);

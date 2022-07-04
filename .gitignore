@@ -35,3 +35,5 @@ yarn-error.log*
 # Sitemap file
 sitemap.xml
 sitemap-0.xml
+# Sentry
+.sentryclirc
