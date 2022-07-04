@@ -1,3 +1,5 @@
+import { withSentry } from "@sentry/nextjs";
+
 import { today, week, weekend, twoWeeksDefault } from "@lib/dates";
 import { getCalendarEvents } from "@lib/helpers";
 
@@ -10,7 +12,7 @@ const noEventsFound = async (events) => {
   return events;
 };
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   const { page, q, maxResults } = req.query;
 
   let events = [];
@@ -65,4 +67,6 @@ export default async function handler(req, res) {
     console.error(error);
     res.status(500).json({ error });
   }
-}
+};
+
+export default withSentry(handler);
