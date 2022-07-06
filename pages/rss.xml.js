@@ -2,9 +2,10 @@ import { Feed } from "feed";
 
 const getAllArticles = async () => {
   const { getCalendarEvents } = require("@lib/helpers");
-  const { twoWeeksDefault } = require("@lib/dates");
 
-  const { from, until } = twoWeeksDefault();
+  const now = new Date();
+  const from = new Date();
+  const until = new Date(now.setDate(now.getDate() + 7));
 
   const { events } = await getCalendarEvents(from, until, true);
   const normalizedEvents = JSON.parse(JSON.stringify(events));
@@ -28,7 +29,12 @@ const buildFeed = (items) => {
     },
   });
 
-  items.forEach((item) => {
+  const removedDuplicatedItems = items.filter(
+    (v, i, a) =>
+      a.findIndex((v2) => v2.id.split("_")[0] === v.id.split("_")[0]) === i
+  );
+
+  removedDuplicatedItems.forEach((item) => {
     feed.addItem({
       title: item.title,
       link: `${hostUrl}/${item.slug}`,
