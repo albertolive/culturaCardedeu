@@ -11,6 +11,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
     const handleRouteChange = (url) => {
       if (
         (typeof window !== "undefined" &&
+          window.localStorage !== undefined &&
           localStorage.getItem("searchTerm") &&
           url === "/") ||
         url === "/avui-a-cardedeu" ||
