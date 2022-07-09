@@ -47,7 +47,7 @@ export const normalizeEvent = (event) => {
   if (tag) title = title.replace(`${tag}:`, "").trim();
 
   const imageUploaded = event.guestsCanModify || false;
-  const imageId = event.id.split("_")[0];
+  const imageId = event.id ? event.id.split("_")[0] : event.id;
 
   const locationNormalized = getVitaminedLocation(location);
 
