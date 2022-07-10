@@ -10,6 +10,7 @@ export default function App(props) {
   const {
     data: { events = [], noEventsFound = false },
     error,
+    isValidating,
   } = useGetEvents(props, "weekend");
 
   if (error) return <div>failed to load</div>;
@@ -47,9 +48,11 @@ export default function App(props) {
       {noEventsFound && (
         <NoEventsFound title="Ho sentim, però no hi ha esdeveniments avui a Cardedeu. Hem rebuscat en l'agenda i pot ser que també t'agradin aquestes altres opcions." />
       )}
-      <List events={events}>
-        {(event) => <Card key={event.id} event={event} />}
-      </List>
+      {!isValidating && (
+        <List events={events}>
+          {(event) => <Card key={event.id} event={event} />}
+        </List>
+      )}
     </>
   );
 }

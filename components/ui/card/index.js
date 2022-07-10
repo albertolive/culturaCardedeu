@@ -2,7 +2,7 @@ import { Image } from "@components/ui/common";
 import Link from "next/link";
 import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
 
-export default function Card({ event }) {
+export default function Card({ event, isValidating }) {
   const image = event.images && event.images[0];
   const location =
     event.location.length > 45
@@ -11,7 +11,12 @@ export default function Card({ event }) {
 
   return (
     <Link href={`/${event.slug}`} passHref>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
+      <div
+        className={`bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40 ${
+          isValidating &&
+          "animate-pulse opacity-70 pointer-events-none cursor-none"
+        }`}
+      >
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">
             <Image

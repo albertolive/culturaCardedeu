@@ -11,6 +11,7 @@ export default function App(props) {
   const {
     data: { events = [] },
     error,
+    isValidating,
   } = useGetEvents(props, "all");
 
   if (error) return <div>failed to load</div>;
@@ -58,9 +59,11 @@ export default function App(props) {
         a Cardedeu. Ja no teniu cap excusa, per no estar al dia, de tot el que
         passa a Cardedeu vinculat a la cultura!
       </p>
-      <List events={events}>
-        {(event) => <Card key={event.id} event={event} />}
-      </List>
+      {!isValidating && (
+        <List events={events}>
+          {(event) => <Card key={event.id} event={event} />}
+        </List>
+      )}
     </>
   );
 }
