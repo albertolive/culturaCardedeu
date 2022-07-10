@@ -121,6 +121,8 @@ export const LOCATIONS = {
   textilRase: ["textil", "rase"],
   vilaPaquita: ["paquita"],
   totsona: ["totsona"],
+  polvori: ["polvori", "polvorí"],
+  garitu: ["garitu"],
 };
 
 export const VITAMINED_LOCATIONS = {
@@ -566,7 +568,34 @@ export const VITAMINED_LOCATIONS = {
       web: "https://www.totsona.com/",
       facebook: "https://www.facebook.com/damarisgelabert",
       twitter: "https://twitter.com/damarisgelabert",
-      instagram: "https://open.spotify.com/artist/3FGL9zcXC0ZcBFui2S9PxK",
+    },
+  },
+  polvori: {
+    images: [
+      "/static/images/locations/polvori/1.jpeg",
+      "/static/images/locations/polvori/2.jpeg",
+    ],
+    lat: 41.63693779243355,
+    lng: 2.3658255878361234,
+    social: {
+      web: "https://elpolvori.wordpress.com/",
+      facebook: "https://www.facebook.com/ElPolvori/",
+      twitter: "https://www.facebook.com/ElPolvori/",
+      instagram: "https://www.instagram.com/elpolvori/?hl=en",
+    },
+  },
+  garitu: {
+    images: [
+      "/static/images/locations/garitu/1.jpeg",
+      "/static/images/locations/garitu/2.jpeg",
+    ],
+    lat: 41.63693779243355,
+    lng: 2.3658255878361234,
+    social: {
+      web: "https://elgaritu.cat/",
+      facebook: "https://www.facebook.com/elgaritucardedeu",
+      twitter: "https://twitter.com/elgaritu",
+      instagram: "https://www.instagram.com/elgaritu",
     },
   },
 };
