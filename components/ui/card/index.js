@@ -2,21 +2,53 @@ import { Image } from "@components/ui/common";
 import Link from "next/link";
 import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
 
-export default function Card({ event, isValidating }) {
+export default function Card({ event, isLoading }) {
   const image = event.images && event.images[0];
   const location =
     event.location.length > 45
       ? event.location.substring(0, 45) + "..."
       : event.location;
 
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl pointer-events-none cursor-none h-48 md:lg-52 lg:h-56 hover:shadow-gray-500/40">
+        <div className="animate-pulse flex h-full">
+          <div className="flex-1 h-full next-image-wrapper">
+            <div className="h-full bg-slate-200 rounded"></div>
+          </div>
+          <div className="p-4 flex-2">
+            <div className="mt-3 mb-3 text-sm sm:text-base text-gray-500 ">
+              <div className="h-2 bg-[#ECB84A] opacity-20 rounded"></div>
+            </div>
+            <div className="mt-3 mb-3 text-sm sm:text-base text-gray-500 ">
+              <div className="h-2 bg-black opacity-20 rounded"></div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+              <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+            </div>
+            <div className="mt-3 mb-3 text-sm sm:text-base text-gray-500 ">
+              <div className="h-2 bg-slate-200 rounded"></div>
+            </div>
+            <div className="mt-3 mb-3 text-sm sm:text-base text-gray-500 ">
+              <div className="h-2 bg-slate-200 rounded"></div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+              <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+            </div>
+            <div className="mt-3 mb-3 text-sm sm:text-base text-gray-500 ">
+              <div className="h-2 bg-slate-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Link href={`/${event.slug}`} passHref>
-      <div
-        className={`bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40 ${
-          isValidating &&
-          "animate-pulse opacity-70 pointer-events-none cursor-none"
-        }`}
-      >
+      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">
             <Image
