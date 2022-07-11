@@ -16,6 +16,8 @@ export default function App(props) {
 
   if (error) return <div>failed to load</div>;
 
+  const isLoading = (!events && !error) || isValidating;
+
   const jsonData = events.map((event) => generateJsonData(event));
 
   return (
@@ -59,11 +61,9 @@ export default function App(props) {
         a Cardedeu. Ja no teniu cap excusa, per no estar al dia, de tot el que
         passa a Cardedeu vinculat a la cultura!
       </p>
-      {!isValidating && (
-        <List events={events}>
-          {(event) => <Card key={event.id} event={event} />}
-        </List>
-      )}
+      <List events={events}>
+        {(event) => <Card key={event.id} event={event} isLoading={isLoading} />}
+      </List>
     </>
   );
 }
