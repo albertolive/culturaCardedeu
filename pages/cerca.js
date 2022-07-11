@@ -39,6 +39,8 @@ const SearchResults = ({ keyword }) => {
 
   if (error) return <div className="">failed to load</div>;
 
+  const isLoading = (!events && !error) || isValidating;
+
   const jsonData = events.map((event) => generateJsonData(event));
 
   return (
@@ -52,7 +54,7 @@ const SearchResults = ({ keyword }) => {
         <NoEventsFound title="Res ha coincidit amb la teva cerca, però pot ser que t'agradin aquestes altres opcions." />
       )}
       <List events={events}>
-        {(event) => <Card key={event.id} event={event} />}
+        {(event) => <Card key={event.id} event={event} isLoading={isLoading} />}
       </List>
     </>
   );
