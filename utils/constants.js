@@ -575,8 +575,8 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/polvori/1.jpeg",
       "/static/images/locations/polvori/2.jpeg",
     ],
-    lat: 41.63693779243355,
-    lng: 2.3658255878361234,
+    lat: 41.63806878807939,
+    lng: 2.354556047015495,
     social: {
       web: "https://elpolvori.wordpress.com/",
       facebook: "https://www.facebook.com/ElPolvori/",
@@ -589,8 +589,8 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/garitu/1.jpeg",
       "/static/images/locations/garitu/2.jpeg",
     ],
-    lat: 41.63693779243355,
-    lng: 2.3658255878361234,
+    lat: 41.63873233419056,
+    lng: 2.3564691713843104,
     social: {
       web: "https://elgaritu.cat/",
       facebook: "https://www.facebook.com/elgaritucardedeu",
