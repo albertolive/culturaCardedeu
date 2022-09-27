@@ -14,6 +14,7 @@ const sanitizeText = (text) =>
     .replace("%", "")
     .replace("&", "")
     .replace("?", "")
+    .replace("¿", "")
     .replace("ª", "a")
     .replace(/\+/g, "")
     .replace(/\|/g, "")

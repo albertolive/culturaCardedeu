@@ -51,6 +51,8 @@ export const LOCATIONS_ARRAY = [
   { value: "Cervesa Sant Jordi", label: "Cervesa Sant Jordi" },
   { value: "Cinema Esbarjo", label: "Cinema Esbarjo" },
   { value: "Església de Santa Maria", label: "Església de Santa Maria" },
+  { value: "Espai Totsona", label: "Espai Totsona" },
+  { value: "Esbiosfera", label: "Esbiosfera" },
   { value: "Floristeria Parera", label: "Floristeria Parera" },
   { value: "Granja el Melindro", label: "Granja el Melindro" },
   { value: "Kid&Us Cardedeu", label: "Kid&Us Cardedeu" },
@@ -67,6 +69,10 @@ export const LOCATIONS_ARRAY = [
   { value: "Plaça Sant Corneli", label: "Plaça Sant Corneli" },
   { value: "Plaça Sant Joan", label: "Plaça Sant Joan" },
   { value: "Pla de la calma", label: "Pla de la calma" },
+  {
+    value: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
+    label: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
+  },
   { value: "Sala Sarau", label: "Sala Sarau" },
   { value: "Sant Hilari", label: "Sant Hilari" },
   { value: "Tarambana", label: "Tarambana" },
@@ -76,11 +82,6 @@ export const LOCATIONS_ARRAY = [
     label: "Tèxtil Rase Fàbrica de Cultura",
   },
   { value: "Vil·la Paquita", label: "Vil·la Paquita" },
-  {
-    value: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
-    label: "Plaça dels Contes (Carrer Hospital i Teresa Oller)",
-  },
-  { value: "Espai Totsona", label: "Espai Totsona" },
 ];
 
 export const LOCATIONS = {
