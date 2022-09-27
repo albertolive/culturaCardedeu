@@ -123,6 +123,7 @@ export const LOCATIONS = {
   totsona: ["totsona"],
   polvori: ["polvori", "polvorí"],
   garitu: ["garitu"],
+  esbiosfera: ["esbiosfera"],
 };
 
 export const VITAMINED_LOCATIONS = {
@@ -596,6 +597,18 @@ export const VITAMINED_LOCATIONS = {
       facebook: "https://www.facebook.com/elgaritucardedeu",
       twitter: "https://twitter.com/elgaritu",
       instagram: "https://www.instagram.com/elgaritu",
+    },
+  },
+  esbiosfera: {
+    images: [
+      "/static/images/locations/esbiosfera/1.jpeg",
+      "/static/images/locations/esbiosfera/2.jpeg",
+    ],
+    lat: 41.6396718848256,
+    lng: 2.356776911185772,
+    social: {
+      web: "http://www.esbioesfera.cat/",
+      facebook: "https://www.facebook.com/326643577355325",
     },
   },
 };
