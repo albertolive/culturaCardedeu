@@ -17,7 +17,7 @@ export const MONTHS = [
   "Juny",
   "Juliol",
   "Agost",
-  "Septembre",
+  "Setembre",
   "Octubre",
   "Novembre",
   "Desembre",
