@@ -103,7 +103,7 @@ export const monthsName = [
   "Juny",
   "Juliol",
   "Agost",
-  "Septembre",
+  "Setembre",
   "Octubre",
   "Novembre",
   "Desembre",
@@ -123,7 +123,6 @@ export const generateJsonData = ({
   lng,
   imageUploaded,
   images,
-  social,
 }) => ({
   "@context": "https://schema.org",
   "@type": "Event",
