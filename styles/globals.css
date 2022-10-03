@@ -83,6 +83,10 @@ body {
   border: 0;
 }
 
+iframe {
+  max-width: 100% !important;
+}
+
 .blurred-image {
   image-rendering: -moz-crisp-edges; /* Firefox */
   image-rendering: -o-crisp-edges; /* Opera */
