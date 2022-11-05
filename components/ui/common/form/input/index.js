@@ -1,4 +1,4 @@
-export default function Input({ id, title, value, onChange }) {
+export default function Input({ id, title, subtitle, value, onChange }) {
   return (
     <div className="sm:col-span-6">
       <label
@@ -8,6 +8,9 @@ export default function Input({ id, title, value, onChange }) {
         {title}
       </label>
       <div className="mt-1">
+        {subtitle ? (
+          <div className="mb-1 text-xs text-gray-500">{subtitle}</div>
+        ) : null}
         <input
           value={value}
           onChange={onChange}
