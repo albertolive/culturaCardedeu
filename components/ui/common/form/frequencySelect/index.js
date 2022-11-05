@@ -33,7 +33,6 @@ const customStyles = {
 };
 
 const options = [
-  { value: "DAILY", label: "Cada dia" },
   { value: "WEEKLY", label: "Cada setmana" },
   { value: "MONTHLY", label: "Cada mes" },
   { value: "ANUALY", label: "Cada any" },
@@ -73,6 +72,16 @@ export default function FrequencySelect({ id, value, title, onChange }) {
           styles={customStyles}
           isClearable
         />
+      </div>
+      <div className="mt-1 text-xs text-gray-500">
+        Vols més opcions? Posa&apos;t en contacte a{" "}
+        <a
+          className="hover:text-[#ECB84A]"
+          href="mailto:hola@culturacardedeu.com"
+        >
+          hola@culturacardedeu.com
+        </a>{" "}
+        i t&apos;ajudarem.
       </div>
     </div>
   );

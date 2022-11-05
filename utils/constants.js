@@ -87,7 +87,7 @@ export const LOCATIONS_ARRAY = [
 export const LOCATIONS = {
   ajuntamentCardedeu: ["ajuntament", "columnes"],
   bibliotecaMarcVilalba: ["vilalba"],
-  bibliotecaLesAigues: ["aigues", "sec"],
+  bibliotecaLesAigues: ["aigues", "sec", "aigües"],
   cambridgeSchool: ["cambridge"],
   capellaSantCorneli: ["corneli"],
   casaCorbella: ["corbella"],
@@ -203,8 +203,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/cardedeu/1.jpeg",
       "/static/images/locations/cardedeu/2.jpeg",
     ],
-    lat: 41.6394024,
-    lng: 2.3591531,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",

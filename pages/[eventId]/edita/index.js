@@ -283,6 +283,13 @@ export default function Edita({ event }) {
                 onChange={handleChangeDate}
               />
 
+              <Input
+                id="email"
+                title="Correu electrònic"
+                subtitle="Vols que t'avisem quan l'esdeveniment s'hagi actualitzat? (no guardem les dades)"
+                onChange={handleChange}
+              />
+
               {/* <FrequencySelect
                 id="frequency"
                 value={form.frequency || event.frequency}

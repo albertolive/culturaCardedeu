@@ -194,6 +194,9 @@ export default function Event(props) {
 
   if (title === "CANCELLED") return <NoEventFound />;
 
+  const gMapsQuery =
+    lat && lng ? `${lat},${lng}` : `${location},Cardedeu+08440`;
+
   return (
     <>
       <Script
@@ -367,7 +370,7 @@ export default function Event(props) {
               <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
                 <div
                   className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
-                  data-src={`https://www.google.com/maps/embed/v1/place?q=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
+                  data-src={`https://www.google.com/maps/embed/v1/place?q=${gMapsQuery}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
                   id="mymap"
                 ></div>
               </div>
