@@ -40,12 +40,16 @@ export const convertTZ = (date, tzString) =>
   );
 
 export const getFormattedDate = (start, end) => {
+  const today = new Date();
   const startDate = new Date(
     (start && start.date) || (start && start.dateTime) || start
   );
   const endDate = new Date((end && end.date) || (end && end.dateTime) || end);
 
-  const startDateConverted = convertTZ(startDate, "Europe/Madrid");
+  const startDateConverted = convertTZ(
+    today > startDate ? today : startDate,
+    "Europe/Madrid"
+  );
   const endDateConverted = convertTZ(endDate, "Europe/Madrid");
 
   const numberDay = new Date(startDateConverted).getDay();
