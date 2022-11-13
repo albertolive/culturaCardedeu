@@ -2,10 +2,13 @@ import { TAGS } from "./constants";
 import { slug, getFormattedDate, getVitaminedLocation } from "./helpers";
 
 export const normalizeEvents = (event) => {
-  const { formattedStart, startTime, endTime, nameDay } = getFormattedDate(
-    event.start,
-    event.end
-  );
+  const {
+    originalFormattedStart,
+    formattedStart,
+    startTime,
+    endTime,
+    nameDay,
+  } = getFormattedDate(event.start, event.end);
   const location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary || "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
@@ -23,7 +26,7 @@ export const normalizeEvents = (event) => {
     formattedStart,
     nameDay,
     tag,
-    slug: slug(title, formattedStart, event.id),
+    slug: slug(title, originalFormattedStart, event.id),
     ...locationNormalized,
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
@@ -36,10 +39,13 @@ export const normalizeEvents = (event) => {
 export const normalizeEvent = (event) => {
   if (!event || event.error) return null;
 
-  const { formattedStart, startTime, endTime, nameDay } = getFormattedDate(
-    event.start,
-    event.end
-  );
+  const {
+    originalFormattedStart,
+    formattedStart,
+    startTime,
+    endTime,
+    nameDay,
+  } = getFormattedDate(event.start, event.end);
   let location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary || "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
@@ -63,7 +69,7 @@ export const normalizeEvent = (event) => {
       ? event.description
       : "Cap descripció. Vols afegir-ne una? Escriu-nos i et direm com fer-ho!",
     tag,
-    slug: slug(title, formattedStart, event.id),
+    slug: slug(title, originalFormattedStart, event.id),
     ...locationNormalized,
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,

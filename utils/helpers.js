@@ -58,6 +58,7 @@ export const getFormattedDate = (start, end) => {
   const nameDay = DAYS[day];
   const nameMonth = MONTHS[month];
 
+  const originalFormattedStart = `${startDateConverted.getDate()} de ${nameMonth} del ${year}`;
   const formattedStart = `${date.getDate()} de ${nameMonth} del ${year}`;
   const startTime = `${startDateConverted.getHours()}:${String(
     startDateConverted.getMinutes()
@@ -66,7 +67,13 @@ export const getFormattedDate = (start, end) => {
     endDateConverted.getMinutes()
   ).padStart(2, "0")}`;
 
-  return { formattedStart, startTime, endTime, nameDay };
+  return {
+    originalFormattedStart,
+    formattedStart,
+    startTime,
+    endTime,
+    nameDay,
+  };
 };
 
 export const getVitaminedLocation = (location) => {
