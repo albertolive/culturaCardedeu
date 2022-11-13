@@ -46,17 +46,19 @@ export const getFormattedDate = (start, end) => {
   );
   const endDate = new Date((end && end.date) || (end && end.dateTime) || end);
 
+  const todayDateConverted = convertTZ(today, "Europe/Madrid");
   const startDateConverted = convertTZ(startDate, "Europe/Madrid");
   const endDateConverted = convertTZ(endDate, "Europe/Madrid");
 
-  const numberDay = new Date(startDateConverted).getDay();
-  const numberMonth = new Date(startDateConverted).getMonth();
-  const nameDay = DAYS[numberDay];
-  const nameMonth = MONTHS[numberMonth];
+  const date = today > startDate ? todayDateConverted : startDateConverted;
 
-  const formattedStart = `${
-    today > startDate ? today.getDate() : startDateConverted.getDate()
-  } de ${nameMonth} del ${startDateConverted.getFullYear()}`;
+  const day = new Date(date).getDay();
+  const month = new Date(date).getMonth();
+  const year = new Date(date).getFullYear();
+  const nameDay = DAYS[day];
+  const nameMonth = MONTHS[month];
+
+  const formattedStart = `${date.getDate()} de ${nameMonth} del ${year}`;
   const startTime = `${startDateConverted.getHours()}:${String(
     startDateConverted.getMinutes()
   ).padStart(2, "0")}`;
