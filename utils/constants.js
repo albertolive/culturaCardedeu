@@ -57,6 +57,7 @@ export const LOCATIONS_ARRAY = [
   { value: "Granja el Melindro", label: "Granja el Melindro" },
   { value: "Kid&Us Cardedeu", label: "Kid&Us Cardedeu" },
   { value: "La Fresca", label: "La Fresca" },
+  { value: "L'estació és allà", label: "L'estació és allà" },
   {
     value: "La Guingueta del Pompeu Fabra",
     label: "La Guingueta del Pompeu Fabra",
@@ -104,6 +105,7 @@ export const LOCATIONS = {
   creperiaMelindro: ["melindro"],
   kidUsCardedeu: ["kid"],
   laFresca: ["fresca"],
+  estacioAlla: ["estacio", "l'estació"],
   guinguetaPompeuFabra: ["guingueta"],
   terrassaViuLaMusica: ["terrassa"],
   museuArxiuTomasBalvey: ["museu"],
@@ -133,8 +135,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/ajuntamentCardedeu/1.jpeg",
       "/static/images/locations/ajuntamentCardedeu/2.jpeg",
     ],
-    lat: 41.63806878807939,
-    lng: 2.354556047015495,
     social: {
       web: "https://www.cardedeu.cat/",
       twitter: "https://twitter.com/ajcardedeu",
@@ -148,8 +148,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/bibliotecaMarcVilalba/1.jpeg",
       "/static/images/locations/bibliotecaMarcVilalba/2.jpeg",
     ],
-    lat: 41.63937540779609,
-    lng: 2.360981985672975,
     social: {
       web: "https://www.bibliotecacardedeu.cat/",
       twitter: "https://twitter.com/bibliocardedeu",
@@ -162,16 +160,12 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/bibliotecaLesAigues/1.jpeg",
       "/static/images/locations/bibliotecaLesAigues/2.jpeg",
     ],
-    lat: 41.63082569512009,
-    lng: 2.361644997216786,
     social: {
       web: "https://agora.xtec.cat/lesaigues/biblioteca/",
     },
   },
   cambridgeSchool: {
     images: ["/static/images/locations/cambridgeSchool/1.jpeg"],
-    lat: 41.64197980432416,
-    lng: 2.3619516657450683,
     social: {
       web: "https://www.cambridgeschool.com/es/escuela-idiomas-cardedeu.html",
     },
@@ -181,8 +175,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/capellaSantCorneli/1.jpeg",
       "/static/images/locations/capellaSantCorneli/2.jpeg",
     ],
-    lat: 41.638586306071716,
-    lng: 2.356506032558306,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -192,8 +184,6 @@ export const VITAMINED_LOCATIONS = {
   },
   canBorras: {
     images: ["/static/images/locations/canBorras/1.jpeg"],
-    lat: 41.64023,
-    lng: 2.35982,
     social: {
       web: "https://www.cardedeu.cat/serveis-i-tramits/oficines-municipals-punts-dinformacio-ciutadana/can-borras-accio-social-educacio-igualtat-i-gent-gran.html",
     },
@@ -212,8 +202,6 @@ export const VITAMINED_LOCATIONS = {
   },
   casaCorbella: {
     images: ["/static/images/locations/casaCorbella/1.jpeg"],
-    lat: 41.64260842131494,
-    lng: 2.3563093806627684,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -223,8 +211,6 @@ export const VITAMINED_LOCATIONS = {
   },
   caEspavil: {
     images: ["/static/images/locations/caEspavil/1.jpeg"],
-    lat: 41.637327097133934,
-    lng: 2.3577802372875993,
     social: {
       web: "http://www.calespavil.cat/",
     },
@@ -234,8 +220,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/casaViader/1.jpeg",
       "/static/images/locations/casaViader/2.jpeg",
     ],
-    lat: 41.63822360236233,
-    lng: 2.356717062164755,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -248,8 +232,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/casalAjuntamentCardedeu/1.jpeg",
       "/static/images/locations/casalAjuntamentCardedeu/2.jpeg",
     ],
-    lat: 41.637386026126805,
-    lng: 2.35524507384688,
     social: {
       web: "https://www.cardedeu.cat/el-municipi/equipaments/casal-de-la-gent-gran.html",
     },
@@ -259,8 +241,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/cementiriCardedeu/1.jpeg",
       "/static/images/locations/cementiriCardedeu/2.jpeg",
     ],
-    lat: 41.63833320631103,
-    lng: 2.345500898205636,
     social: {
       web: "https://www.cardedeu.cat/el-municipi/equipaments/cementiri-municipal.html",
     },
@@ -270,8 +250,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/cervesaSantJordi/1.jpeg",
       "/static/images/locations/cervesaSantJordi/2.jpeg",
     ],
-    lat: 41.636249392703576,
-    lng: 2.358455195836614,
     social: {
       web: "https://www.cervesasantjordi.cat/",
       instagram: "https://www.instagram.com/cervesasantjordi/",
@@ -283,8 +261,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/cinemaEsbarjo/1.jpeg",
       "/static/images/locations/cinemaEsbarjo/2.jpeg",
     ],
-    lat: 41.639618044147646,
-    lng: 2.3564723602327,
     social: {
       web: "http://www.cinemaesbarjo.cat/",
       instagram: "https://www.instagram.com/cinemaesbarjo/",
@@ -297,16 +273,12 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/esglesiaSantaMaria/1.jpeg",
       "/static/images/locations/esglesiaSantaMaria/2.jpeg",
     ],
-    lat: 41.63856445421189,
-    lng: 2.355979312757857,
     social: {
       web: "https://santamariacardedeu.com/",
     },
   },
   espai31: {
     images: ["/static/images/locations/espai31/1.jpeg"],
-    lat: 41.63856445421189,
-    lng: 2.355979312757857,
     social: {
       web: "https://espai31.cat/",
       facebook: "https://www.facebook.com/llibreriaespai31",
@@ -316,16 +288,12 @@ export const VITAMINED_LOCATIONS = {
   },
   floristeriaParera: {
     images: ["/static/images/locations/floristeriaParera/1.jpeg"],
-    lat: 41.63844997556709,
-    lng: 2.35583292648753,
     social: {
       instagram: "https://www.instagram.com/floristeriaparera/",
     },
   },
   creperiaMelindro: {
     images: ["/static/images/locations/creperiaMelindro/1.jpeg"],
-    lat: 41.63887870552354,
-    lng: 2.3557829899327127,
     social: {
       web: "http://www.elmelindro.cat/",
       facebook: "https://www.facebook.com/elmelindro",
@@ -334,8 +302,6 @@ export const VITAMINED_LOCATIONS = {
   },
   kidUsCardedeu: {
     images: ["/static/images/locations/kidUsCardedeu/1.jpeg"],
-    lat: 41.63975765103531,
-    lng: 2.361501060984501,
     social: {
       web: "https://cardedeu.kidsandus.es/ca/",
       instagram: "https://www.instagram.com/kidsandus.cardedeu/?hl=en",
@@ -348,8 +314,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/laFresca/1.jpeg",
       "/static/images/locations/laFresca/2.jpeg",
     ],
-    lat: 41.639890381660656,
-    lng: 2.3579162300262793,
     social: {
       web: "https://lafresca.eco/",
       facebook:
@@ -361,8 +325,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/guinguetaPompeuFabra/1.jpeg",
       "/static/images/locations/guinguetaPompeuFabra/2.jpeg",
     ],
-    lat: 41.64225826500509,
-    lng: 2.352798747679134,
     social: {
       web: "https://laguinguetadelpompeufabra.cat/",
       facebook: "https://www.facebook.com/laguinguetadelpompeufabra/",
@@ -375,8 +337,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/terrassaViuLaMusica/1.jpeg",
       "/static/images/locations/terrassaViuLaMusica/2.jpeg",
     ],
-    lat: 41.638703341862495,
-    lng: 2.360165621399748,
     social: {
       web: "http://viulamusica.cat/",
       facebook: "https://www.facebook.com/escolaviulamusica/",
@@ -389,8 +349,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/museuArxiuTomasBalvey/1.jpeg",
       "/static/images/locations/museuArxiuTomasBalvey/2.jpeg",
     ],
-    lat: 41.637994223216054,
-    lng: 2.3548167289541015,
     social: {
       web: "https://museudecardedeu.cat/",
       instagram: "https://www.instagram.com/museudecardedeu/",
@@ -400,8 +358,6 @@ export const VITAMINED_LOCATIONS = {
   },
   parcPompeuFabra: {
     images: ["/static/images/locations/parcPompeuFabra/1.jpeg"],
-    lat: 41.64187052797948,
-    lng: 2.3530121512517255,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -411,8 +367,6 @@ export const VITAMINED_LOCATIONS = {
   },
   parcDelsPinetons: {
     images: ["/static/images/locations/parcDelsPinetons/1.jpeg"],
-    lat: 41.6418889903151,
-    lng: 2.3542687426674447,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -425,8 +379,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/placaContes/1.jpeg",
       "/static/images/locations/placaContes/2.jpeg",
     ],
-    lat: 41.63836142146722,
-    lng: 2.357423235796843,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -436,8 +388,6 @@ export const VITAMINED_LOCATIONS = {
   },
   placaEsglesia: {
     images: ["/static/images/locations/placaEsglesia/1.jpeg"],
-    lat: 41.63853798978688,
-    lng: 2.355840838823934,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -447,8 +397,6 @@ export const VITAMINED_LOCATIONS = {
   },
   placaSantCorneli: {
     images: ["/static/images/locations/placaSantCorneli/1.jpeg"],
-    lat: 41.63872635026174,
-    lng: 2.356437313664736,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -458,8 +406,6 @@ export const VITAMINED_LOCATIONS = {
   },
   placaSantJoan: {
     images: ["/static/images/locations/placaSantJoan/1.jpeg"],
-    lat: 41.63816747322217,
-    lng: 2.355029169716503,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -469,8 +415,6 @@ export const VITAMINED_LOCATIONS = {
   },
   placaJoanAlsina: {
     images: ["/static/images/locations/placaJoanAlsina/1.jpeg"],
-    lat: 41.64200225558534,
-    lng: 2.36117166518075,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -483,16 +427,12 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/plaCalma/1.jpeg",
       "/static/images/locations/plaCalma/2.jpeg",
     ],
-    lat: 41.63830233290612,
-    lng: 2.356343940659575,
     social: {
       facebook: "https://www.facebook.com/barpladelacalma/",
     },
   },
   salaSarau: {
     images: ["/static/images/locations/salaSarau/1.jpeg"],
-    lat: 41.637130295523384,
-    lng: 2.361176040465669,
     social: {
       web: "https://www.cardedeu.cat/adreces-i-telefons/sala-sarau.html",
     },
@@ -502,8 +442,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/santHilari/1.jpeg",
       "/static/images/locations/santHilari/2.jpeg",
     ],
-    lat: 41.66877946875697,
-    lng: 2.34985794255853,
     social: {
       web: "https://www.cardedeu.cat/el-municipi/equipaments/mas-de-sant-hilari.html",
     },
@@ -513,8 +451,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/tarambana/1.jpeg",
       "/static/images/locations/tarambana/2.jpeg",
     ],
-    lat: 41.641054643881766,
-    lng: 2.363269773588325,
     social: {
       web: "https://tarambana.cat/",
       twitter: "https://twitter.com/eltarambana",
@@ -527,8 +463,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/teatreAuditoriCardedeu/1.jpeg",
       "/static/images/locations/teatreAuditoriCardedeu/2.jpeg",
     ],
-    lat: 41.63715759707137,
-    lng: 2.36132918584645,
     social: {
       web: "https://www.teatreauditoricardedeu.cat/",
       twitter: "https://twitter.com/teatrecardedeu",
@@ -541,8 +475,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/textilRase/1.jpeg",
       "/static/images/locations/textilRase/2.jpeg",
     ],
-    lat: 41.63835093425814,
-    lng: 2.3629058262509672,
     social: {
       web: "https://www.cardedeu.cat/el-municipi/equipaments/sala-polivalent-textil-rase.html",
       facebook: "https://www.facebook.com/textilrase/",
@@ -554,16 +486,12 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/vilaPaquita/1.jpeg",
       "/static/images/locations/vilaPaquita/2.jpeg",
     ],
-    lat: 41.637052846146986,
-    lng: 2.360924223825777,
     social: {
       web: "https://www.cardedeu.cat/serveis-i-tramits/oficines-municipals-punts-dinformacio-ciutadana/villa-paquita-cultura-participacio-i-joventut.html",
     },
   },
   totsona: {
     images: ["/static/images/locations/totsona/1.jpeg"],
-    lat: 41.63693779243355,
-    lng: 2.3658255878361234,
     social: {
       web: "https://www.totsona.com/",
       facebook: "https://www.facebook.com/damarisgelabert",
@@ -575,8 +503,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/polvori/1.jpeg",
       "/static/images/locations/polvori/2.jpeg",
     ],
-    lat: 41.63806878807939,
-    lng: 2.354556047015495,
     social: {
       web: "https://elpolvori.wordpress.com/",
       facebook: "https://www.facebook.com/ElPolvori/",
@@ -589,8 +515,6 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/garitu/1.jpeg",
       "/static/images/locations/garitu/2.jpeg",
     ],
-    lat: 41.63873233419056,
-    lng: 2.3564691713843104,
     social: {
       web: "https://elgaritu.cat/",
       facebook: "https://www.facebook.com/elgaritucardedeu",
@@ -603,11 +527,15 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/esbiosfera/1.jpeg",
       "/static/images/locations/esbiosfera/2.jpeg",
     ],
-    lat: 41.6396718848256,
-    lng: 2.356776911185772,
     social: {
       web: "http://www.esbioesfera.cat/",
       facebook: "https://www.facebook.com/326643577355325",
+    },
+  },
+  estacioAlla: {
+    images: ["/static/images/locations/estacioAlla/1.jpeg"],
+    social: {
+      web: "http://lestacioesalla.blogspot.com.es/",
     },
   },
 };

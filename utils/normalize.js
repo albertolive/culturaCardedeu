@@ -76,6 +76,7 @@ export const normalizeEvent = (event) => {
     imageUploaded: imageUploaded
       ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${imageId}`
       : null,
+    imageId,
     isEventFinished: event.end
       ? new Date(event.end.dateTime) < new Date()
       : false,

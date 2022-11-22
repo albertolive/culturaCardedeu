@@ -12,8 +12,14 @@ export default function ImageComponent({
   layout = "responsive",
 }) {
   const [src, setSrc] = useState(image);
+  const [error, setError] = useState(false);
 
-  const onError = () => setSrc(defaultImage);
+  const onError = () => {
+    setError(true);
+    setSrc(defaultImage);
+  };
+
+  if (error) return null;
 
   return (
     <>

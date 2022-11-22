@@ -182,6 +182,7 @@ export default function Event(props) {
     lat,
     lng,
     imageUploaded,
+    imageId,
     social,
     isEventFinished,
   } = data.event;
@@ -312,7 +313,7 @@ export default function Event(props) {
                   <div className="w-1/2">
                     <div className="rounded-lg bg-gray-100 overflow-hidden">
                       <a
-                        href={`https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${id}`}
+                        href={`https://res.cloudinary.com/culturaCardedeu/image/upload/v1/culturaCardedeu/${imageId}`}
                         className="pointer"
                         target="_blank"
                         rel="image_src noreferrer"
