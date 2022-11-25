@@ -16,6 +16,8 @@ export const normalizeEvents = (event) => {
   if (tag) title = title.replace(`${tag}:`, "").trim();
 
   const locationNormalized = getVitaminedLocation(location);
+  const imageUploaded = event.guestsCanModify || false;
+  const imageId = event.id ? event.id.split("_")[0] : event.id;
 
   return {
     id: event.id,
@@ -28,6 +30,12 @@ export const normalizeEvents = (event) => {
     tag,
     slug: slug(title, originalFormattedStart, event.id),
     ...locationNormalized,
+    images: [
+      imageUploaded
+        ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${imageId}`
+        : undefined,
+      ...locationNormalized.images,
+    ].filter(Boolean),
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
     description: event.description
