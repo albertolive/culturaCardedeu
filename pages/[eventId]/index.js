@@ -213,6 +213,7 @@ export default function Event(props) {
         )}
         canonical={`https://www.culturacardedeu.com/${slug}`}
         image={images[0]}
+        imageUploaded={imageUploaded}
         preload="/static/images/gMaps.webp"
       />
       {newEvent && <Notification title={title} url={slug} />}
