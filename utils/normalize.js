@@ -30,14 +30,11 @@ export const normalizeEvents = (event) => {
     tag,
     slug: slug(title, originalFormattedStart, event.id),
     ...locationNormalized,
-    images: [
-      imageUploaded
-        ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${imageId}`
-        : undefined,
-      ...locationNormalized.images,
-    ].filter(Boolean),
     startDate: event.start && event.start.dateTime,
     endDate: event.end && event.end.dateTime,
+    imageUploaded: imageUploaded
+      ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${imageId}`
+      : null,
     description: event.description
       ? event.description
       : "Cap descripció. Vols afegir-ne una? Escriu-nos i et direm com fer-ho!",
