@@ -37,7 +37,9 @@ export const getServerSideProps = async (ctx) => {
     lastmod: new Date().toISOString(),
     changefreq: "daily",
     "image:image": `
-    <image:loc>${siteUrl}${data.images[0]}</image:loc>
+    <image:loc>${
+      data.imageUploaded ? data.imageUploaded : siteUrl + data.images[0]
+    }</image:loc>
     <image:title>${sanitizeText(data.title)}</image:title>
   `,
   }));

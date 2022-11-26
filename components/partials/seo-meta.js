@@ -5,9 +5,11 @@ const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 const getRandomImage = Math.floor(Math.random() * 9);
 
 const Meta = (props) => {
-  const image =
-    props.image ||
-    `/static/images/banners/cultura-cardedeu-banner-${getRandomImage}.jpeg`;
+  const image = props.imageUploaded
+    ? props.imageUploaded
+    : props.image
+    ? siteUrl + props.image
+    : `/static/images/banners/cultura-cardedeu-banner-${getRandomImage}.jpeg`;
 
   return (
     <Head>
@@ -33,7 +35,7 @@ const Meta = (props) => {
         property="og:description"
         content={props.description}
       />
-      <meta property="og:image" content={`${siteUrl}${image}`} />
+      <meta property="og:image" content={image} />
       <meta property="og:url" content={props.canonical} />
       <meta property="og:site_name" content="Cultura Cardedeu" />
       <meta property="og:locale" content="ca-ES" />
@@ -49,8 +51,8 @@ const Meta = (props) => {
       <meta name="twitter:image:alt" content={props.title} />
       <meta property="fb:app_id" content="103738478742219" />
       <meta property="fb:pages" content="103738478742219" />
-      <meta name="twitter:image" content={`${siteUrl}${image}`} />
-      <meta name="twitter:image:src" content={`${siteUrl}${image}`} />
+      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:src" content={image} />
       <meta
         name="google-site-verification"
         content="ujWqRwOYsTEmYofWVJcDeMp54QW4PGivj2yUaBRevls"
