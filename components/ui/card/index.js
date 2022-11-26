@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
 
 export default function Card({ event, isLoading }) {
-  const image = event.images && event.images[0];
+  const image = event.imageUploaded ? event.imageUploaded : event.images[0];
   const location =
     event.location.length > 45
       ? event.location.substring(0, 45) + "..."
