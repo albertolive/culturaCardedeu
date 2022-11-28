@@ -165,7 +165,10 @@ export default function Edita({ event }) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...form, imageUploaded: !!imageToUpload }),
+        body: JSON.stringify({
+          ...form,
+          imageUploaded: event.imageUploaded || !!imageToUpload,
+        }),
       });
 
       await rawResponse.json();
