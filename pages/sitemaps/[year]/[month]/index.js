@@ -33,7 +33,7 @@ export default function Month({ events }) {
           <Link href={`/${event.slug}`}>
             <a className="hover:underline">
               <p className="text-sm" key={event.id}>
-                {event.title} - {event.formattedStart}
+                {event.title} - {event.originalFormattedStart}
               </p>
             </a>
           </Link>
