@@ -30,6 +30,7 @@ export const TAGS = [
   "Cinema",
   "Concert",
   "Teatre",
+  "Exposició",
 ];
 
 export const LOCATIONS_ARRAY = [

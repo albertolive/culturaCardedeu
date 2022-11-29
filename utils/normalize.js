@@ -26,6 +26,7 @@ export const normalizeEvents = (event) => {
     endTime,
     location,
     formattedStart,
+    originalFormattedStart,
     nameDay,
     tag,
     slug: slug(title, originalFormattedStart, event.id),
