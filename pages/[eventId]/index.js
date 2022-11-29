@@ -176,7 +176,7 @@ export default function Event(props) {
     startTime,
     endTime,
     nameDay,
-    formattedStart,
+    originalFormattedStart,
     tag,
     images = [],
     lat,
@@ -208,7 +208,7 @@ export default function Event(props) {
       <Meta
         title={generateMetaTitle(title, "Cultura Cardedeu", location)}
         description={generateMetaDescription(
-          `${title} - ${nameDay} ${formattedStart} - ${location}`,
+          `${title} - ${nameDay} ${originalFormattedStart} - ${location}`,
           description
         )}
         canonical={`https://www.culturacardedeu.com/${slug}`}
@@ -275,7 +275,7 @@ export default function Event(props) {
               )}
               <div className="border-b border-gray-200">
                 <h2 className="font-bold text-[#ECB84A]">
-                  {nameDay}, {formattedStart}
+                  {nameDay}, {originalFormattedStart}
                 </h2>
                 <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                   {title}

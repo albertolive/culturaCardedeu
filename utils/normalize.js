@@ -70,6 +70,7 @@ export const normalizeEvent = (event) => {
     endTime,
     location,
     formattedStart,
+    originalFormattedStart,
     nameDay,
     description: event.description
       ? event.description
