@@ -1,16 +1,22 @@
 import { TAGS } from "./constants";
-import { slug, getFormattedDate, getVitaminedLocation } from "./helpers";
+import {
+  slug,
+  getFormattedDate,
+  getVitaminedLocation,
+  sanitizeText,
+} from "./helpers";
 
 export const normalizeEvents = (event) => {
   const {
     originalFormattedStart,
     formattedStart,
+    formattedEnd,
     startTime,
     endTime,
     nameDay,
   } = getFormattedDate(event.start, event.end);
   const location = event.location ? event.location.split(",")[0] : "Cardedeu";
-  let title = event.summary || "";
+  let title = event.summary ? sanitizeText(event.summary) : "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
 
   if (tag) title = title.replace(`${tag}:`, "").trim();
@@ -26,7 +32,7 @@ export const normalizeEvents = (event) => {
     endTime,
     location,
     formattedStart,
-    originalFormattedStart,
+    formattedEnd,
     nameDay,
     tag,
     slug: slug(title, originalFormattedStart, event.id),
@@ -48,12 +54,13 @@ export const normalizeEvent = (event) => {
   const {
     originalFormattedStart,
     formattedStart,
+    formattedEnd,
     startTime,
     endTime,
     nameDay,
   } = getFormattedDate(event.start, event.end);
   let location = event.location ? event.location.split(",")[0] : "Cardedeu";
-  let title = event.summary || "";
+  let title = event.summary ? sanitizeText(event.summary) : "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
 
   if (tag) title = title.replace(`${tag}:`, "").trim();
@@ -70,7 +77,7 @@ export const normalizeEvent = (event) => {
     endTime,
     location,
     formattedStart,
-    originalFormattedStart,
+    formattedEnd,
     nameDay,
     description: event.description
       ? event.description

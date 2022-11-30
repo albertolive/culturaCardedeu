@@ -23,7 +23,7 @@ export default function Sitemaps() {
               <div key={`${year}-${month}`} className="box py-1">
                 <Link href={`/sitemaps/${year}/${month.toLocaleLowerCase()}`}>
                   <a className="hover:underline">
-                    <p className="text-md">{month}</p>
+                    <p className="text-md capitalize">{month}</p>
                   </a>
                 </Link>
               </div>
