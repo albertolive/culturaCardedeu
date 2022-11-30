@@ -35,7 +35,7 @@ const customStyles = {
 const options = [
   { value: "WEEKLY", label: "Cada setmana" },
   { value: "MONTHLY", label: "Cada mes" },
-  { value: "ANUALY", label: "Cada any" },
+  { value: "YEARLY", label: "Cada any" },
 ];
 
 export default function FrequencySelect({ id, value, title, onChange }) {

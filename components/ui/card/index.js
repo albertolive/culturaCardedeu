@@ -62,7 +62,9 @@ export default function Card({ event, isLoading }) {
           <div className="p-4 flex-2">
             <div className="flex items-center">
               <div className="flex items-center mr-2 tracking-wide text-sm text-[#ECB84A] font-bold">
-                {event.nameDay}, {event.formattedStart}
+                {event.formattedEnd
+                  ? `Del ${event.formattedStart} al ${event.formattedEnd}`
+                  : `${event.nameDay}, ${event.formattedStart}`}
               </div>
               <div></div>
             </div>

@@ -9,18 +9,18 @@ export const DAYS = [
 ];
 
 export const MONTHS = [
-  "Gener",
-  "Febrer",
-  "Març",
-  "Abril",
-  "Maig",
-  "Juny",
-  "Juliol",
-  "Agost",
-  "Setembre",
-  "Octubre",
-  "Novembre",
-  "Desembre",
+  "gener",
+  "febrer",
+  "març",
+  "abril",
+  "maig",
+  "juny",
+  "juliol",
+  "agost",
+  "setembre",
+  "octubre",
+  "novembre",
+  "desembre",
 ];
 
 export const TAGS = [

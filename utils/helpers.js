@@ -2,6 +2,8 @@ import { DAYS, MONTHS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
+export const sanitizeText = (str) => str.replace("&amp;", "&");
+
 export const slug = (str, formattedStart, id) =>
   `${str
     .toLowerCase()
@@ -40,26 +42,43 @@ export const convertTZ = (date, tzString) =>
   );
 
 export const getFormattedDate = (start, end) => {
-  const today = new Date();
   const startDate = new Date(
     (start && start.date) || (start && start.dateTime) || start
   );
   const endDate = new Date((end && end.date) || (end && end.dateTime) || end);
 
-  const todayDateConverted = convertTZ(today, "Europe/Madrid");
   const startDateConverted = convertTZ(startDate, "Europe/Madrid");
   const endDateConverted = convertTZ(endDate, "Europe/Madrid");
 
-  const date = today > startDate ? todayDateConverted : startDateConverted;
+  let isMultipleDays = false;
+  let isSameMonth = false;
+  let isSameYear = false;
 
-  const day = new Date(date).getDay();
-  const month = new Date(date).getMonth();
-  const year = new Date(date).getFullYear();
+  if (startDateConverted.getDay() !== endDateConverted.getDay())
+    isMultipleDays = true;
+
+  if (startDateConverted.getMonth() === endDateConverted.getMonth())
+    isSameMonth = true;
+
+  if (startDateConverted.getFullYear() === endDateConverted.getFullYear())
+    isSameYear = true;
+
+  const day = new Date(startDateConverted).getDay();
+  const month = new Date(startDateConverted).getMonth();
+  const year = new Date(startDateConverted).getFullYear();
   const nameDay = DAYS[day];
   const nameMonth = MONTHS[month];
 
   const originalFormattedStart = `${startDateConverted.getDate()} de ${nameMonth} del ${year}`;
-  const formattedStart = `${date.getDate()} de ${nameMonth} del ${year}`;
+  const formattedStart =
+    isMultipleDays && isSameMonth
+      ? `${startDateConverted.getDate()}`
+      : `${startDateConverted.getDate()} de ${nameMonth} ${
+          isMultipleDays && isSameYear ? "" : `del ${year}`
+        }`;
+  const formattedEnd = `${endDateConverted.getDate()} de ${
+    MONTHS[endDateConverted.getMonth()]
+  } del ${endDateConverted.getFullYear()}`;
   const startTime = `${startDateConverted.getHours()}:${String(
     startDateConverted.getMinutes()
   ).padStart(2, "0")}`;
@@ -70,6 +89,7 @@ export const getFormattedDate = (start, end) => {
   return {
     originalFormattedStart,
     formattedStart,
+    formattedEnd: isMultipleDays ? formattedEnd : null,
     startTime,
     endTime,
     nameDay,
@@ -107,18 +127,18 @@ export const isWeekend = () => {
 };
 
 export const monthsName = [
-  "Gener",
-  "Febrer",
-  "Març",
-  "Abril",
-  "Maig",
-  "Juny",
-  "Juliol",
-  "Agost",
-  "Setembre",
-  "Octubre",
-  "Novembre",
-  "Desembre",
+  "gener",
+  "febrer",
+  "març",
+  "abril",
+  "maig",
+  "juny",
+  "juliol",
+  "agost",
+  "setembre",
+  "octubre",
+  "novembre",
+  "desembre",
 ];
 
 const transformImagestoAbsoluteUrl = (images) =>
