@@ -2,10 +2,8 @@ import { DAYS, MONTHS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
-export const sanitizeText = (str) => str.replace("&amp;", "&");
-
-export const slug = (str, formattedStart, id) =>
-  `${str
+export const sanitize = (str) =>
+  str
     .toLowerCase()
     .replace(/ /g, "-")
     .normalize("NFD")
@@ -28,7 +26,14 @@ export const slug = (str, formattedStart, id) =>
     .replace(/\|/g, "")
     .replace(/•|/g, "")
     .replace(/·|/g, "")
-    .replace(/:/g, "")}-${formattedStart
+    .replace(/º|/g, "")
+    .replace(/:/g, "")
+    .replace(/(<([^>]+)>)/gi, "");
+
+export const sanitizeText = (str) => str.replace("&amp;", "&");
+
+export const slug = (str, formattedStart, id) =>
+  `${sanitize(str)}-${formattedStart
     .toLowerCase()
     .replace(/ /g, "-")
     .replace("---", "-")
