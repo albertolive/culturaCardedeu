@@ -1,6 +1,6 @@
 import { getServerSideSitemap } from "next-sitemap";
 
-import { sanitize } from "utils/helpers";
+import { sanitize } from "@utils/helpers";
 
 const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 

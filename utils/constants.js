@@ -36,6 +36,7 @@ export const TAGS = [
 export const LOCATIONS_ARRAY = [
   { value: "Ajuntament de Cardedeu", label: "Ajuntament de Cardedeu" },
   { value: "Biblioteca Marc de Vilalba", label: "Biblioteca Marc de Vilalba" },
+  { value: "Biblioteca Les Aigües", label: "Biblioteca Les Aigües" },
   { value: "Cambridge School Cardedeu", label: "Cambridge School Cardedeu" },
   {
     value: "Capella de Sant Corneli i Sant Cebrià",
