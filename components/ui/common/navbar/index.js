@@ -8,6 +8,7 @@ import logo from "@public/static/images/logo-cultura-cardedeu.png";
 const navigation = [
   { name: "Agenda", href: "/", current: true },
   { name: "Qui som", href: "/qui-som", current: false },
+  { name: "2022 en xifres", href: "/2022-en-xifres", current: false },
   { name: "Arxiu", href: "/sitemaps", current: false },
 ];
 
