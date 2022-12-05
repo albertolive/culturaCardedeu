@@ -74,7 +74,10 @@ export async function getStaticProps() {
 
   const { from, until } = twoWeeksDefault();
 
-  const { events } = await getCalendarEvents(from, until);
+  const { events } = await getCalendarEvents({
+    from,
+    until,
+  });
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return {

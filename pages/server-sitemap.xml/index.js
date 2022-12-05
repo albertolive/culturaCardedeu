@@ -11,7 +11,13 @@ export const getServerSideProps = async (ctx) => {
   const from = new Date(now.getFullYear(), now.getMonth() - 4);
   const until = new Date(now.getFullYear(), now.getMonth() + 4);
 
-  const { events } = await getCalendarEvents(from, until, true, "", 2500);
+  const { events } = await getCalendarEvents({
+    from,
+    until,
+    normalizeRss: true,
+    maxResults: 2500,
+    filterByDate: false,
+  });
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   const fields = normalizedEvents?.map((data) => ({

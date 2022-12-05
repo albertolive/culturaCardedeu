@@ -75,7 +75,12 @@ export async function getStaticProps({ params }) {
 
   const { from, until } = getHistoricDates(month, year);
 
-  const { events } = await getCalendarEvents(from, until, false, "", 2500);
+  const { events } = await getCalendarEvents({
+    from,
+    until,
+    maxResults: 2500,
+    filterByDate: false,
+  });
 
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 

@@ -1,6 +1,6 @@
 import Meta from "@components/partials/seo-meta";
 
-export default function QuiSom() {
+export default function Resum2022() {
   return (
     <>
       <Meta
