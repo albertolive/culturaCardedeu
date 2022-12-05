@@ -6,7 +6,7 @@ import { getCalendarEvents } from "@lib/helpers";
 const noEventsFound = async (events) => {
   const { from, until } = twoWeeksDefault();
 
-  events = await getCalendarEvents(from, until, false, "", 7);
+  events = await getCalendarEvents({ from, until, maxResults: 7 });
   events = { ...events, noEventsFound: true };
 
   return events;
@@ -21,7 +21,7 @@ const handler = async (req, res) => {
     case "today":
       const { from: fromToday, until: untilToday } = today();
 
-      events = await getCalendarEvents(fromToday, untilToday);
+      events = await getCalendarEvents({ from: fromToday, until: untilToday });
 
       if (events.noEventsFound) events = await noEventsFound(events);
 
@@ -29,7 +29,7 @@ const handler = async (req, res) => {
     case "week":
       const { from: fromWeek, until: toWeek } = week();
 
-      events = await getCalendarEvents(fromWeek, toWeek);
+      events = await getCalendarEvents({ from: fromWeek, until: toWeek });
 
       if (events.noEventsFound) events = await noEventsFound(events);
 
@@ -37,7 +37,7 @@ const handler = async (req, res) => {
     case "weekend":
       const { from: fromWeekend, until: toWeekend } = weekend();
 
-      events = await getCalendarEvents(fromWeekend, toWeekend);
+      events = await getCalendarEvents({ from: fromWeekend, until: toWeekend });
 
       if (events.noEventsFound) events = await noEventsFound(events);
 
@@ -45,7 +45,7 @@ const handler = async (req, res) => {
     case "search":
       const fromSearch = new Date();
 
-      events = await getCalendarEvents(fromSearch, null, false, q);
+      events = await getCalendarEvents({ from: fromSearch, q });
 
       if (events.noEventsFound) events = await noEventsFound(events);
 
@@ -53,7 +53,7 @@ const handler = async (req, res) => {
     default:
       const { from, until } = twoWeeksDefault();
 
-      events = await getCalendarEvents(from, until, false, q, maxResults);
+      events = await getCalendarEvents({ from, until, q, maxResults });
   }
 
   try {

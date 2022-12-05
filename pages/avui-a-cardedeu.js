@@ -71,7 +71,10 @@ export async function getStaticProps() {
   const { today, twoWeeksDefault } = require("@lib/dates");
 
   const { from, until } = today();
-  const { events: todayEvents } = await getCalendarEvents(from, until);
+  const { events: todayEvents } = await getCalendarEvents({
+    from,
+    until,
+  });
 
   let events = todayEvents;
   let noEventsFound = false;
@@ -79,13 +82,11 @@ export async function getStaticProps() {
   if (events.length === 0) {
     const { from, until } = twoWeeksDefault();
 
-    const { events: nextEvents } = await getCalendarEvents(
+    const { events: nextEvents } = await getCalendarEvents({
       from,
       until,
-      false,
-      "",
-      7
-    );
+      maxResults: 7,
+    });
 
     noEventsFound = true;
     events = nextEvents;

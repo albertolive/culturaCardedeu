@@ -7,7 +7,12 @@ const getAllArticles = async () => {
   const from = new Date();
   const until = new Date(now.setDate(now.getDate() + 7));
 
-  const { events } = await getCalendarEvents(from, until, true);
+  const { events } = await getCalendarEvents({
+    from,
+    until,
+    normalizeRss: true,
+    filterByDate: false,
+  });
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return normalizedEvents;

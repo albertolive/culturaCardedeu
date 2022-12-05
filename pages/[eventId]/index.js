@@ -572,7 +572,10 @@ export async function getStaticPaths() {
   const { twoWeeksDefault } = require("@lib/dates");
 
   const { from, until } = twoWeeksDefault();
-  const { events } = await getCalendarEvents(from, until);
+  const { events } = await getCalendarEvents({
+    from,
+    until,
+  });
   const eventsSlug = events.map((c) => ({ params: { eventId: c.slug } }));
 
   return {

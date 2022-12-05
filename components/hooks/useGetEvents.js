@@ -14,7 +14,7 @@ export const useGetEvents = (
 ) => {
   return useSWR(["/api/getEvents", pageIndex, q, maxResults], fetcher, {
     fallbackData: props,
-    refreshInterval: refreshInterval ? 60000 : 0,
+    refreshInterval: refreshInterval ? 300000 : 0,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
