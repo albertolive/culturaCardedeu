@@ -1,8 +1,11 @@
 import { Image } from "@components/ui/common";
 import Link from "next/link";
 import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
+import AdCard from "@components/ui/adCard";
 
 export default function Card({ event, isLoading }) {
+  if (event.isAd) return <AdCard event={event} />;
+
   const image = event.imageUploaded ? event.imageUploaded : event.images[0];
   const location =
     event.location.length > 45
