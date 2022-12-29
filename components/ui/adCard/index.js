@@ -37,7 +37,7 @@ export default function AdCard({ event }) {
           style={{ display: "block" }}
           data-ad-format="fluid"
           data-ad-layout-key="-gw-1q+20-6g+hq"
-          data-ad-client="ca-pub-7286843731381299"
+          data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
           data-ad-slot="6735633460"
         ></ins>
       </div>
