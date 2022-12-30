@@ -85,6 +85,6 @@ export async function getStaticProps({ params }) {
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return {
-    props: { events: normalizedEvents },
+    props: { events: normalizedEvents.filter((event) => !event.isAd) },
   };
 }
