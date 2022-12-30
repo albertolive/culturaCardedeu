@@ -576,7 +576,9 @@ export async function getStaticPaths() {
     from,
     until,
   });
-  const eventsSlug = events.map((c) => ({ params: { eventId: c.slug } }));
+  const eventsSlug = events
+    .filter((event) => !event.isAd)
+    .map((c) => ({ params: { eventId: c.slug } }));
 
   return {
     paths: eventsSlug,
