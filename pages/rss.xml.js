@@ -34,10 +34,12 @@ const buildFeed = (items) => {
     },
   });
 
-  const removedDuplicatedItems = items.filter(
-    (v, i, a) =>
-      a.findIndex((v2) => v2.id.split("_")[0] === v.id.split("_")[0]) === i
-  );
+  const removedDuplicatedItems = items
+    .filter((event) => !event.isAd)
+    .filter(
+      (v, i, a) =>
+        a.findIndex((v2) => v2.id.split("_")[0] === v.id.split("_")[0]) === i
+    );
 
   removedDuplicatedItems.forEach((item) => {
     feed.addItem({
