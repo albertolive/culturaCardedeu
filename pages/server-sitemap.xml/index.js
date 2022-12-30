@@ -20,17 +20,19 @@ export const getServerSideProps = async (ctx) => {
   });
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
-  const fields = normalizedEvents?.map((data) => ({
-    loc: `${siteUrl}/${data.slug}`,
-    lastmod: new Date().toISOString(),
-    changefreq: "daily",
-    "image:image": `
+  const fields = normalizedEvents
+    ?.filter((event) => !event.isAd)
+    .map((data) => ({
+      loc: `${siteUrl}/${data.slug}`,
+      lastmod: new Date().toISOString(),
+      changefreq: "daily",
+      "image:image": `
     <image:loc>${
       data.imageUploaded ? data.imageUploaded : siteUrl + data.images[0]
     }</image:loc>
     <image:title>${sanitize(data.title)}</image:title>
   `,
-  }));
+    }));
 
   return getServerSideSitemap(ctx, fields);
 };
