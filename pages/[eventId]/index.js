@@ -13,6 +13,7 @@ import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
 import { generateJsonData } from "@utils/helpers";
 import { PencilIcon, XCircleIcon } from "@heroicons/react/outline";
+import AdArticle from "@components/ui/adArticle";
 
 function replaceURLs(text) {
   if (!text) return;
@@ -284,6 +285,7 @@ export default function Event(props) {
                   {title}
                 </h1>
               </div>
+              <AdArticle />
               <dl className="mt-6 space-y-10">
                 <div>
                   <div className="flex items-center">

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-export default function AdCard({ event }) {
+export default function AdArticle({ event }) {
   useEffect(() => {
     const pushAd = () => {
       try {
@@ -26,26 +26,14 @@ export default function AdCard({ event }) {
   }, []);
 
   return (
-    <div
-      key={event.id}
-      className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40"
-    >
+    <div className="">
       <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
-        {/* <ins
-          className="adsbygoogle w-full"
-          style={{ display: "block" }}
-          data-ad-format="fluid"
-          data-ad-layout-key="-gw-1q+20-6g+hq"
-          data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
-          data-ad-slot="6735633460"
-        ></ins> */}
         <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
+          className="adsbygoogle w-full"
+          style={{ display: "block", textAlign: "center" }}
+          data-ad-format="fluid"
           data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
-          data-ad-slot="9596766377"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
+          data-ad-slot="3218597262"
         ></ins>
       </div>
     </div>
