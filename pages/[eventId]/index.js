@@ -371,7 +371,9 @@ export default function Event(props) {
                   <Social links={social} />
                 </dl>
               )}
-              <AdArticle />
+              <div className="mt-6 space-y-10">
+                <AdArticle />
+              </div>
             </div>
             <div>
               <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">

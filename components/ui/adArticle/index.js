@@ -1,48 +1,6 @@
-import React, { useEffect, useState } from "react";
-
 export default function AdArticle({ isDisplay }) {
-  const { isLoaded, setIsLoaded } = useState(false);
-
-  useEffect(() => {
-    const pushAd = () => {
-      try {
-        const adsbygoogle = window.adsbygoogle;
-        adsbygoogle.push({});
-        setIsLoaded(true);
-        console.log(adsbygoogle);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    let interval = setInterval(() => {
-      // Check if Adsense script is loaded every 300ms
-      if (window.adsbygoogle) {
-        pushAd();
-        // clear the interval once the ad is pushed so that function isn't called indefinitely
-        clearInterval(interval);
-      }
-    }, 300);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [setIsLoaded]);
-
-  useEffect(() => {
-    if (window.adsbygoogle && !window.adsbygoogle.loaded) {
-      setIsLoaded(false);
-      console.log("caca");
-    }
-  }, [isLoaded, setIsLoaded]);
-
-  if (!isLoaded) return null;
-
   return (
-    <div
-      key={typeof window !== "undefined" && window.location.pathname}
-      className="flex h-full min-h-[170px] lg:min-h-[230px]"
-    >
+    <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
       {isDisplay ? (
         <ins
           className="adsbygoogle w-full"
@@ -62,6 +20,7 @@ export default function AdArticle({ isDisplay }) {
           data-ad-slot="3218597262"
         ></ins>
       )}
+      {/* <script>if (!adsbygoogle.loaded) {console.log("caca")}</script> */}
     </div>
   );
 }
