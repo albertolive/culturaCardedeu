@@ -40,7 +40,7 @@ export default function AdCard({ event }) {
           data-ad-slot="6735633460"
         ></ins> */}
         <ins
-          className="adsbygoogle"
+          className="adsbygoogle w-full"
           style={{ display: "block" }}
           data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
           data-ad-slot="9596766377"
