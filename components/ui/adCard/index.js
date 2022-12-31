@@ -30,13 +30,12 @@ export default function AdCard({ event }) {
       key={event.id}
       className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40"
     >
-      <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
+      <div className="flex" style={{ maxHeight: "min-content" }}>
         <ins
           className="adsbygoogle w-full"
           style={{ display: "block" }}
           data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
           data-ad-slot="9596766377"
-          data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
       </div>
