@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-export default function AdArticle({ event }) {
+export default function AdArticle({ isDisplay }) {
   useEffect(() => {
     const pushAd = () => {
       try {
@@ -26,8 +26,8 @@ export default function AdArticle({ event }) {
   }, []);
 
   return (
-    <div className="">
-      <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
+    <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
+      {isDisplay ? (
         <ins
           className="adsbygoogle w-full"
           style={{ display: "block" }}
@@ -36,7 +36,16 @@ export default function AdArticle({ event }) {
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-      </div>
+      ) : (
+        <ins
+          className="adsbygoogle w-full"
+          style={{ display: "block", textAlign: "center" }}
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
+          data-ad-slot="3218597262"
+        ></ins>
+      )}
     </div>
   );
 }
