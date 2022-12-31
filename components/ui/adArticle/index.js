@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function AdArticle({ isDisplay }) {
+  const { isLoaded, setIsLoaded } = useState(false);
+
   useEffect(() => {
     const pushAd = () => {
       try {
         const adsbygoogle = window.adsbygoogle;
         adsbygoogle.push({});
+        setIsLoaded(true);
+        console.log(adsbygoogle);
       } catch (e) {
         console.error(e);
       }
@@ -23,10 +27,22 @@ export default function AdArticle({ isDisplay }) {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [setIsLoaded]);
+
+  useEffect(() => {
+    if (window.adsbygoogle && !window.adsbygoogle.loaded) {
+      setIsLoaded(false);
+      console.log("caca");
+    }
+  }, [isLoaded, setIsLoaded]);
+
+  if (!isLoaded) return null;
 
   return (
-    <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
+    <div
+      key={typeof window !== "undefined" && window.location.pathname}
+      className="flex h-full min-h-[170px] lg:min-h-[230px]"
+    >
       {isDisplay ? (
         <ins
           className="adsbygoogle w-full"
