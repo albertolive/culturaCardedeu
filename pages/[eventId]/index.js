@@ -285,7 +285,9 @@ export default function Event(props) {
                   {title}
                 </h1>
               </div>
-              <AdArticle isDisplay />
+              <div className="mt-6 space-y-10">
+                <AdArticle isDisplay />
+              </div>
               <dl className="mt-6 space-y-10">
                 <div>
                   <div className="flex items-center">
