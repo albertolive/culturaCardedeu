@@ -34,10 +34,10 @@ export default function AdCard({ event }) {
         <ins
           className="adsbygoogle w-full"
           style={{ display: "block" }}
-          data-ad-format="fluid"
-          data-ad-layout-key="-gw-1q+20-6g+hq"
           data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
-          data-ad-slot="6735633460"
+          data-ad-slot="9596766377"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
         ></ins>
       </div>
     </div>
