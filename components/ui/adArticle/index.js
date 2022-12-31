@@ -32,7 +32,7 @@ export default function AdArticle({ event }) {
           className="adsbygoogle w-full"
           style={{ display: "block" }}
           data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADS}
-          data-ad-slot="9596766377"
+          data-ad-slot="7838221321"
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
