@@ -1,4 +1,14 @@
+import { useEffect } from "react";
+
 export default function AdCard({ event }) {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   return (
     <div
       key={event.id}

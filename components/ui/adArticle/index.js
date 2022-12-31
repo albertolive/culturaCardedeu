@@ -1,4 +1,14 @@
+import { useEffect } from "react";
+
 export default function AdArticle({ isDisplay }) {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   return (
     <div className="flex h-full min-h-[170px] lg:min-h-[230px]">
       {isDisplay ? (
@@ -20,7 +30,6 @@ export default function AdArticle({ isDisplay }) {
           data-ad-slot="3218597262"
         ></ins>
       )}
-      {/* <script>if (!adsbygoogle.loaded) {console.log("caca")}</script> */}
     </div>
   );
 }
