@@ -285,7 +285,7 @@ export default function Event(props) {
                   {title}
                 </h1>
               </div>
-              <AdArticle />
+              <AdArticle isDisplay />
               <dl className="mt-6 space-y-10">
                 <div>
                   <div className="flex items-center">
@@ -371,8 +371,8 @@ export default function Event(props) {
                   <Social links={social} />
                 </dl>
               )}
+              <AdArticle />
             </div>
-
             <div>
               <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
                 <div
