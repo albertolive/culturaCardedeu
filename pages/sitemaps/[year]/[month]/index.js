@@ -9,7 +9,9 @@ export default function Month({ events }) {
   const { query } = useRouter();
   const { year, month } = query;
 
-  const jsonData = events.map((event) => generateJsonData(event));
+  const jsonData = events
+    .filter(({ isAd }) => !isAd)
+    .map((event) => generateJsonData(event));
 
   return (
     <>
@@ -85,6 +87,6 @@ export async function getStaticProps({ params }) {
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return {
-    props: { events: normalizedEvents.filter((event) => !event.isAd) },
+    props: { events: normalizedEvents.filter(({ isAd }) => !isAd) },
   };
 }

@@ -41,7 +41,9 @@ const SearchResults = ({ keyword }) => {
 
   const isLoading = (!events && !error) || isValidating;
 
-  const jsonData = events.map((event) => generateJsonData(event));
+  const jsonData = events
+    .filter(({ isAd }) => !isAd)
+    .map((event) => generateJsonData(event));
 
   return (
     <>
