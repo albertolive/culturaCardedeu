@@ -15,6 +15,47 @@ const GoogleAdsenseContainer = ({
     }
   }, []);
 
+  useEffect(() => {
+    const element = document.querySelector('[data-ad-status="unfilled"]');
+
+    // const observer = new MutationObserver((mutations) => {
+    //   mutations.forEach((mutation) => {
+    //     const { target } = mutation;
+    //     debugger;
+    //     if (mutation.attributeName === "class") {
+    //       const currentState = mutation.target.querySelector(
+    //         '[data-ad-status="unfilled"]'
+    //       );
+    //       if (element !== currentState) {
+    //         element = currentState;
+    //         console.log(
+    //           `'is-busy' class ${currentState ? "added" : "removed"}`
+    //         );
+    //       }
+    //     }
+    //   });
+    // });
+    debugger;
+    const observer = new MutationObserver((mutations) => {
+      debugger;
+      mutations.forEach((mutation) => {
+        const el = mutation.target;
+        if (
+          mutation.target &&
+          mutation.target.document.querySelector('[data-ad-status="unfilled"]')
+        ) {
+          alert("is-busy class added");
+        }
+      });
+    });
+
+    observer.observe(document.querySelector("div"), {
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: ["class"],
+    });
+  }, []);
+
   return (
     <ins
       className="adsbygoogle w-full"
