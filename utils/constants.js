@@ -381,6 +381,8 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/placaContes/1.jpeg",
       "/static/images/locations/placaContes/2.jpeg",
     ],
+    lat: 41.63836142146722,
+    lng: 2.357423235796843,
     social: {
       twitter: "https://www.twitter.com/culturacardedeu",
       instagram: "https://www.instagram.com/culturacardedeu",
@@ -444,6 +446,9 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/santHilari/1.jpeg",
       "/static/images/locations/santHilari/2.jpeg",
     ],
+    lat: 41.66877946875697,
+    lng: 2.34985794255853,
+
     social: {
       web: "https://www.cardedeu.cat/el-municipi/equipaments/mas-de-sant-hilari.html",
     },
@@ -505,6 +510,8 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/polvori/1.jpeg",
       "/static/images/locations/polvori/2.jpeg",
     ],
+    lat: 41.63806878807939,
+    lng: 2.354556047015495,
     social: {
       web: "https://elpolvori.wordpress.com/",
       facebook: "https://www.facebook.com/ElPolvori/",
@@ -517,6 +524,8 @@ export const VITAMINED_LOCATIONS = {
       "/static/images/locations/garitu/1.jpeg",
       "/static/images/locations/garitu/2.jpeg",
     ],
+    lat: 41.63873233419056,
+    lng: 2.3564691713843104,
     social: {
       web: "https://elgaritu.cat/",
       facebook: "https://www.facebook.com/elgaritucardedeu",
