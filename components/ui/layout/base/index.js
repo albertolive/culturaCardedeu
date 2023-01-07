@@ -17,7 +17,7 @@ export default function BaseLayout({ children }) {
         />
       </Head>
       <Navbar />
-      <Notify />
+      {/* <Notify /> */}
       <div className="mx-auto">
         <div className="max-w-7xl mx-auto fit p-4 xl:p-0 xl:py-4">
           {children}
