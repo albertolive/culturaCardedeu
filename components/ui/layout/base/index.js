@@ -18,8 +18,8 @@ export default function BaseLayout({ children }) {
       </Head>
       <Navbar />
       {/* <Notify /> */}
-      <div className="mx-auto">
-        <div className="max-w-7xl mx-auto fit p-4 xl:p-0 xl:py-4">
+      <div className="mx-auto pb-[85px]">
+        <div className="fit max-w-7xl mx-auto p-4 xl:p-0 xl:py-4">
           {children}
         </div>
       </div>
