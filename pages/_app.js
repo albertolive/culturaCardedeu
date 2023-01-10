@@ -57,12 +57,6 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         crossOrigin="anonymous"
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADS}`}
       />
-      <Script
-        id="ezoic-ads"
-        strategy="lazyOnload"
-        crossOrigin="anonymous"
-        src={"//www.ezojs.com/ezoic/sa.min.js"}
-      />
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
