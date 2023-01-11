@@ -13,6 +13,7 @@ const sentryWebpackPluginOptions = {
 };
 
 const nextConfig = {
+  productionBrowserSourceMaps: true,
   i18n: {
     locales: ["ca-ES"],
     defaultLocale: "ca-ES",
