@@ -13,7 +13,7 @@ const GoogleAdsenseContainer = ({
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
-      console.log(err);
+      console.log("adsense error", err);
     }
   }, []);
 
