@@ -23,6 +23,21 @@ export const MONTHS = [
   "desembre",
 ];
 
+export const MONTHS_URL = [
+  "gener",
+  "febrer",
+  "marc",
+  "abril",
+  "maig",
+  "juny",
+  "juliol",
+  "agost",
+  "setembre",
+  "octubre",
+  "novembre",
+  "desembre",
+];
+
 export const TAGS = [
   "Familiar",
   "Tertúlia Literària",
