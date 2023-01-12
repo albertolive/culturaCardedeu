@@ -6,6 +6,7 @@ export const sanitize = (str) =>
   str
     .toLowerCase()
     .replace(/ /g, "-")
+    .replace("–", "-")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/"/g, "")
