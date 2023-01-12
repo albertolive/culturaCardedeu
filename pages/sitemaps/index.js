@@ -1,6 +1,6 @@
 import Meta from "@components/partials/seo-meta";
 import { getAllYears } from "@lib/dates";
-import { MONTHS } from "@utils/constants";
+import { MONTHS_URL as MONTHS } from "@utils/constants";
 import Link from "next/link";
 
 export default function Sitemaps() {

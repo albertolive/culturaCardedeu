@@ -3,7 +3,7 @@ import Script from "next/script";
 import { generateJsonData } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 import Link from "next/link";
-import { MONTHS } from "@utils/constants";
+import { MONTHS_URL as MONTHS } from "@utils/constants";
 
 export default function Month({ events }) {
   const { query } = useRouter();

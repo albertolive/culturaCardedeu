@@ -37,6 +37,7 @@ export const slug = (str, formattedStart, id) =>
     .toLowerCase()
     .replace(/ /g, "-")
     .replace("---", "-")
+    .replace("ç", "c")
     .replace(/--/g, "-")}-${id}`;
 
 export const convertTZ = (date, tzString) =>
