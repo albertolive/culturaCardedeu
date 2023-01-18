@@ -286,7 +286,7 @@ export default function Event(props) {
                 </h1>
               </div>
               <div className="mt-6 space-y-10">
-                <AdArticle isDisplay />
+                <AdArticle slot="7838221321" />
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
@@ -374,7 +374,7 @@ export default function Event(props) {
                 </dl>
               )}
               <div className="mt-6 space-y-10">
-                <AdArticle />
+                <AdArticle isDisplay={false} slot="3218597262" />
               </div>
             </div>
             <div>

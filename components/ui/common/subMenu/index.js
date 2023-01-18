@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import AdArticle from "@components/ui/adArticle";
 
 const RenderButton = ({ text, goTo }) => {
   const router = useRouter();
@@ -18,14 +19,17 @@ const RenderButton = ({ text, goTo }) => {
 
 export default function SubMenu() {
   return (
-    <div className="flex justify-center mb-4">
-      <RenderButton text="Agenda" goTo="/" />
-      <RenderButton text="Avui" goTo="/avui-a-cardedeu" />
-      <RenderButton
-        text="El cap de setmana"
-        goTo="/cap-de-setmana-a-cardedeu"
-      />
-      <RenderButton text="Aquesta setmana" goTo="/setmana-a-cardedeu" />
-    </div>
+    <>
+      <AdArticle slot="4437291073" />
+      <div className="flex justify-center my-4">
+        <RenderButton text="Agenda" goTo="/" />
+        <RenderButton text="Avui" goTo="/avui-a-cardedeu" />
+        <RenderButton
+          text="El cap de setmana"
+          goTo="/cap-de-setmana-a-cardedeu"
+        />
+        <RenderButton text="Aquesta setmana" goTo="/setmana-a-cardedeu" />
+      </div>
+    </>
   );
 }
