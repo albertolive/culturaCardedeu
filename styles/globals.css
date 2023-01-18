@@ -99,3 +99,13 @@ iframe {
 ins.adsbygoogle[data-ad-status="unfilled"] {
   display: none !important;
 }
+
+#ad-card-slot {
+  min-height: 250px;
+  min-width: 250px;
+}
+
+#ad-article-slot {
+  min-height: 250px;
+  min-width: 250px;
+}

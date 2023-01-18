@@ -1,29 +1,21 @@
 import { useState } from "react";
 import GoogleAdsenseContainer from "../GoogleAdsense";
 
-export default function AdArticle({ isDisplay }) {
+export default function AdArticle({ isDisplay = true, slot }) {
   const [displayAd, setDisplayAd] = useState(true);
 
   if (!displayAd) return;
 
   return (
-    <div className="flex">
-      {isDisplay ? (
-        <GoogleAdsenseContainer
-          slot="7838221321"
-          format="auto"
-          responsive
-          setDisplayAd={setDisplayAd}
-        />
-      ) : (
-        <GoogleAdsenseContainer
-          slot="3218597262"
-          format="fluid"
-          layout="in-article"
-          style={{ textAlign: "center" }}
-          setDisplayAd={setDisplayAd}
-        />
-      )}
+    <div id="ad-article-slot" className="flex">
+      <GoogleAdsenseContainer
+        slot={slot}
+        format={isDisplay ? "auto" : "fluid"}
+        responsive={isDisplay}
+        layout={isDisplay ? "" : "in-article"}
+        style={{ textAlign: isDisplay ? "initial" : "center" }}
+        setDisplayAd={setDisplayAd}
+      />
     </div>
   );
 }
