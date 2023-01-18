@@ -53,8 +53,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
       </Script>
       <Script
         id="google-ads"
-        async
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         crossOrigin="anonymous"
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADS}`}
         onError={(e) => {
