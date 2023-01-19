@@ -266,8 +266,8 @@ export default function Event(props) {
       </nav>
       <div className="bg-white">
         <div className="max-w-2xl mx-auto px-4 md:px-0 lg:max-w-7xl">
-          <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-2">
-            <div className="prose prose-lg">
+          <div className="grid items-center grid-cols-1 gap-y-16 gap-x-8">
+            <div className="prose prose-lg max-w-none">
               {isEventFinished && (
                 <div className="-mb-8 lg:-mb-4 mt-8">
                   <span className="font-bold text-black rounded-full p-2 px-4 bg-[#ECB84A] text-sm">
@@ -377,7 +377,7 @@ export default function Event(props) {
                 <AdArticle isDisplay={false} slot="3218597262" />
               </div>
             </div>
-            <div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
                 <div
                   className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
@@ -385,12 +385,12 @@ export default function Event(props) {
                   id="mymap"
                 ></div>
               </div>
-              <div className="grid grid-cols-2 gap-4 mt-4 sm:gap-6 sm:mt-6 lg:gap-8 lg:mt-8">
+              <div className="grid grid-cols-2 lg:grid-cols-2 grid-rows-1 lg:grid-rows-2 gap-4 mt-4 sm:gap-6 sm:mt-6 lg:gap-8 lg:mt-0">
                 {images.length > 0 &&
                   images.map((image) => (
                     <div
                       key={image}
-                      className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
+                      className="lg:col-start-1 aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
                     >
                       <Image
                         alt={location}
