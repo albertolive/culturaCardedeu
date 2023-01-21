@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { Notify } from "@components/ui/common";
+// import Notify from "@components/ui/common/notify";
 
 const Navbar = dynamic(() => import("@components/ui/common/navbar"), {
   loading: () => "",

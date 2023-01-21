@@ -2,8 +2,8 @@ import { forwardRef, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import ChevronLeftIcon from "@heroicons/react/solid/ChevronLeftIcon";
 import ChevronRightIcon from "@heroicons/react/solid/ChevronRightIcon";
-import { format } from "date-fns";
-import { ca } from "date-fns/locale";
+import format from "date-fns/format";
+import ca from "date-fns/locale/ca";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 
