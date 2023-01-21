@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Script from "next/script";
 import { generateJsonData } from "@utils/helpers";
-import { SearchIcon, XIcon } from "@heroicons/react/solid";
+import SearchIcon from "@heroicons/react/solid/SearchIcon";
+import XIcon from "@heroicons/react/solid/XIcon";
 import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";

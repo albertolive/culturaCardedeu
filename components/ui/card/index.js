@@ -1,6 +1,7 @@
 import { Image } from "@components/ui/common";
 import Link from "next/link";
-import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
+import ClockIcon from "@heroicons/react/outline/ClockIcon";
+import LocationMarkerIcon from "@heroicons/react/outline/LocationMarkerIcon";
 import AdCard from "@components/ui/adCard";
 
 export default function Card({ event, isLoading }) {
