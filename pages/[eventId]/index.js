@@ -3,13 +3,6 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import {
-  Image,
-  Modal,
-  NoEventFound,
-  Notification,
-  Social,
-} from "@components/ui/common";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
 import { generateJsonData } from "@utils/helpers";
@@ -17,6 +10,32 @@ import PencilIcon from "@heroicons/react/outline/PencilIcon";
 import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
 const AdArticle = dynamic(() => import("@components/ui/adArticle"), {
+  loading: () => "",
+});
+
+const Image = dynamic(() => import("@components/ui/common/image"), {
+  loading: () => "",
+});
+
+const Modal = dynamic(() => import("@components/ui/common/modal"), {
+  loading: () => "",
+});
+
+const NoEventFound = dynamic(
+  () => import("@components/ui/common/noEventFound"),
+  {
+    loading: () => "",
+  }
+);
+
+const Notification = dynamic(
+  () => import("@components/ui/common/notification"),
+  {
+    loading: () => "",
+  }
+);
+
+const Social = dynamic(() => import("@components/ui/common/social"), {
   loading: () => "",
 });
 

@@ -1,11 +1,22 @@
 import Link from "next/link";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { generateJsonData } from "@utils/helpers";
-import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
-import { NoEventsFound, SubMenu } from "@components/ui/common";
+import SubMenu from "@components/ui/common/subMenu";
 import Meta from "@components/partials/seo-meta";
+
+const NoEventsFound = dynamic(
+  () => import("@components/ui/common/noEventsFound"),
+  {
+    loading: () => "",
+  }
+);
+
+const Card = dynamic(() => import("@components/ui/card"), {
+  loading: () => "",
+});
 
 export default function App(props) {
   const {
