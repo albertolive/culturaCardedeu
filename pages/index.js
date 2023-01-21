@@ -3,7 +3,7 @@ import Script from "next/script";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import { useGetEvents } from "@components/hooks/useGetEvents";
-import { SubMenu } from "@components/ui/common";
+import SubMenu from "@components/ui/common/subMenu";
 import { monthsName, generateJsonData } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 
