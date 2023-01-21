@@ -1,4 +1,4 @@
-import { Image } from "@components/ui/common";
+import Image from "@components/ui/common/image";
 import Link from "next/link";
 import ClockIcon from "@heroicons/react/outline/ClockIcon";
 import LocationMarkerIcon from "@heroicons/react/outline/LocationMarkerIcon";
