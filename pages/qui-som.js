@@ -132,7 +132,7 @@ export default function QuiSom() {
             <p>
               L&apos;agenda és col·laborativa, i cada persona que organitzi un
               acte cultural podrà publicar-lo{" "}
-              <Link href="/publica">
+              <Link href="/publica" prefetch={false}>
                 <a className="font-medium text-black underline">aquí</a>
               </Link>{" "}
               pel seu compte.

@@ -46,7 +46,7 @@ export default function App(props) {
       </p>
       <p className="mb-4">
         Les coses per fer a Cardedeu no descansen ni un dia.{" "}
-        <Link href="/setmana-a-cardedeu">
+        <Link href="/setmana-a-cardedeu" prefetch={false}>
           <a className="font-medium text-black underline">
             Cada setmana, descobrireu centenars d&apos;activitats increïbles
           </a>
