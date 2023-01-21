@@ -47,15 +47,15 @@ export default function App(props) {
       <p className="mb-4">
         Us donem un ventall de possibilitats perquè no us quedi temps per
         avorrir-vos. La cultura no descansa. Podeu veure què passa{" "}
-        <Link href="/avui-a-cardedeu">
+        <Link href="/avui-a-cardedeu" prefetch={false}>
           <a className="font-medium text-black underline">avui</a>
         </Link>
         ,{" "}
-        <Link href="/setmana-a-cardedeu">
+        <Link href="/setmana-a-cardedeu" prefetch={false}>
           <a className="font-medium text-black underline">aquesta setmana</a>
         </Link>
         , o ve,{" "}
-        <Link href="/cap-de-setmana-a-cardedeu">
+        <Link href="/cap-de-setmana-a-cardedeu" prefetch={false}>
           <a className="font-medium text-black underline">el cap de setmana</a>
         </Link>{" "}
         a Cardedeu. Ja no teniu cap excusa, per no estar al dia, de tot el que

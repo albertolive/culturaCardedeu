@@ -51,7 +51,7 @@ export default function Card({ event, isLoading }) {
   }
 
   return (
-    <Link href={`/${event.slug}`} passHref>
+    <Link href={`/${event.slug}`} passHref prefetch={false}>
       <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">

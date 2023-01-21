@@ -32,7 +32,7 @@ export default function Month({ events }) {
       </div>
       {events.map((event) => (
         <div key={event.id} className="py-1 w-fit">
-          <Link href={`/${event.slug}`}>
+          <Link href={`/${event.slug}`} prefetch={false}>
             <a className="hover:underline">
               <p className="text-sm" key={event.id}>
                 {event.formattedEnd

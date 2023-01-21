@@ -11,5 +11,9 @@ export default function ActiveLink({ children, activeLinkClass, ...props }) {
       activeLinkClass ? activeLinkClass : "text-[#ECB84A]"
     }`;
 
-  return <Link {...props}>{React.cloneElement(children, { className })}</Link>;
+  return (
+    <Link {...props} prefetch={false}>
+      {React.cloneElement(children, { className })}
+    </Link>
+  );
 }

@@ -21,7 +21,10 @@ export default function Sitemaps() {
             </div>
             {MONTHS.map((month) => (
               <div key={`${year}-${month}`} className="box py-1">
-                <Link href={`/sitemaps/${year}/${month.toLocaleLowerCase()}`}>
+                <Link
+                  href={`/sitemaps/${year}/${month.toLocaleLowerCase()}`}
+                  prefetch={false}
+                >
                   <a className="hover:underline">
                     <p className="text-md capitalize">{month}</p>
                   </a>

@@ -23,17 +23,17 @@ export default function NoEventFound() {
           </div>
           <p className="mb-4">
             Pots provar sort amb el{" "}
-            <Link href="/cerca">
+            <Link href="/cerca" prefetch={false}>
               <a className="font-bold text-black hover:underline">cercador</a>
             </Link>
             , veure{" "}
-            <Link href="/avui-a-cardedeu">
+            <Link href="/avui-a-cardedeu" prefetch={false}>
               <a className="font-bold text-black hover:underline">
                 que passa avui a Cardedeu
               </a>
             </Link>
             , o bé,{" "}
-            <Link href="/publica">
+            <Link href="/publica" prefetch={false}>
               <a className="font-bold text-black hover:underline">
                 publicar l&apos;esdeveniment
               </a>

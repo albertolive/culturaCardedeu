@@ -110,7 +110,7 @@ export default function NoEventsFound({ title }) {
         </div>
         <div className="ml-3 text-sm italic mt-0 lg:-mt-4 mr-20 text-left md:text-center">
           Trobes a faltar algun esdeveniment? Fes clic{" "}
-          <Link href="/publica">
+          <Link href="/publica" prefetch={false}>
             <a className="font-bold text-black hover:underline">aquí</a>
           </Link>{" "}
           per afegir-lo!
