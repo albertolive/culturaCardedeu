@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { generateJsonData } from "@utils/helpers";
 import SearchIcon from "@heroicons/react/solid/SearchIcon";
 import XIcon from "@heroicons/react/solid/XIcon";
@@ -7,7 +8,13 @@ import { useGetEvents } from "@components/hooks/useGetEvents";
 import Card from "@components/ui/card";
 import List from "@components/ui/list";
 import Meta from "@components/partials/seo-meta";
-import { NoEventsFound } from "@components/ui/common";
+
+const NoEventsFound = dynamic(
+  () => import("@components/ui/common/noEventsFound"),
+  {
+    loading: () => "",
+  }
+);
 
 function debounce(func, wait, immediate) {
   let timeout;
