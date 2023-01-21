@@ -1,6 +1,8 @@
 import { Disclosure } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { PlusSmIcon, SearchIcon } from "@heroicons/react/solid";
+import MenuIcon from "@heroicons/react/outline/MenuIcon";
+import XIcon from "@heroicons/react/outline/XIcon";
+import PlusSmIcon from "@heroicons/react/solid/PlusSmIcon";
+import SearchIcon from "@heroicons/react/solid/SearchIcon";
 import Image from "next/image";
 import ActiveLink from "@components/ui/common/link";
 import logo from "@public/static/images/logo-cultura-cardedeu.png";

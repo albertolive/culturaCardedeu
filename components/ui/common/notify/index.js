@@ -1,4 +1,4 @@
-import { InformationCircleIcon } from "@heroicons/react/solid";
+import InformationCircleIcon from "@heroicons/react/solid/InformationCircleIcon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 

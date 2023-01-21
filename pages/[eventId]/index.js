@@ -1,4 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
+import dynamic from "next/dynamic";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -12,8 +13,12 @@ import {
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
 import { generateJsonData } from "@utils/helpers";
-import { PencilIcon, XCircleIcon } from "@heroicons/react/outline";
-import AdArticle from "@components/ui/adArticle";
+import PencilIcon from "@heroicons/react/outline/PencilIcon";
+import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
+
+const AdArticle = dynamic(() => import("@components/ui/adArticle"), {
+  loading: () => "",
+});
 
 function replaceURLs(text) {
   if (!text) return;
@@ -229,7 +234,7 @@ export default function Event(props) {
       <nav className="flex" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">
           <li className="inline-flex items-center">
-            <Link href="/">
+            <Link href="/" prefetch={false}>
               <a className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-yellow-400 dark:text-gray-400 dark:hover:text-white">
                 <svg
                   className="mr-2 w-4 h-4"
@@ -412,7 +417,7 @@ export default function Event(props) {
       >
         <ul role="list" className="divide-y divide-gray-200 text-left">
           <li key="edit" className="py-4 flex">
-            <Link href={`/${slug}/edita`}>
+            <Link href={`/${slug}/edita`} prefetch={false}>
               <a>
                 <div className="flex items-center">
                   <PencilIcon

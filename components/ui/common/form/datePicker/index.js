@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
+import ChevronLeftIcon from "@heroicons/react/solid/ChevronLeftIcon";
+import ChevronRightIcon from "@heroicons/react/solid/ChevronRightIcon";
 import { format } from "date-fns";
 import { ca } from "date-fns/locale";
 import setHours from "date-fns/setHours";

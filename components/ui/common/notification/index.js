@@ -1,4 +1,5 @@
-import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
+import CheckCircleIcon from "@heroicons/react/solid/CheckCircleIcon";
+import XIcon from "@heroicons/react/solid/XIcon";
 
 export default function Notification({
   url,

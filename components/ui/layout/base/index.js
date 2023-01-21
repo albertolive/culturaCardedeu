@@ -1,6 +1,14 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import { Navbar, Footer } from "@components/ui/common";
 import { Notify } from "@components/ui/common";
+
+const Navbar = dynamic(() => import("@components/ui/common/navbar"), {
+  loading: () => "",
+});
+
+const Footer = dynamic(() => import("@components/ui/common/footer"), {
+  loading: () => "",
+});
 
 export default function BaseLayout({ children }) {
   return (
