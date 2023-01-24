@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Script from "next/script";
 import { BaseLayout } from "@components/ui/layout";
 import { useRouter } from "next/router";
-import { Analytics } from "@vercel/analytics/react";
 
 function CulturaCardedeuMainEntry({ Component, pageProps }) {
   const { events } = useRouter();
@@ -62,7 +61,6 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
-      <Analytics />
     </>
   );
 }
