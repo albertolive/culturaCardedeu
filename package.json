@@ -41,6 +41,6 @@
     "cross-env": "^7.0.3",
     "eslint": "8.12.0",
     "eslint-config-next": "13.1.5",
-    "next-sitemap": "^2.5.20"
+    "next-sitemap": "^2.5.28"
   }
 }
