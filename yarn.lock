@@ -172,10 +172,10 @@
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-0.0.0-insiders.591b328.tgz#9187923c42b5c2b05d5b2b0337698b572bd09de1"
   integrity sha512-YOdY3GWYq2l/5gE5NRwjpFCHii8Rni9ozDWg2/8rnSEWuniLxoeiz27+Nwmjbl9iXnIHtBw+ADE2IsDTJ4LLSA==
 
-"@heroicons/react@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-1.0.6.tgz#35dd26987228b39ef2316db3b1245c42eb19e324"
-  integrity sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==
+"@heroicons/react@^2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.13.tgz#9b1cc54ff77d6625c9565efdce0054a4bcd9074c"
+  integrity sha512-iSN5XwmagrnirWlYEWNPdCDj9aRYVD/lnK3JlsC9/+fqGF80k8C7rl+1HCvBX0dBoagKqOFBs6fMhJJ1hOg1EQ==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
