@@ -1,10 +1,12 @@
-import useSWR from "swr";
+import useSWR, { preload } from "swr";
 
-const fetchWithId = (url, id) =>
+const fetchWithId = ([url, id]) =>
   fetch(`${url}?eventId=${id}`).then((r) => r.json());
 
 export const useGetEvent = (props) => {
   const eventId = props.event.slug;
+
+  preload([eventId ? `/api/getEvent` : null, eventId], fetchWithId);
 
   return useSWR([eventId ? `/api/getEvent` : null, eventId], fetchWithId, {
     fallbackData: props,
@@ -12,5 +14,7 @@ export const useGetEvent = (props) => {
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
+    suspense: true,
+    keepPreviousData: true,
   });
 };
