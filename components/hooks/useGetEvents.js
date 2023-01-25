@@ -1,9 +1,9 @@
 import useSWR, { preload } from "swr";
 
 const fetcher = ([url, pageIndex, q, maxResults]) =>
-  fetch(`${url}?page=${pageIndex}&q=${q}&maxResults=${maxResults}`).then(
-    (res) => res.json()
-  );
+  fetch(
+    `${process.env.NEXT_PUBLIC_DOMAIN_URL}/${url}?page=${pageIndex}&q=${q}&maxResults=${maxResults}`
+  ).then((res) => res.json());
 
 preload("/api/getEvents", fetcher);
 
@@ -20,7 +20,7 @@ export const useGetEvents = (
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
-    // suspense: true,
+    suspense: true,
     keepPreviousData: true,
   });
 };

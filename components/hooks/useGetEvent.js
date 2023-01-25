@@ -1,7 +1,9 @@
 import useSWR, { preload } from "swr";
 
 const fetchWithId = ([url, id]) =>
-  fetch(`${url}?eventId=${id}`).then((r) => r.json());
+  fetch(`${process.env.NEXT_PUBLIC_DOMAIN_URL}/${url}?eventId=${id}`).then(
+    (r) => r.json()
+  );
 
 export const useGetEvent = (props) => {
   const eventId = props.event.slug;
@@ -14,7 +16,7 @@ export const useGetEvent = (props) => {
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
-    // suspense: true,
+    suspense: true,
     keepPreviousData: true,
   });
 };
