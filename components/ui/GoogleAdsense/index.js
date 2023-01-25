@@ -17,24 +17,24 @@ const GoogleAdsenseContainer = ({
     }
   }, []);
 
-  // useEffect(() => {
-  //   const callback = (mutationsList) => {
-  //     mutationsList.forEach((element) => {
-  //       if (element.target.attributes["data-ad-status"].value === "unfilled") {
-  //         setDisplayAd && setDisplayAd(false);
-  //       }
-  //     });
-  //   };
+  useEffect(() => {
+    const callback = (mutationsList) => {
+      mutationsList.forEach((element) => {
+        if (element.target.attributes["data-ad-status"].value === "unfilled") {
+          setDisplayAd && setDisplayAd(false);
+        }
+      });
+    };
 
-  //   const obs = new MutationObserver(callback);
+    const obs = new MutationObserver(callback);
 
-  //   obs.observe(document.querySelector("ins"), {
-  //     attributeFilter: ["data-ad-status"],
-  //     attributes: true,
-  //   });
+    obs.observe(document.querySelector("ins"), {
+      attributeFilter: ["data-ad-status"],
+      attributes: true,
+    });
 
-  //   return () => obs.disconnect();
-  // }, [setDisplayAd]);
+    return () => obs.disconnect();
+  }, [setDisplayAd]);
 
   return (
     <ins
