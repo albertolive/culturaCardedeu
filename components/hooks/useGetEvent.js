@@ -14,7 +14,7 @@ export const useGetEvent = (props) => {
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
-    suspense: true,
+    // suspense: true,
     keepPreviousData: true,
   });
 };

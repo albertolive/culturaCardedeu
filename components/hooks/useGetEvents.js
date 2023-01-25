@@ -20,7 +20,7 @@ export const useGetEvents = (
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
-    suspense: true,
+    // suspense: true,
     keepPreviousData: true,
   });
 };
