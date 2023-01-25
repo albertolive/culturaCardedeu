@@ -11,12 +11,11 @@ export default function App(props) {
   const {
     data: { events = [] },
     error,
+    isLoading,
     isValidating,
   } = useGetEvents(props, "all");
 
   if (error) return <div>failed to load</div>;
-
-  const isLoading = (!events && !error) || isValidating;
 
   const jsonData = events.map((event) => generateJsonData(event));
 
@@ -62,7 +61,14 @@ export default function App(props) {
         passa a Cardedeu vinculat a la cultura!
       </p>
       <List events={events}>
-        {(event) => <Card key={event.id} event={event} isLoading={isLoading} />}
+        {(event) => (
+          <Card
+            key={event.id}
+            event={event}
+            isLoading={isLoading}
+            isValidating={isValidating}
+          />
+        )}
       </List>
     </>
   );

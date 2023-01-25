@@ -1,7 +1,7 @@
-import useSWR from "swr";
+import useSWR, { preload } from "swr";
 import { normalizeEvent } from "@utils/normalize";
 
-const fetcher = async (url) => {
+const fetcher = async ([url]) => {
   const res = await fetch(url);
   const json = await res.json();
   let normalizedItems;
@@ -20,5 +20,7 @@ export const useCalendarEventsList = ({ from, until }) => {
   const untilDate = until.toISOString();
   const URL = `https://www.googleapis.com/calendar/v3/calendars/8e1jse11ireht56ho13r6a470s@group.calendar.google.com/events?timeMin=${fromDate}&timeMax=${untilDate}&singleEvents=true&orderBy=startTime&showDeleted=false&maxResults=100&${process.env.NEXT_PUBLIC_GOOGLE_CALENDAR}`;
 
-  return useSWR(URL, fetcher);
+  preload(URL, fetcher);
+
+  return useSWR(URL, fetcher, { suspense: true, keepPreviousData: true });
 };
