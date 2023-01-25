@@ -1,6 +1,6 @@
 import useSWR from "swr";
 
-const fetcher = (url, pageIndex, q, maxResults) =>
+const fetcher = ([url, pageIndex, q, maxResults]) =>
   fetch(`${url}?page=${pageIndex}&q=${q}&maxResults=${maxResults}`).then(
     (res) => res.json()
   );
