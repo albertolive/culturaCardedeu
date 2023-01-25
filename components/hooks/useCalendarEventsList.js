@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { normalizeEvent } from "@utils/normalize";
 
-const fetcher = async (url) => {
+const fetcher = async ([url]) => {
   const res = await fetch(url);
   const json = await res.json();
   let normalizedItems;

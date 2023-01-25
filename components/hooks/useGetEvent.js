@@ -1,6 +1,6 @@
 import useSWR from "swr";
 
-const fetchWithId = (url, id) =>
+const fetchWithId = ([url, id]) =>
   fetch(`${url}?eventId=${id}`).then((r) => r.json());
 
 export const useGetEvent = (props) => {
