@@ -22,5 +22,5 @@ export const useCalendarEventsList = ({ from, until }) => {
 
   preload(URL, fetcher);
 
-  return useSWR(URL, fetcher, { keepPreviousData: true });
+  return useSWR(URL, fetcher, { suspense: true, keepPreviousData: true });
 };
