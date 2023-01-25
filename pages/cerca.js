@@ -42,12 +42,11 @@ const SearchResults = ({ keyword }) => {
   const {
     data: { events = [], noEventsFound = false },
     error,
+    isLoading,
     isValidating,
   } = useGetEvents({}, "search", keyword, false);
 
   if (error) return <div className="">failed to load</div>;
-
-  const isLoading = (!events && !error) || isValidating;
 
   const jsonData = events
     .filter(({ isAd }) => !isAd)
@@ -60,11 +59,18 @@ const SearchResults = ({ keyword }) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
-      {noEventsFound && !isValidating && (
+      {noEventsFound && !isLoading && (
         <NoEventsFound title="Res ha coincidit amb la teva cerca, però pot ser que t'agradin aquestes altres opcions." />
       )}
       <List events={events}>
-        {(event) => <Card key={event.id} event={event} isLoading={isLoading} />}
+        {(event) => (
+          <Card
+            key={event.id}
+            event={event}
+            isLoading={isLoading}
+            isValidating={isValidating}
+          />
+        )}
       </List>
     </>
   );

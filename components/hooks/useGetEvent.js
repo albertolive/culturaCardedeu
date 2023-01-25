@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { preload } from "swr";
 
 const fetchWithId = ([url, id]) =>
   fetch(`${url}?eventId=${id}`).then((r) => r.json());
@@ -6,11 +6,15 @@ const fetchWithId = ([url, id]) =>
 export const useGetEvent = (props) => {
   const eventId = props.event.slug;
 
+  preload([eventId ? `/api/getEvent` : null, eventId], fetchWithId);
+
   return useSWR([eventId ? `/api/getEvent` : null, eventId], fetchWithId, {
     fallbackData: props,
     refreshInterval: 300000,
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
+    suspense: true,
+    keepPreviousData: true,
   });
 };
