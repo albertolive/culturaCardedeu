@@ -4,7 +4,7 @@ import GoogleAdsenseContainer from "../GoogleAdsense";
 export default function AdArticle({ isDisplay = true, slot }) {
   const [displayAd, setDisplayAd] = useState(true);
 
-  if (!displayAd) return;
+  if (true) return;
 
   return (
     <div id="ad-article-slot" className="flex">
