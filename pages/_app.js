@@ -58,12 +58,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
           console.error("Script failed to load", e);
         }}
       />
-      <Script
-        id="google-maven"
-        strategy="lazyOnload"
-        data-cfasync="false"
-        src="//d1j2jv7bvcsxqg.cloudfront.net/?bvjjd=976186"
-      />
+
       <Script async id="show-banner">
         {`(function() {
           var host = 'www.themoneytizer.com';
