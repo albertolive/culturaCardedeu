@@ -62,7 +62,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         id="google-maven"
         strategy="lazyOnload"
         data-cfasync="false"
-        src="//d1j2jv7bvcsxqg.cloudfront.net/?bvjjd=976153"
+        src="//d1j2jv7bvcsxqg.cloudfront.net/?bvjjd=976186"
       />
       <Script async id="show-banner">
         {`(function() {
