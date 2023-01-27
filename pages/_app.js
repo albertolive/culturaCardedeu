@@ -49,7 +49,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         });
     `}
       </Script>
-      <Script
+      {/* <Script
         id="google-ads"
         strategy="lazyOnload"
         crossOrigin="anonymous"
@@ -57,7 +57,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         onError={(e) => {
           console.error("Script failed to load", e);
         }}
-      />
+      /> */}
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
