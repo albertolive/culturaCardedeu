@@ -58,6 +58,16 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
           console.error("Script failed to load", e);
         }}
       /> */}
+
+      <Script
+        id="adcash"
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+        data-cfasync="false"
+        data-adel="atag"
+        src="//acscdn.com/script/atg.js"
+        czid="lrxig1rism"
+      ></Script>
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
