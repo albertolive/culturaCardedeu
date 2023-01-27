@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 
 function CulturaCardedeuMainEntry({ Component, pageProps }) {
   const { events } = useRouter();
+  const infolinks_pid = 3386219;
+  const infolinks_wsid = 0;
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -67,6 +69,13 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         data-adel="atag"
         src="//acscdn.com/script/atg.js"
         czid="lrxig1rism"
+      ></Script>
+
+      <Script
+        id="infolinks"
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+        src="//resources.infolinks.com/js/infolinks_main.js"
       ></Script>
       <BaseLayout>
         <Component {...pageProps} />
