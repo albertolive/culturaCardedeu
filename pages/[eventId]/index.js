@@ -310,7 +310,7 @@ export default function Event(props) {
                 </h1>
               </div>
               <div className="mt-6 space-y-10">
-                <AdArticle slot="7838221321" />
+                {/* <AdArticle slot="7838221321" /> */}
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
