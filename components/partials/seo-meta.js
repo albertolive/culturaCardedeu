@@ -57,6 +57,10 @@ const Meta = (props) => {
         name="google-site-verification"
         content="ujWqRwOYsTEmYofWVJcDeMp54QW4PGivj2yUaBRevls"
       />
+      <meta
+        name="a.validate.02"
+        content="kVObusxsGrSuN0cm9Kvhbj3DlR42lh149af3"
+      />
       <link rel="icon" type="image/png" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/favicon.ico" />
       <link rel="shortcut icon" href="/favicon.ico" />
