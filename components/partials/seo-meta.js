@@ -57,10 +57,6 @@ const Meta = (props) => {
         name="google-site-verification"
         content="ujWqRwOYsTEmYofWVJcDeMp54QW4PGivj2yUaBRevls"
       />
-      <meta
-        name="exoclick-site-verification"
-        content="53ad5f4531bc2d9640ffcdff258d8e5f"
-      />
       <link rel="icon" type="image/png" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/favicon.ico" />
       <link rel="shortcut icon" href="/favicon.ico" />
