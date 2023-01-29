@@ -9,7 +9,7 @@ import { generateJsonData } from "@utils/helpers";
 import PencilIcon from "@heroicons/react/outline/PencilIcon";
 import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
-const AdArticle = dynamic(() => import("@components/ui/ads/adsArticle"), {
+const Amazon = dynamic(() => import("@components/ui/ads/Amazon"), {
   loading: () => "",
 });
 
@@ -310,7 +310,7 @@ export default function Event(props) {
                 </h1>
               </div>
               <div className="mt-6 space-y-10">
-                <AdArticle slot="7838221321" />
+                <Amazon category="kindle_unlimited" />
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
@@ -398,7 +398,7 @@ export default function Event(props) {
                 </dl>
               )}
               <div className="mt-6 space-y-10">
-                <AdArticle isDisplay={false} slot="3218597262" />
+                {/* <Amazon category="prime_video" /> */}
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
