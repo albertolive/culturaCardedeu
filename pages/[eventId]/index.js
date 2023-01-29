@@ -398,7 +398,7 @@ export default function Event(props) {
                 </dl>
               )}
               <div className="mt-6 space-y-10">
-                {/* <Amazon category="prime_video" /> */}
+                <Amazon category="prime_video" />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

@@ -24,7 +24,7 @@ export default function AmazonIframe({ category }) {
       </div>
       <div className="block md:hidden">
         <iframe
-          src={`https://rcm-eu.amazon-adsystem.com/e/cm?o=30&p=48&l=ur1&category=${category}&banner=${bannerSm}&f=ifr&linkID={{link_id}}&t=albertolive-21&tracking_id=albertolive-21`}
+          src={`https://rcm-eu.amazon-adsystem.com/e/cm?o=30&p=12&l=ur1&category=${category}&banner=${bannerSm}&f=ifr&linkID={{link_id}}&t=albertolive-21&tracking_id=albertolive-21`}
           width="300"
           height="250"
           border="0"
