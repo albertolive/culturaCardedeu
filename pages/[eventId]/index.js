@@ -9,7 +9,7 @@ import { generateJsonData } from "@utils/helpers";
 import PencilIcon from "@heroicons/react/outline/PencilIcon";
 import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
-const AdArticle = dynamic(() => import("@components/ui/adArticle"), {
+const AdArticle = dynamic(() => import("@components/ui/ads/adsArticle"), {
   loading: () => "",
 });
 

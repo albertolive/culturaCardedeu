@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { useEffect, useRef } from "react";
 
 const atOptions = {
@@ -9,22 +10,36 @@ const atOptions = {
 };
 
 export default function Banner() {
-  const banner = useRef();
-
+  const adRef = useRef(null);
   useEffect(() => {
-    if (!banner.current.firstChild) {
-      const conf = document.createElement("script");
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = `//www.highperformancedformats.com/${atOptions.key}/invoke.js`;
-      conf.innerHTML = `atOptions = ${JSON.stringify(atOptions)}`;
-
-      if (banner.current) {
-        banner.current.append(conf);
-        banner.current.append(script);
-      }
+    try {
+      (window.AdProvider = window.AdProvider || []).push({ serve: {} });
+    } catch (err) {
+      console.log("adsense error", err);
     }
   }, []);
 
-  return <div ref={banner}></div>;
+  //   const banner = useRef();
+
+  //   useEffect(() => {
+  //     if (!banner.current.firstChild) {
+  //       const conf = document.createElement("script");
+  //       const script = document.createElement("script");
+  //       script.type = "text/javascript";
+  //       script.src = `//www.highperformancedformats.com/${atOptions.key}/invoke.js`;
+  //       conf.innerHTML = `atOptions = ${JSON.stringify(atOptions)}`;
+
+  //       if (banner.current) {
+  //         banner.current.append(conf);
+  //         banner.current.append(script);
+  //       }
+  //     }
+  //   }, []);
+
+  return (
+    <>
+      <Script id="adsbyexoclick"></Script>
+      <ins ref={adRef} className="adsbyexoclick" data-zoneid="4901056"></ins>
+    </>
+  );
 }
