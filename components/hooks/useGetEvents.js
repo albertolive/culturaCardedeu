@@ -2,7 +2,7 @@ import useSWR, { preload } from "swr";
 
 const fetcher = ([url, pageIndex, q, maxResults]) =>
   fetch(
-    `${process.env.NEXT_PUBLIC_DOMAIN_URL}/${url}?page=${pageIndex}&q=${q}&maxResults=${maxResults}`
+    `${process.env.NEXT_PUBLIC_DOMAIN_URL}${url}?page=${pageIndex}&q=${q}&maxResults=${maxResults}`
   ).then((res) => res.json());
 
 preload("/api/getEvents", fetcher);
