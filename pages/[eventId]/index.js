@@ -11,6 +11,7 @@ import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
 const Amazon = dynamic(() => import("@components/ui/ads/Amazon"), {
   loading: () => "",
+  ssr: false,
 });
 
 const Image = dynamic(() => import("@components/ui/common/image"), {
