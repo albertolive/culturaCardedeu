@@ -8,7 +8,7 @@ export default function Resum2022() {
         description="2022 en xifres, resum de l'any - Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu."
         canonical="https://www.culturacardedeu.com/2022-en-xifres"
       />
-
+      flexoffers
       <div
         dangerouslySetInnerHTML={{
           __html:
