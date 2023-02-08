@@ -60,12 +60,7 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
           console.error("Script failed to load", e);
         }}
       />
-      <Script
-        id="infolinks"
-        strategy="lazyOnload"
-        crossOrigin="anonymous"
-        src="//resources.infolinks.com/js/infolinks_main.js"
-      />
+
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
