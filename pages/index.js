@@ -17,7 +17,9 @@ export default function App(props) {
 
   if (error) return <div>failed to load</div>;
 
-  const jsonData = events.map((event) => generateJsonData(event));
+  const jsonData = events
+    .filter(({ isAd }) => !isAd)
+    .map((event) => generateJsonData(event));
 
   return (
     <>
