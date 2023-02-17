@@ -111,7 +111,7 @@ const ADS = [
 ];
 
 const getSize = (adIds, isCard, isBanner, isMobile) => {
-  if (isCard) AD_SIZES["card"].find((size) => adIds[size]);
+  if (isCard) return AD_SIZES["card"].find((size) => adIds[size]);
 
   if (isBanner) {
     return isMobile
