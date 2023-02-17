@@ -1,5 +1,10 @@
 import { useRouter } from "next/router";
-import AdArticle from "@components/ui/adArticle";
+import dynamic from "next/dynamic";
+
+const Tradedoubler = dynamic(() => import("@components/ui/ads/Tradedoubler"), {
+  loading: () => "",
+  ssr: false,
+});
 
 const RenderButton = ({ text, goTo }) => {
   const router = useRouter();
@@ -20,7 +25,7 @@ const RenderButton = ({ text, goTo }) => {
 export default function SubMenu() {
   return (
     <>
-      <AdArticle slot="4437291073" />
+      <Tradedoubler isBanner />
       <div className="flex justify-center my-4">
         <RenderButton text="Agenda" goTo="/" />
         <RenderButton text="Avui" goTo="/avui-a-cardedeu" />
