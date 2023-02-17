@@ -1,8 +1,13 @@
-import Image from "@components/ui/common/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import Image from "@components/ui/common/image";
 import ClockIcon from "@heroicons/react/outline/ClockIcon";
 import LocationMarkerIcon from "@heroicons/react/outline/LocationMarkerIcon";
-import AdCard from "@components/ui/adCard";
+
+const Tradedoubler = dynamic(() => import("@components/ui/ads/Tradedoubler"), {
+  loading: () => "",
+  ssr: false,
+});
 
 const IsLoadingComponent = () => (
   <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl pointer-events-none cursor-none h-48 md:lg-52 lg:h-56 hover:shadow-gray-500/40">
@@ -40,7 +45,7 @@ const IsLoadingComponent = () => (
 );
 
 export default function Card({ event, isLoading, isValidating }) {
-  if (event.isAd) return <AdCard event={event} />;
+  if (event.isAd) return <Tradedoubler isCard />;
 
   const image = event.imageUploaded ? event.imageUploaded : event.images[0];
   const location =
@@ -53,7 +58,7 @@ export default function Card({ event, isLoading, isValidating }) {
 
   return (
     <Link href={`/${event.slug}`} passHref prefetch={false}>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40 max-h-[220px]">
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">
             <Image

@@ -9,11 +9,6 @@ import { generateJsonData } from "@utils/helpers";
 import PencilIcon from "@heroicons/react/outline/PencilIcon";
 import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
-const Amazon = dynamic(() => import("@components/ui/ads/Amazon"), {
-  loading: () => "",
-  ssr: false,
-});
-
 const Tradedoubler = dynamic(() => import("@components/ui/ads/Tradedoubler"), {
   loading: () => "",
   ssr: false,
@@ -316,7 +311,7 @@ export default function Event(props) {
                 </h1>
               </div>
               <div className="mt-6 space-y-10">
-                <Tradedoubler size="728x90" />
+                <Tradedoubler isBanner />
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
@@ -404,7 +399,7 @@ export default function Event(props) {
                 </dl>
               )}
               <div className="mt-6 space-y-10">
-                <Tradedoubler size="728x90" />
+                <Tradedoubler isBanner />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

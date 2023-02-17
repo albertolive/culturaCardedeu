@@ -103,18 +103,18 @@ export const normalizePrograms = ({ id }) => ({
 
 export const normalizeAds = ({
   adId,
-  programId,
-  programName,
+  // programId,
+  // programName,
   adSize,
-  url,
-  productUrl,
+  // url,
+  // productUrl,
 }) => {
   return {
     adId,
-    programId,
-    programName,
+    // programId,
+    // programName,
     adSize,
-    url,
-    productUrl,
+    // url,
+    // productUrl,
   };
 };
