@@ -14,6 +14,11 @@ const Amazon = dynamic(() => import("@components/ui/ads/Amazon"), {
   ssr: false,
 });
 
+const Tradedoubler = dynamic(() => import("@components/ui/ads/Tradedoubler"), {
+  loading: () => "",
+  ssr: false,
+});
+
 const Image = dynamic(() => import("@components/ui/common/image"), {
   loading: () => "",
 });
@@ -311,7 +316,7 @@ export default function Event(props) {
                 </h1>
               </div>
               <div className="mt-6 space-y-10">
-                <Amazon category="kindle_unlimited" />
+                <Tradedoubler size="728x90" />
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
@@ -399,7 +404,7 @@ export default function Event(props) {
                 </dl>
               )}
               <div className="mt-6 space-y-10">
-                <Amazon category="prime_video" />
+                <Tradedoubler size="728x90" />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -619,9 +624,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { getCalendarEvent } = require("@lib/helpers");
+  // const { getAds } = require("@lib/helpers");
   const eventId = params.eventId;
 
   const { event } = await getCalendarEvent(eventId);
+  const ads = {}; //await getAds({});
 
   if (!event || !event.id) {
     return {
@@ -630,7 +637,7 @@ export async function getStaticProps({ params }) {
   }
 
   return {
-    props: { event },
+    props: { event, ads },
     revalidate: 60,
   };
 }
