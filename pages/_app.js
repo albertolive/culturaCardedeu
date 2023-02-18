@@ -51,16 +51,6 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
         });
     `}
       </Script>
-      <Script
-        id="google-ads"
-        strategy="lazyOnload"
-        crossOrigin="anonymous"
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADS}`}
-        onError={(e) => {
-          console.error("Script failed to load", e);
-        }}
-      />
-
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>

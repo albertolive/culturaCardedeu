@@ -140,9 +140,7 @@ export default function TradedoublerIframe({
 
   const [width, height] = size.split("x");
   const adId = adIds[Math.floor(Math.random() * adIds.length)];
-  const uri =
-    `https://impfr.tradedoubler.com/imp?type(img)g(${adId})a(3299008)` +
-    new String(Math.random()).substring(2, 11);
+  const uri = `https://impfr.tradedoubler.com/imp?type(img)g(${adId})a(3299008)`;
 
   if (hideImage) return null;
 
