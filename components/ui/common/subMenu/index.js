@@ -25,7 +25,9 @@ const RenderButton = ({ text, goTo }) => {
 export default function SubMenu() {
   return (
     <>
-      <Tradedoubler isBanner />
+      <div className="min-h-[260px] lg:min-h-[100px] h-full ">
+        <Tradedoubler isBanner />
+      </div>
       <div className="flex justify-center my-4">
         <RenderButton text="Agenda" goTo="/" />
         <RenderButton text="Avui" goTo="/avui-a-cardedeu" />
