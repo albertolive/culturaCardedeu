@@ -23,7 +23,13 @@ const nextConfig = {
     defaultLocale: "ca-ES",
   },
   reactStrictMode: false,
-  images: { domains: ["res.cloudinary.com"] },
+  images: {
+    domains: [
+      "res.cloudinary.com",
+      "impfr.tradedoubler.com",
+      "connect.tradedoubler.com",
+    ],
+  },
   async headers() {
     return [
       {

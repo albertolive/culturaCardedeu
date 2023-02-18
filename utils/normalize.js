@@ -96,3 +96,25 @@ export const normalizeEvent = (event) => {
       : false,
   };
 };
+
+export const normalizePrograms = ({ id }) => ({
+  id,
+});
+
+export const normalizeAds = ({
+  adId,
+  // programId,
+  // programName,
+  adSize,
+  // url,
+  // productUrl,
+}) => {
+  return {
+    adId,
+    // programId,
+    // programName,
+    adSize,
+    // url,
+    // productUrl,
+  };
+};
