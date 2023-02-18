@@ -4,7 +4,7 @@ import useCheckMobileScreen from "@components/hooks/useCheckMobileScreen";
 
 const AD_SIZES = {
   mobile: ["250x250", "300x250", "500x500", "468x60"],
-  desktop: ["728x90", "500x500", "468x60", "300x250"],
+  desktop: ["728x90", "468x60"],
   card: ["250x250", "300x250", "500x500", "468x60"],
 };
 
@@ -147,7 +147,7 @@ export default function TradedoublerIframe({
   if (hideImage) return null;
 
   return (
-    <div className={`text-center w-[${width}] h-[${height}]`}>
+    <div className={`text-center min-w-[${width}px] min-h-[${height}px]`}>
       <a
         href={`https://clk.tradedoubler.com/click?p=${programId}&a=3299008&g=${adId}`}
         target="_BLANK"

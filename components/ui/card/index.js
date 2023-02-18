@@ -45,7 +45,12 @@ const IsLoadingComponent = () => (
 );
 
 export default function Card({ event, isLoading, isValidating }) {
-  if (event.isAd) return <Tradedoubler isCard />;
+  if (event.isAd)
+    return (
+      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
+        <Tradedoubler isCard />
+      </div>
+    );
 
   const image = event.imageUploaded ? event.imageUploaded : event.images[0];
   const location =

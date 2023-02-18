@@ -310,7 +310,7 @@ export default function Event(props) {
                   {title}
                 </h1>
               </div>
-              <div className="mt-6 space-y-10">
+              <div className="mt-6 space-y-10 min-h-[260px] lg:min-h-[100px] h-full">
                 <Tradedoubler isBanner />
               </div>
               <dl className="mt-6 space-y-10">
@@ -398,7 +398,7 @@ export default function Event(props) {
                   <Social links={social} />
                 </dl>
               )}
-              <div className="mt-6 space-y-10">
+              <div className="mt-6 space-y-10 min-h-[260px] lg:min-h-[100px] h-full">
                 <Tradedoubler isBanner />
               </div>
             </div>
