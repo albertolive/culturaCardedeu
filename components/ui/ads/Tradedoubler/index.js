@@ -152,6 +152,7 @@ export default function TradedoublerIframe({
         rel="noreferrer"
       >
         <Image
+          priority
           src={uri}
           border="0"
           width={width}
