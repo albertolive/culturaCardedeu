@@ -5,8 +5,6 @@ const fetcher = ([url, pageIndex, q, maxResults]) =>
     `${process.env.NEXT_PUBLIC_DOMAIN_URL}${url}?page=${pageIndex}&q=${q}&maxResults=${maxResults}`
   ).then((res) => res.json());
 
-preload("/api/getEvents", fetcher);
-
 export const useGetEvents = (
   props,
   pageIndex,
@@ -14,6 +12,8 @@ export const useGetEvents = (
   refreshInterval = true,
   maxResults = 50
 ) => {
+  preload(["/api/getEvents"], fetcher);
+
   return useSWR(["/api/getEvents", pageIndex, q, maxResults], fetcher, {
     fallbackData: props,
     refreshInterval: refreshInterval ? 300000 : 0,
