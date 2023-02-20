@@ -3,9 +3,9 @@ import Image from "next/image";
 import useCheckMobileScreen from "@components/hooks/useCheckMobileScreen";
 
 const AD_SIZES = {
-  mobile: ["250x250", "300x250", "500x500", "468x60"],
-  desktop: ["728x90", "468x60"],
-  card: ["250x250", "300x250", "500x500", "468x60"],
+  mobile: ["250x250", "300x250", "300x300", "500x500", "468x60", "320x50"],
+  desktop: ["728x90", "768x90", "468x60"],
+  card: ["250x250", "300x250", "300x300", "500x500", "468x60", "320x50"],
 };
 
 const ADS = [
@@ -108,6 +108,23 @@ const ADS = [
       "250x250": [25389762],
     },
   },
+  {
+    304859: {
+      "728x90": [25392858, 25392804, 24788454, 24848244],
+      "500x500": [25392866, 25392780, 25292050],
+      "300x250": [25392848, 24848250],
+    },
+  },
+  {
+    327062: {
+      "768x90": [25189208],
+      "728x90": [25189206],
+      "468x60": [25189204],
+      "300x250": [25189196],
+      "300x300": [25189198],
+      "320x50": [25189202],
+    },
+  },
 ];
 
 const getSize = (adIds, isCard, isBanner, isMobile) => {
@@ -154,6 +171,11 @@ export default function TradedoublerIframe({
         <Image
           priority
           src={uri}
+          srcSet={`${uri} 1200w, 
+             ${uri}?w=200 200w,
+             ${uri}?w=400 400w, 
+             ${uri}?w=800 800w, 
+             ${uri}?w=1024 1024w`}
           border="0"
           width={width}
           height={height}
@@ -161,6 +183,8 @@ export default function TradedoublerIframe({
           onError={() => {
             setHideImage(true);
           }}
+          placeholder="blur"
+          blurDataURL="/static/images/blur.png"
         />
       </a>
     </div>
