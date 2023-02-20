@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import Image from "next/image";
 import useCheckMobileScreen from "@components/hooks/useCheckMobileScreen";
 
@@ -137,7 +137,7 @@ const getSize = (adIds, isCard, isBanner, isMobile) => {
   }
 };
 
-export default function TradedoublerIframe({
+export default memo(function TradedoublerIframe({
   isCard = false,
   isBanner = false,
 }) {
@@ -189,4 +189,4 @@ export default function TradedoublerIframe({
       </a>
     </div>
   );
-}
+});
