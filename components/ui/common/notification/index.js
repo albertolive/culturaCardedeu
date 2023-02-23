@@ -1,11 +1,14 @@
 import CheckCircleIcon from "@heroicons/react/solid/CheckCircleIcon";
+import ExclamationCircleIcon from "@heroicons/react/solid/ExclamationCircleIcon";
 import XIcon from "@heroicons/react/solid/XIcon";
 
 export default function Notification({
   url,
   title,
+  type,
   customNotification = true,
   hideNotification,
+  hideClose = false,
 }) {
   if (customNotification) {
     return (
@@ -42,22 +45,31 @@ export default function Notification({
 
   return (
     <div className="relative rounded-md bg-green-50 p-4 mb-4 break-word">
-      <div className="absolute top-0 right-0 pt-4 pr-4">
-        <button
-          type="button"
-          className=" rounded-md text-gray-400 hover:text-gray-500"
-          onClick={() => hideNotification && hideNotification()}
-        >
-          <span className="sr-only">Close</span>
-          <XIcon className="h-6 w-6" aria-hidden="true" />
-        </button>
-      </div>
+      {!hideClose && (
+        <div className="absolute top-0 right-0 pt-4 pr-4">
+          <button
+            type="button"
+            className=" rounded-md text-gray-400 hover:text-gray-500"
+            onClick={(hide) => hideNotification && hideNotification(hide)}
+          >
+            <span className="sr-only">Close</span>
+            <XIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+        </div>
+      )}
       <div className="flex">
         <div className="flex-shrink-0">
-          <CheckCircleIcon
-            className="h-5 w-5 text-green-400"
-            aria-hidden="true"
-          />
+          {type === "warning" ? (
+            <ExclamationCircleIcon
+              className="h-5 w-5 text-green-400"
+              aria-hidden="true"
+            />
+          ) : (
+            <CheckCircleIcon
+              className="h-5 w-5 text-green-400"
+              aria-hidden="true"
+            />
+          )}
         </div>
         <div className="ml-3">
           <h3 className="text-sm font-medium text-green-800">

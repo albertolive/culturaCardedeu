@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { slug, getFormattedDate } from "@utils/helpers";
 import {
   DatePicker,
@@ -10,6 +11,13 @@ import {
   ImageUpload,
 } from "@components/ui/common/form";
 import Meta from "@components/partials/seo-meta";
+
+const Notification = dynamic(
+  () => import("@components/ui/common/notification"),
+  {
+    loading: () => "",
+  }
+);
 
 const defaultForm = {
   title: "",
@@ -80,6 +88,7 @@ export default function Publica() {
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
+  const [hideNotification, setHideNotification] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const handleFormChange = (name, value) => {
@@ -166,6 +175,9 @@ export default function Publica() {
     xhr.send(fd);
   };
 
+  const notificationTitle =
+    "Avís! Preveient que s'acosta un any electoral, us volíem informar que Cultura Cardedeu no és un espai per a la publicació d'actes de partits polítics i quan en detectem algun, l'eliminarem. Considerem que els partits ja tenen els seus canals i volem deixar aquest espai per a les entitats i iniciatives culturals. Gràcies per la comprensió!";
+
   return (
     <>
       <Meta
@@ -173,6 +185,14 @@ export default function Publica() {
         description="Publica un acte cultural - Cultura Cardedeu"
         canonical="https://www.culturacardedeu.com/publica"
       />
+      {!hideNotification && (
+        <Notification
+          type="warning"
+          customNotification={false}
+          hideNotification={() => setHideNotification(true)}
+          title={notificationTitle}
+        />
+      )}
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         <div className="space-y-8 divide-y divide-gray-200">
           <div className="pt-8">
