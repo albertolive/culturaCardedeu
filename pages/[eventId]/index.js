@@ -247,6 +247,7 @@ export default function Event(props) {
       {showThankYouBanner && (
         <Notification
           customNotification={false}
+          hideClose
           hideNotification={setShowThankYouBanner}
           title="Gràcies per contribuir a millorar el contingut de Cultura Cardedeu! En menys de 24 hores estarà disponible el canvi."
         />
