@@ -4,9 +4,8 @@ import Image from "@components/ui/common/image";
 import ClockIcon from "@heroicons/react/outline/ClockIcon";
 import LocationMarkerIcon from "@heroicons/react/outline/LocationMarkerIcon";
 
-const Tradedoubler = dynamic(() => import("@components/ui/ads/Tradedoubler"), {
+const AdCard = dynamic(() => import("@components/ui/adCard"), {
   loading: () => "",
-  ssr: false,
 });
 
 const IsLoadingComponent = () => (
@@ -48,7 +47,7 @@ export default function Card({ event, isLoading, isValidating }) {
   if (event.isAd)
     return (
       <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
-        <Tradedoubler isCard />
+        <AdCard event={event} />
       </div>
     );
 

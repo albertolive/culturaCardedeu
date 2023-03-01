@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import GoogleAdsenseContainer from "../GoogleAdsense";
 
-export default function AdCard({ event }) {
+export default memo(function AdCard({ event }) {
   const [displayAd, setDisplayAd] = useState(true);
 
-  if (true) return;
+  if (!displayAd) return;
 
   return (
     <div
@@ -13,10 +13,10 @@ export default function AdCard({ event }) {
       className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40"
     >
       <GoogleAdsenseContainer
-        slot="9596766377"
+        slot="5262346605"
         responsive
         setDisplayAd={setDisplayAd}
       />
     </div>
   );
-}
+});
