@@ -11,6 +11,7 @@ import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
 const AdArticle = dynamic(() => import("@components/ui/adArticle"), {
   loading: () => "",
+  ssr: false,
 });
 
 const Image = dynamic(() => import("@components/ui/common/image"), {
@@ -310,7 +311,7 @@ export default function Event(props) {
                   {title}
                 </h1>
               </div>
-              <div className="mt-6 space-y-10 min-h-[260px] lg:min-h-[100px] h-full">
+              <div className="mt-6 space-y-10 min-h-[325px] lg:min-h-[100px] h-full">
                 <AdArticle slot="1256471228" />
               </div>
               <dl className="mt-6 space-y-10">
@@ -398,7 +399,7 @@ export default function Event(props) {
                   <Social links={social} />
                 </dl>
               )}
-              <div className="mt-6 space-y-10 min-h-[260px] lg:min-h-[100px] h-full">
+              <div className="mt-6 space-y-10 min-h-[280px] lg:min-h-[100px] h-full">
                 <AdArticle slot="8822317665" />
               </div>
             </div>

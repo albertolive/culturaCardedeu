@@ -6,6 +6,7 @@ import LocationMarkerIcon from "@heroicons/react/outline/LocationMarkerIcon";
 
 const AdCard = dynamic(() => import("@components/ui/adCard"), {
   loading: () => "",
+  ssr: false,
 });
 
 const IsLoadingComponent = () => (
