@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import GoogleAdsenseContainer from "../GoogleAdsense";
 
-export default function AdArticle({ isDisplay = true, slot }) {
+export default memo(function AdArticle({ isDisplay = true, slot }) {
   const [displayAd, setDisplayAd] = useState(true);
 
-  if (true) return;
+  if (!displayAd) return;
 
   return (
     <div id="ad-article-slot" className="flex">
@@ -18,4 +18,4 @@ export default function AdArticle({ isDisplay = true, slot }) {
       />
     </div>
   );
-}
+});

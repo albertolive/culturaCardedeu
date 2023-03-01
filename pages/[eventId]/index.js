@@ -9,9 +9,8 @@ import { generateJsonData } from "@utils/helpers";
 import PencilIcon from "@heroicons/react/outline/PencilIcon";
 import XCircleIcon from "@heroicons/react/outline/XCircleIcon";
 
-const Tradedoubler = dynamic(() => import("@components/ui/ads/Tradedoubler"), {
+const AdArticle = dynamic(() => import("@components/ui/adArticle"), {
   loading: () => "",
-  ssr: false,
 });
 
 const Image = dynamic(() => import("@components/ui/common/image"), {
@@ -312,7 +311,7 @@ export default function Event(props) {
                 </h1>
               </div>
               <div className="mt-6 space-y-10 min-h-[260px] lg:min-h-[100px] h-full">
-                <Tradedoubler isBanner />
+                <AdArticle slot="1256471228" />
               </div>
               <dl className="mt-6 space-y-10">
                 <div>
@@ -400,7 +399,7 @@ export default function Event(props) {
                 </dl>
               )}
               <div className="mt-6 space-y-10 min-h-[260px] lg:min-h-[100px] h-full">
-                <Tradedoubler isBanner />
+                <AdArticle slot="8822317665" />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
