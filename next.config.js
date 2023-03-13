@@ -28,6 +28,10 @@ const nextConfig = {
       "res.cloudinary.com",
       "impfr.tradedoubler.com",
       "connect.tradedoubler.com",
+      "tarambana.cat",
+      "cinemaesbarjo.cat",
+      "www.cinemaesbarjo.cat",
+      "https://www.cardedeu.cat"
     ],
   },
   async headers() {
