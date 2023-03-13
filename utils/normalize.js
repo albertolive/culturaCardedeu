@@ -16,7 +16,7 @@ export const normalizeEvents = (event) => {
     nameDay,
   } = getFormattedDate(event.start, event.end);
   const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
-  const hasEventImage = event.description.match(regex);
+  const hasEventImage = event.description && event.description.match(regex);
   const eventImage = hasEventImage && hasEventImage[0]
   const location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary ? sanitizeText(event.summary) : "";
