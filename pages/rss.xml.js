@@ -42,7 +42,7 @@ const buildFeed = (items) => {
     );
 
   removedDuplicatedItems.forEach((item) => {
-    const description = `${item.title} el ${item.nameDay.toLowerCase()} ${item.formattedStart} a ${item.location}. \n\nMés informació a l'enllaç de la nostra bio!`;
+    const description = `${item.title}\n\n🗓️ ${item.nameDay} ${item.formattedStart}\n\n🏡 On: a ${item.location} \n\nℹ️ Més informació a l'enllaç de la nostra bio!`;
     const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
     const hasImage = item.description.match(regex);
     const image = hasImage && hasImage[0]

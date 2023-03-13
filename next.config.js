@@ -31,7 +31,8 @@ const nextConfig = {
       "tarambana.cat",
       "cinemaesbarjo.cat",
       "www.cinemaesbarjo.cat",
-      "https://www.cardedeu.cat"
+      "https://www.cardedeu.cat",
+      "http://www.teatreauditoricardedeu.cat"
     ],
   },
   async headers() {
