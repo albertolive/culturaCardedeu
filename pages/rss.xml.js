@@ -42,7 +42,7 @@ const buildFeed = (items) => {
     );
 
   removedDuplicatedItems.forEach((item) => {
-    const description = `${item.title} el ${item.nameDay.toLowerCase()} ${item.formattedStart} a ${item.location}. Més informació a l'enllaç de la nostra bio!`;
+    const description = `${item.title} el ${item.nameDay.toLowerCase()} ${item.formattedStart} a ${item.location}. \n\nMés informació a l'enllaç de la nostra bio!`;
     
     feed.addItem({
       id: item.id,
