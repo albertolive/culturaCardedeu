@@ -42,11 +42,16 @@ const buildFeed = (items) => {
     );
 
   removedDuplicatedItems.forEach((item) => {
+    const description = `${item.title} el ${item.nameDay.toLowerCase()} ${item.formattedStart} a ${item.location}. Més informació a l'enllaç de la nostra bio!`;
+    
     feed.addItem({
+      id: item.id,
       title: item.title,
       link: `${hostUrl}/${item.slug}`,
-      description: item.description,
+      description,
+      content: item.location,
       date: new Date(item.startDate),
+      image: `${hostUrl}${item.images[0]}`
     });
   });
 
