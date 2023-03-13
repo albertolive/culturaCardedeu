@@ -9,7 +9,7 @@ import Meta from "@components/partials/seo-meta";
 
 export default function App(props) {
   const {
-    data: { events = [] },
+    data: { events = [], currentYear },
     error,
     isLoading,
     isValidating,
@@ -29,14 +29,14 @@ export default function App(props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonData) }}
       />
       <Meta
-        title="Agenda 2022 - Cultura Cardedeu"
+        title={`Agenda ${currentYear} - Cultura Cardedeu`}
         description="Cultura Cardedeu és una iniciativa ciutadana per veure en un cop d'ull tots els actes culturals que es fan a Cardedeu. L'agenda és col·laborativa."
         canonical="https://www.culturacardedeu.com/"
       />
       <SubMenu />
       <div className="reset-this">
         <h1 className="mb-4 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Agenda Cardedeu 2022
+          Agenda Cardedeu {currentYear}
         </h1>
       </div>
       <p className="mb-4 font-bold">
@@ -89,7 +89,7 @@ export async function getStaticProps() {
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
   return {
-    props: { events: normalizedEvents },
+    props: { events: normalizedEvents, currentYear: new Date().getFullYear() },
     revalidate: 60,
   };
 }

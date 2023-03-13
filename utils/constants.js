@@ -71,7 +71,7 @@ export const LOCATIONS_ARRAY = [
   { value: "Espai Totsona", label: "Espai Totsona" },
   { value: "Esbiosfera", label: "Esbiosfera" },
   { value: "Floristeria Parera", label: "Floristeria Parera" },
-  { value: "Granja el Melindro", label: "Granja el Melindro" },
+  { value: "El Melindro", label: "El Melindro" },
   { value: "Kid&Us Cardedeu", label: "Kid&Us Cardedeu" },
   { value: "La Fresca", label: "La Fresca" },
   { value: "L'estació és allà", label: "L'estació és allà" },

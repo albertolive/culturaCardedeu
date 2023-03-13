@@ -62,6 +62,7 @@ const handler = async (req, res) => {
       noEventsFound: events.noEventsFound
         ? events.noEventsFound
         : events.length === 0,
+        currentYear: new Date().getFullYear()
     });
   } catch (error) {
     console.error(error);
