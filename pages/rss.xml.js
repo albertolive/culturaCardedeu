@@ -43,7 +43,10 @@ const buildFeed = (items) => {
 
   removedDuplicatedItems.forEach((item) => {
     const description = `${item.title} el ${item.nameDay.toLowerCase()} ${item.formattedStart} a ${item.location}. \n\nMés informació a l'enllaç de la nostra bio!`;
-    
+    const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
+    const hasImage = item.description.match(regex);
+    const image = hasImage && hasImage[0]
+
     feed.addItem({
       id: item.id,
       title: item.title,
@@ -51,7 +54,7 @@ const buildFeed = (items) => {
       description,
       content: item.location,
       date: new Date(item.startDate),
-      image: `${hostUrl}${item.images[0]}`
+      image: image || `${hostUrl}${item.images[0]}`
     });
   });
 
