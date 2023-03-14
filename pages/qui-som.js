@@ -175,6 +175,17 @@ export default function QuiSom() {
                   https://t.me/culturacardedeu
                 </a>
               </div>
+              <div>
+                <span>📷 Instagram: </span>
+                <a
+                  className="text-[#ECB84A]"
+                  href="https://www.instagram.com/culturacardedeu/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  https://www.instagram.com/culturacardedeu/
+                </a>
+              </div>
             </ul>
           </div>
         <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
