@@ -61,7 +61,7 @@ export const getFormattedDate = (start, end) => {
   let isSameMonth = false;
   let isSameYear = false;
 
-  if (startDateConverted.getDay() !== endDateConverted.getDay())
+  if (startDateConverted.getDate() !== endDateConverted.getDate())
     isMultipleDays = true;
 
   if (startDateConverted.getMonth() === endDateConverted.getMonth())
