@@ -1,6 +1,7 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "@components/ui/common/image";
+import NextImage from "next/image";
 import ClockIcon from "@heroicons/react/outline/ClockIcon";
 import LocationMarkerIcon from "@heroicons/react/outline/LocationMarkerIcon";
 
@@ -52,6 +53,7 @@ export default function Card({ event, isLoading, isValidating }) {
       </div>
     );
 
+  const { description, icon } = event.weather || {};
   const image = event.imageUploaded ? event.imageUploaded : event.images[0];
   const location =
     event.location.length > 45
@@ -63,7 +65,7 @@ export default function Card({ event, isLoading, isValidating }) {
 
   return (
     <Link href={`/${event.slug}`} passHref prefetch={false}>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40 max-h-[220px]">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40 max-h-[240px]">
         <div className="flex h-full">
           <div className="flex-1 h-full next-image-wrapper">
             <Image
@@ -73,15 +75,14 @@ export default function Card({ event, isLoading, isValidating }) {
               layout="responsive"
             />
           </div>
-
-          <div className="p-4 flex-2">
+          <div className="p-4 pr-2 flex-2 lg:relative">
             <div className="flex items-center">
-              <div className="flex items-center mr-2 tracking-wide text-sm text-[#ECB84A] font-bold">
+              <div className="flex items-center tracking-wide text-sm text-[#ECB84A] font-bold">
                 {event.formattedEnd
                   ? `Del ${event.formattedStart} al ${event.formattedEnd}`
                   : `${event.nameDay}, ${event.formattedStart}`}
               </div>
-              <div></div>
+              {icon && <div className="flex mb-4 lg:absolute lg:right-2 lg:mb-0"><NextImage alt={description} src={icon} width="30px" height="30px" /></div>}
             </div>
 
             <p className="block mt-1 text-sm sm:text-xl leading-tight font-bold text-black hover:underline">
