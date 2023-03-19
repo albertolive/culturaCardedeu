@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import dynamic from "next/dynamic";
 import Script from "next/script";
 import { useRouter } from "next/router";
+import NextImage from "next/image";
 import Link from "next/link";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
@@ -212,6 +213,7 @@ export default function Event(props) {
     imageId,
     social,
     isEventFinished,
+    weather
   } = data.event;
 
   const descriptionHTML = isHTML(description)
@@ -224,6 +226,8 @@ export default function Event(props) {
 
   const gMapsQuery =
     lat && lng ? `${lat},${lng}` : `${location},Cardedeu+08440`;
+
+  const { temp, description: weatherDescription, icon } = weather || {};
 
   return (
     <>
@@ -333,6 +337,9 @@ export default function Event(props) {
                         <span className="text-gray-800">Suggerir un canvi</span>
                       </button>
                     </div>
+                  </div>
+                  <div className="flex items-center text-xs">
+                    {icon && <div className="mr-1 mt-2"><NextImage alt={weatherDescription} src={icon} width="30px" height="30px" /></div>} {weatherDescription ? weatherDescription : ""} {temp ? `- ${temp}º` : ""}
                   </div>
                   <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
                     <div

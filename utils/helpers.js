@@ -53,15 +53,16 @@ export const getFormattedDate = (start, end) => {
     (start && start.date) || (start && start.dateTime) || start
   );
   const endDate = new Date((end && end.date) || (end && end.dateTime) || end);
-
   const startDateConverted = convertTZ(startDate, "Europe/Madrid");
   const endDateConverted = convertTZ(endDate, "Europe/Madrid");
 
   let isMultipleDays = false;
   let isSameMonth = false;
   let isSameYear = false;
+  const startDay = startDateConverted.getDate()
+  const endDay = endDateConverted.getDate()
 
-  if (startDateConverted.getDate() !== endDateConverted.getDate())
+  if (startDay !== endDay)
     isMultipleDays = true;
 
   if (startDateConverted.getMonth() === endDateConverted.getMonth())
@@ -70,22 +71,20 @@ export const getFormattedDate = (start, end) => {
   if (startDateConverted.getFullYear() === endDateConverted.getFullYear())
     isSameYear = true;
 
-  const day = new Date(startDateConverted).getDay();
+  const weekDay = new Date(startDateConverted).getDay();
   const month = new Date(startDateConverted).getMonth();
   const year = new Date(startDateConverted).getFullYear();
-  const nameDay = DAYS[day];
+  const nameDay = DAYS[weekDay];
   const nameMonth = MONTHS[month];
 
-  const originalFormattedStart = `${startDateConverted.getDate()} de ${nameMonth} del ${year}`;
+  const originalFormattedStart = `${startDay} de ${nameMonth} del ${year}`;
   const formattedStart =
     isMultipleDays && isSameMonth
-      ? `${startDateConverted.getDate()}`
-      : `${startDateConverted.getDate()} de ${nameMonth} ${
-          isMultipleDays && isSameYear ? "" : `del ${year}`
-        }`;
-  const formattedEnd = `${endDateConverted.getDate()} de ${
-    MONTHS[endDateConverted.getMonth()]
-  } del ${endDateConverted.getFullYear()}`;
+      ? `${startDay}`
+      : `${startDay} de ${nameMonth} ${isMultipleDays && isSameYear ? "" : `del ${year}`
+      }`;
+  const formattedEnd = `${endDay} de ${MONTHS[endDateConverted.getMonth()]
+    } del ${endDateConverted.getFullYear()}`;
   const startTime = `${startDateConverted.getHours()}:${String(
     startDateConverted.getMinutes()
   ).padStart(2, "0")}`;
@@ -100,6 +99,7 @@ export const getFormattedDate = (start, end) => {
     startTime,
     endTime,
     nameDay,
+    startDate: isMultipleDays ? startDay <= new Date().getDate() && new Date() || startDateConverted : startDateConverted
   };
 };
 
