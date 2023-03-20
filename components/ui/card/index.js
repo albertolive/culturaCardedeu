@@ -48,13 +48,16 @@ const IsLoadingComponent = () => (
 export default function Card({ event, isLoading, isValidating }) {
   if (event.isAd)
     return (
-      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden lg:max-w-2xl cursor-pointer hover:shadow-gray-500/40 block visible md:hidden md:invisible">
         <AdCard event={event} />
       </div>
     );
 
   const { description, icon } = event.weather || {};
   const image = event.imageUploaded ? event.imageUploaded : event.images[0];
+  const title = event.title.length > 70
+    ? event.title.substring(0, 45) + "..."
+    : event.title;
   const location =
     event.location.length > 45
       ? event.location.substring(0, 45) + "..."
@@ -85,8 +88,8 @@ export default function Card({ event, isLoading, isValidating }) {
               {icon && <div className="flex mb-4 lg:absolute lg:right-2 lg:mb-0"><NextImage alt={description} src={icon} width="30px" height="30px" /></div>}
             </div>
 
-            <p className="block mt-1 text-sm sm:text-xl leading-tight font-bold text-black hover:underline">
-              <a href={`/${event.slug}`}>{event.title}</a>
+            <p className="block mt-1 text-sm lg:text-xl leading-tight font-bold text-black hover:underline">
+              <a href={`/${event.slug}`}>{title}</a>
             </p>
             <p className="flex mt-2 mb-4 text-sm sm:text-base text-gray-900">
               <LocationMarkerIcon className="h-6 w-6" />
