@@ -8,7 +8,12 @@ import {
 
 function to3HourForecastFormat(date) {
   const hours = date.getHours();
-  const forecastHour = Math.ceil(hours / 3) * 3;
+  let forecastHour = Math.ceil(hours / 3) * 3;
+
+  if (forecastHour < 10) {
+    forecastHour = '0' + forecastHour;
+  }
+
   return `${forecastHour}:00:00`;
 }
 
