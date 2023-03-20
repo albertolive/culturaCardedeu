@@ -18,6 +18,8 @@ function to3HourForecastFormat(date) {
 }
 
 const getWeather = (startDate, weatherInfo) => {
+  if (isNaN(startDate)) return {}
+
   const startDateConverted = startDate.toISOString().split('T')[0];
   const weatherArray = weatherInfo[`${startDateConverted} ${to3HourForecastFormat(startDate)}`];
 
