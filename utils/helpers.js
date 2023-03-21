@@ -14,6 +14,8 @@ export const sanitize = (str) =>
     .replace(/’/g, "")
     .replace(/'/g, "")
     .replace(".", "")
+    .replace("(", "")
+    .replace(")", "")
     .replace("%", "")
     .replace("&", "")
     .replace("?", "")
