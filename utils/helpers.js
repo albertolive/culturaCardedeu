@@ -99,7 +99,7 @@ export const getFormattedDate = (start, end) => {
     startTime,
     endTime,
     nameDay,
-    startDate: isMultipleDays ? startDay <= new Date().getDate() && new Date() || startDateConverted : startDateConverted
+    startDate: isMultipleDays ? startDay <= new Date().getDate() && convertTZ(new Date(), "Europe/Madrid") || startDateConverted : startDateConverted
   };
 };
 
