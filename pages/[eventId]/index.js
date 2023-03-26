@@ -226,7 +226,7 @@ export default function Event(props) {
   if (title === "CANCELLED") return <NoEventFound />;
 
   const gMapsQuery =
-    lat && lng ? `${lat},${lng}` : `${location},Cardedeu+08440`;
+    lat && lng ? `${lat},${lng}` : isMoney ? location : `${location},Cardedeu+08440`;
 
   const { temp, description: weatherDescription, icon } = weather || {};
 
