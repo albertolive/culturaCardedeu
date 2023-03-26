@@ -31,9 +31,10 @@ export const sanitize = (str) =>
     .replace(/·|/g, "")
     .replace(/º|/g, "")
     .replace(/:/g, "")
+    .replace(/\[Ad\]/g, "")
     .replace(/(<([^>]+)>)/gi, "");
 
-export const sanitizeText = (str) => str.replace("&amp;", "&");
+export const sanitizeText = (str) => str.replace("&amp;", "&").replace(/\[Ad\]/g, "");
 
 export const slug = (str, formattedStart, id) =>
   `${sanitize(str)}-${formattedStart
