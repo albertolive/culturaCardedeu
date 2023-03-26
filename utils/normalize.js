@@ -139,7 +139,8 @@ export const normalizeEvent = (event, weatherInfo) => {
     isEventFinished: event.end
       ? new Date(event.end.dateTime) < new Date()
       : false,
-    weather: weatherObject
+    weather: weatherObject,
+    isMoney: event.summary ? event.summary.search(/\[Ad\]/g, "") !== -1 : false
   };
 };
 

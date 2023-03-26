@@ -213,7 +213,8 @@ export default function Event(props) {
     imageId,
     social,
     isEventFinished,
-    weather
+    weather,
+    isMoney
   } = data.event;
 
   const descriptionHTML = isHTML(description)
@@ -324,7 +325,7 @@ export default function Event(props) {
                     <dt className="text-md font-bold text-gray-900">
                       Descripció
                     </dt>
-                    <div className="ml-auto">
+                    {!isMoney && <div className="ml-auto">
                       <button
                         onClick={() => setOpenModal(true)}
                         type="button"
@@ -336,7 +337,7 @@ export default function Event(props) {
                         />
                         <span className="text-gray-800">Suggerir un canvi</span>
                       </button>
-                    </div>
+                    </div>}
                   </div>
                   <div className="flex items-center text-xs">
                     {icon && <div className="mr-1 mt-2"><NextImage alt={weatherDescription} src={icon} width="30px" height="30px" /></div>} {weatherDescription ? weatherDescription : ""} {temp ? `- ${temp}º` : ""}
@@ -410,7 +411,7 @@ export default function Event(props) {
                 <AdArticle slot="8822317665" />
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {!isMoney && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
                 <div
                   className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden"
@@ -434,7 +435,7 @@ export default function Event(props) {
                     </div>
                   ))}
               </div>
-            </div>
+            </div>}
           </div>
         </div>
       </div>
