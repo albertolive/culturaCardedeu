@@ -165,6 +165,7 @@ export const generateJsonData = ({
   lng,
   imageUploaded,
   images,
+  isMoney
 }) => ({
   "@context": "https://schema.org",
   "@type": "Event",
@@ -180,8 +181,8 @@ export const generateJsonData = ({
     address: {
       "@type": "PostalAddress",
       streetAddress: location,
-      addressLocality: "Cardedeu",
-      postalCode: "08440",
+      addressLocality: isMoney ? "Barcelona" : "Cardedeu",
+      postalCode: isMoney ? "" : "08440",
       addressCountry: "ES",
       addressRegion: "CT",
     },
