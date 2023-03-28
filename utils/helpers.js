@@ -2,6 +2,13 @@ import { DAYS, MONTHS, LOCATIONS, VITAMINED_LOCATIONS } from "./constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
+const isLessThanFiveDays = (date) => {
+  const currentDate = new Date();
+  const timeDiff = currentDate.getTime() - date.getTime();
+  const dayDiff = timeDiff / (1000 * 3600 * 24);
+  return Math.floor(Math.abs(dayDiff)) < 5;
+}
+
 export const sanitize = (str) =>
   str
     .toLowerCase()
@@ -102,7 +109,8 @@ export const getFormattedDate = (start, end) => {
     startTime,
     endTime,
     nameDay,
-    startDate: isMultipleDays ? startDay <= new Date().getDate() && convertTZ(new Date(), "Europe/Madrid") || startDateConverted : startDateConverted
+    startDate: isMultipleDays ? startDay <= new Date().getDate() && convertTZ(new Date(), "Europe/Madrid") || startDateConverted : startDateConverted,
+    isLessThanFiveDays: isLessThanFiveDays(startDate)
   };
 };
 
