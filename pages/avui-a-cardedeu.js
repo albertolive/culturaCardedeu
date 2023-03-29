@@ -24,7 +24,7 @@ export default function App(props) {
     error,
     isLoading,
     isValidating,
-  } = useGetEvents(props, "today");
+  } = useGetEvents({ props, pageIndex: "today" });
 
   if (error) return <div>failed to load</div>;
 

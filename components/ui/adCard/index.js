@@ -4,7 +4,7 @@ import GoogleAdsenseContainer from "../GoogleAdsense";
 export default memo(function AdCard({ event }) {
   const [displayAd, setDisplayAd] = useState(true);
 
-  if (!displayAd) return;
+  // if (!displayAd) return;
 
   return (
     <div

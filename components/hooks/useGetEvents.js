@@ -6,11 +6,11 @@ const fetcher = ([url, pageIndex, q, maxResults]) =>
   ).then((res) => res.json());
 
 export const useGetEvents = (
-  props,
-  pageIndex,
-  q = "",
-  refreshInterval = true,
-  maxResults = 50
+  { props = {},
+    pageIndex,
+    q = "",
+    refreshInterval = true,
+    maxResults = 10 }
 ) => {
   preload(["/api/getEvents"], fetcher);
 

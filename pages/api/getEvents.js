@@ -51,9 +51,9 @@ const handler = async (req, res) => {
 
       break;
     default:
-      const { from, until } = twoWeeksDefault();
+      const from = new Date();
 
-      events = await getCalendarEvents({ from, until, q, maxResults });
+      events = await getCalendarEvents({ from, q, maxResults });
   }
 
   try {
@@ -62,7 +62,7 @@ const handler = async (req, res) => {
       noEventsFound: events.noEventsFound
         ? events.noEventsFound
         : events.length === 0,
-        currentYear: new Date().getFullYear()
+      currentYear: new Date().getFullYear()
     });
   } catch (error) {
     console.error(error);

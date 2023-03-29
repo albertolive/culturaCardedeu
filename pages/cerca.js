@@ -44,7 +44,7 @@ const SearchResults = ({ keyword }) => {
     error,
     isLoading,
     isValidating,
-  } = useGetEvents({}, "search", keyword, false);
+  } = useGetEvents({ pageIndex: "search", q: keyword, refreshInterval: false });
 
   if (error) return <div className="">failed to load</div>;
 
