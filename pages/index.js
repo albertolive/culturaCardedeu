@@ -86,13 +86,15 @@ export default function App(props) {
           />
         )}
       </List>
-      <button
-        type="button"
-        className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
-        onClick={() => setPage((prevPage) => prevPage + 1)}
-      >
-        <span className="text-white">Carregar més</span>
-      </button>
+      <div className="text-center">
+        <button
+          type="button"
+          className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
+          onClick={() => setPage((prevPage) => prevPage + 1)}
+        >
+          <span className="text-white">Carregar més</span>
+        </button>
+      </div>
     </>
   );
 }

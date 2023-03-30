@@ -17,6 +17,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 const nextConfig = {
+  experimental: {
+    scrollRestoration: true,
+  },
   productionBrowserSourceMaps: true,
   i18n: {
     locales: ["ca-ES"],
