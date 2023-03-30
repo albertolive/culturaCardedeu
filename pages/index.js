@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import Card from "@components/ui/card";
@@ -7,13 +8,26 @@ import SubMenu from "@components/ui/common/subMenu";
 import { monthsName, generateJsonData } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 
+
 export default function App(props) {
+  const [page, setPage] = useState(() => {
+    const storedPage = typeof window !== "undefined" && window.localStorage.getItem("currentPage");
+    return storedPage ? parseInt(storedPage) : 1;
+  });
   const {
     data: { events = [], currentYear },
     error,
     isLoading,
     isValidating,
-  } = useGetEvents(props, "all");
+  } = useGetEvents({ props, pageIndex: "all", maxResults: page * 10 });
+
+  useEffect(() => {
+    localStorage.setItem("currentPage", page);
+  }, [page]);
+
+  useEffect(() => {
+    localStorage.removeItem("currentPage");
+  }, []);
 
   if (error) return <div>failed to load</div>;
 
@@ -72,6 +86,15 @@ export default function App(props) {
           />
         )}
       </List>
+      <div className="text-center">
+        <button
+          type="button"
+          className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
+          onClick={() => setPage((prevPage) => prevPage + 1)}
+        >
+          <span className="text-white">Carregar més</span>
+        </button>
+      </div>
     </>
   );
 }

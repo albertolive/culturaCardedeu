@@ -20,7 +20,7 @@ export default function App(props) {
     error,
     isLoading,
     isValidating,
-  } = useGetEvents(props, "weekend");
+  } = useGetEvents({ props, pageIndex: "weekend" });
 
   if (error) return <div>failed to load</div>;
 
