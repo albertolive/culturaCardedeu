@@ -21,6 +21,12 @@ export default function App(props) {
     isValidating,
   } = useGetEvents({ props, pageIndex: "all", maxResults: page * 10 });
 
+  const sendGA = () => {
+    if (typeof window !== "undefined") {
+      window.gtag && window.gtag("event", "load-more-events");
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem("currentPage", page);
   }, [page]);
@@ -90,7 +96,10 @@ export default function App(props) {
         <button
           type="button"
           className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
-          onClick={() => setPage((prevPage) => prevPage + 1)}
+          onClick={() => {
+            setPage((prevPage) => prevPage + 1);
+            sendGA();
+          }}
         >
           <span className="text-white">Carregar més</span>
         </button>
