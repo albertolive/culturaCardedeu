@@ -54,12 +54,12 @@ const buildFeed = (items) => {
       description,
       content: item.location,
       date: new Date(item.startDate),
-      image: 
-      item.imageUploaded
-      ? item.imageUploaded
-      : eventImage
-      ? eventImage
-      : `${hostUrl}${item.images[0]}`
+      image:
+        item.imageUploaded
+          ? item.imageUploaded
+          : eventImage
+            ? eventImage
+            : `${hostUrl}${item.images[0]}`
     });
   });
 
