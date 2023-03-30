@@ -12,7 +12,7 @@ export const useGetEvents = (
     refreshInterval = true,
     maxResults = 10 }
 ) => {
-  preload(["/api/getEvents"], fetcher);
+  preload(["/api/getEvents", pageIndex, q, maxResults], fetcher);
 
   return useSWR(["/api/getEvents", pageIndex, q, maxResults], fetcher, {
     fallbackData: props,
