@@ -5,6 +5,7 @@ const handler = async (req, res) => {
   try {
     const event = await getCalendarEvent(req.query.eventId);
 
+    res.setHeader("Content-Type", "application/json");
     res.status(200).json(event);
   } catch (error) {
     console.error(error);
