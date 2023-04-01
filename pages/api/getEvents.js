@@ -57,6 +57,8 @@ const handler = async (req, res) => {
   }
 
   try {
+    res.setHeader('Cache-Control', 'max-age=1800');
+    res.setHeader("Content-Type", "application/json");
     res.status(200).json({
       ...events,
       noEventsFound: events.noEventsFound

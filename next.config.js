@@ -34,6 +34,7 @@ const nextConfig = {
       "tarambana.cat",
       "cinemaesbarjo.cat",
       "www.cinemaesbarjo.cat",
+      "https://www.cinemaesbarjo.cat/*",
       "https://www.cardedeu.cat",
       "http://www.teatreauditoricardedeu.cat",
       "www.ayrshare.com"

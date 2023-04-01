@@ -2,7 +2,6 @@ import { useEffect, useCallback, useState } from "react";
 import dynamic from "next/dynamic";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import NextImage from "next/image";
 import Link from "next/link";
 import { useGetEvent } from "@components/hooks/useGetEvent";
 import Meta from "@components/partials/seo-meta";
@@ -38,6 +37,10 @@ const Notification = dynamic(
 );
 
 const Social = dynamic(() => import("@components/ui/common/social"), {
+  loading: () => "",
+});
+
+const Weather = dynamic(() => import("@components/ui/weather"), {
   loading: () => "",
 });
 
@@ -144,14 +147,6 @@ export default function Event(props) {
       push(slug, undefined, { shallow: true });
   }, [asPath, data, edit_suggested, newEvent, push, slug, title]);
 
-  useEffect(() => {
-    sendGoogleEvent("open-change-modal");
-  }, [openModal]);
-
-  useEffect(() => {
-    sendGoogleEvent("open-delete-modal");
-  }, [openDeleteReasonModal]);
-
   const handleMapLoad = useCallback(() => {
     setTimeout(() => {
       const map = document.getElementById("mymap");
@@ -200,6 +195,7 @@ export default function Event(props) {
     id,
     description,
     location,
+    startDate,
     startTime,
     endTime,
     nameDay,
@@ -213,7 +209,6 @@ export default function Event(props) {
     imageId,
     social,
     isEventFinished,
-    weather,
     isMoney
   } = data.event;
 
@@ -227,8 +222,6 @@ export default function Event(props) {
 
   const gMapsQuery =
     lat && lng ? `${lat},${lng}` : isMoney ? location : `${location},Cardedeu+08440`;
-
-  const { temp, description: weatherDescription, icon } = weather || {};
 
   return (
     <>
@@ -327,7 +320,10 @@ export default function Event(props) {
                     </dt>
                     {!isMoney && <div className="ml-auto">
                       <button
-                        onClick={() => setOpenModal(true)}
+                        onClick={() => {
+                          setOpenModal(true);
+                          sendGoogleEvent("open-change-modal");
+                        }}
                         type="button"
                         className="relative inline-flex items-center px-4 py-2 border border-slate-200  text-xs font-medium rounded-full text-gray-800 bg-white hover:border-[#ECB84A] focus:outline-none"
                       >
@@ -339,9 +335,7 @@ export default function Event(props) {
                       </button>
                     </div>}
                   </div>
-                  <div className="flex items-center text-xs">
-                    {icon && <div className="mr-1 mt-2"><NextImage alt={weatherDescription} src={icon} width="30px" height="30px" /></div>} {weatherDescription ? weatherDescription : ""} {temp ? `- ${temp}º` : ""}
-                  </div>
+                  <Weather startDate={startDate} />
                   <div className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words">
                     <div
                       dangerouslySetInnerHTML={{ __html: descriptionHTML }}
@@ -472,6 +466,7 @@ export default function Event(props) {
               onClick={() => {
                 setOpenModal(false);
                 setTimeout(() => setOpenModalDeleteReasonModal(true), 300);
+                sendGoogleEvent("open-delete-modal");
               }}
             >
               <div className="flex items-center">
@@ -628,11 +623,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { getCalendarEvent } = require("@lib/helpers");
-  // const { getAds } = require("@lib/helpers");
   const eventId = params.eventId;
 
   const { event } = await getCalendarEvent(eventId);
-  const ads = {}; //await getAds({});
 
   if (!event || !event.id) {
     return {
@@ -641,7 +634,7 @@ export async function getStaticProps({ params }) {
   }
 
   return {
-    props: { event, ads },
+    props: { event },
     revalidate: 60,
   };
 }

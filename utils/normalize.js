@@ -17,9 +17,8 @@ function to3HourForecastFormat(date) {
   return `${forecastHour}:00:00`;
 }
 
-const getWeather = (startDate, weatherInfo) => {
+export const normalizeWeather = (startDate, weatherInfo) => {
   if (isNaN(startDate)) return {}
-
   const startDateConverted = startDate.toISOString().split('T')[0];
   const weatherArray = weatherInfo[`${startDateConverted} ${to3HourForecastFormat(startDate)}`];
 
@@ -48,7 +47,7 @@ export const normalizeEvents = (event, weatherInfo) => {
     nameDay,
     startDate
   } = getFormattedDate(event.start, event.end);
-  const weatherObject = getWeather(startDate, weatherInfo)
+  const weatherObject = normalizeWeather(startDate, weatherInfo)
 
   const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
   const hasEventImage = event.description && event.description.match(regex);
@@ -90,7 +89,7 @@ export const normalizeEvents = (event, weatherInfo) => {
   };
 };
 
-export const normalizeEvent = (event, weatherInfo) => {
+export const normalizeEvent = (event) => {
   if (!event || event.error) return null;
 
   const {
@@ -100,9 +99,7 @@ export const normalizeEvent = (event, weatherInfo) => {
     startTime,
     endTime,
     nameDay,
-    startDate
   } = getFormattedDate(event.start, event.end);
-  const weatherObject = getWeather(startDate, weatherInfo)
 
   let location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary ? sanitizeText(event.summary) : "";
@@ -139,29 +136,6 @@ export const normalizeEvent = (event, weatherInfo) => {
     isEventFinished: event.end
       ? new Date(event.end.dateTime) < new Date()
       : false,
-    weather: weatherObject,
     isMoney: event.summary ? event.summary.search(/\[Ad\]/g, "") !== -1 : false
-  };
-};
-
-export const normalizePrograms = ({ id }) => ({
-  id,
-});
-
-export const normalizeAds = ({
-  adId,
-  // programId,
-  // programName,
-  adSize,
-  // url,
-  // productUrl,
-}) => {
-  return {
-    adId,
-    // programId,
-    // programName,
-    adSize,
-    // url,
-    // productUrl,
   };
 };

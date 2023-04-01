@@ -8,7 +8,6 @@ import SubMenu from "@components/ui/common/subMenu";
 import { monthsName, generateJsonData } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 
-
 export default function App(props) {
   const [page, setPage] = useState(() => {
     const storedPage = typeof window !== "undefined" && window.localStorage.getItem("currentPage");
