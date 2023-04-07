@@ -37,6 +37,12 @@ export const normalizeWeather = (startDate, weatherInfo) => {
   return weatherObject
 }
 
+const hasEventImage = (description) => {
+  const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
+  const hasEventImage = description && description.match(regex);
+  return hasEventImage && hasEventImage[0];
+}
+
 export const normalizeEvents = (event, weatherInfo) => {
   const {
     originalFormattedStart,
@@ -48,10 +54,7 @@ export const normalizeEvents = (event, weatherInfo) => {
     startDate
   } = getFormattedDate(event.start, event.end);
   const weatherObject = normalizeWeather(startDate, weatherInfo)
-
-  const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
-  const hasEventImage = event.description && event.description.match(regex);
-  const eventImage = hasEventImage && hasEventImage[0]
+  const eventImage = hasEventImage(event.description)
   const location = event.location ? event.location.split(",")[0] : "Cardedeu";
   let title = event.summary ? sanitizeText(event.summary) : "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
@@ -111,6 +114,7 @@ export const normalizeEvent = (event) => {
   const imageId = event.id ? event.id.split("_")[0] : event.id;
 
   const locationNormalized = getVitaminedLocation(location);
+  const eventImage = hasEventImage(event.description)
 
   return {
     id: event.id,
@@ -132,6 +136,7 @@ export const normalizeEvent = (event) => {
     imageUploaded: imageUploaded
       ? `https://res.cloudinary.com/culturaCardedeu/image/upload/c_fill/c_scale,w_auto,q_auto,f_auto/v1/culturaCardedeu/${imageId}`
       : null,
+    eventImage,
     imageId,
     isEventFinished: event.end
       ? new Date(event.end.dateTime) < new Date()
