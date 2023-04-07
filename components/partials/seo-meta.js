@@ -8,8 +8,8 @@ const Meta = (props) => {
   const image = props.imageUploaded
     ? props.imageUploaded
     : props.image
-    ? siteUrl + props.image
-    : `/static/images/banners/cultura-cardedeu-banner-${getRandomImage}.jpeg`;
+      ? siteUrl + props.image
+      : `${siteUrl}/static/images/banners/cultura-cardedeu-banner-${getRandomImage}.jpeg`;
 
   return (
     <Head>

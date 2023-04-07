@@ -173,7 +173,8 @@ export const generateJsonData = ({
   lng,
   imageUploaded,
   images,
-  isMoney
+  isMoney,
+  eventImage
 }) => ({
   "@context": "https://schema.org",
   "@type": "Event",
@@ -200,7 +201,7 @@ export const generateJsonData = ({
       longitude: lng,
     },
   },
-  image: [imageUploaded, ...transformImagestoAbsoluteUrl(images)].filter(
+  image: [imageUploaded, eventImage, ...transformImagestoAbsoluteUrl(images)].filter(
     Boolean
   ),
   description,
