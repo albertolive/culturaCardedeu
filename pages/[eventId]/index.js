@@ -382,7 +382,8 @@ export default function Event(props) {
                 <div>
                   <dt className="text-md font-bold text-gray-900">Lloc</dt>
                   <dd className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500">
-                    {location}
+                    <a href={`https://www.google.com/maps/search/?api=1&query=${location}`} target="_blank"
+                      rel="noreferrer">{location}</a>
                   </dd>
                 </div>
               </dl>
@@ -432,8 +433,8 @@ export default function Event(props) {
               </div>
             </div>}
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
       <Modal
         open={openModal}
         setOpen={setOpenModal}
