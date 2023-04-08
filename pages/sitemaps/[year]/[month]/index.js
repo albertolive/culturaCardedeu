@@ -3,11 +3,13 @@ import Script from "next/script";
 import { generateJsonData } from "@utils/helpers";
 import Meta from "@components/partials/seo-meta";
 import Link from "next/link";
-import { MONTHS_URL as MONTHS } from "@utils/constants";
+import { MONTHS_URL } from "@utils/constants";
 
 export default function Month({ events }) {
   const { query } = useRouter();
-  const { year, month } = query;
+  let { year, month } = query;
+
+  if (month === "marc") month = month.replace("c", "ç");
 
   const jsonData = events
     .filter(({ isAd }) => !isAd)
@@ -54,7 +56,7 @@ export async function getStaticPaths() {
   let params = [];
 
   years.map((year) => {
-    MONTHS.map((month) => {
+    MONTHS_URL.map((month) => {
       params.push({
         params: {
           year: year.toString(),
