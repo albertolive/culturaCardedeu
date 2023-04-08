@@ -109,3 +109,18 @@ ins.adsbygoogle[data-ad-status="unfilled"] {
   min-height: 280px;
   min-width: 280px;
 }
+
+.ql-editor > p {
+  margin-top: 1.3333333em !important;
+  margin-bottom: 1.3333333em !important;
+}
+
+.ql-editor > ul {
+  margin-top: 1.3333333em !important;
+  margin-bottom: 1.3333333em !important;
+}
+
+.ql-editor > ul > li {
+  margin-top: 0.6666667em;
+  margin-bottom: 0.6666667em;
+}
