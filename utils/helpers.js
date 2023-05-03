@@ -7,7 +7,7 @@ const isLessThanFiveDays = (date) => {
   const timeDiff = currentDate.getTime() - date.getTime();
   const dayDiff = timeDiff / (1000 * 3600 * 24);
   return Math.floor(Math.abs(dayDiff)) < 5;
-}
+};
 
 export const sanitize = (str) =>
   str
@@ -38,10 +38,12 @@ export const sanitize = (str) =>
     .replace(/·|/g, "")
     .replace(/º|/g, "")
     .replace(/:/g, "")
+    .replace(/#/g, "")
     .replace(/\[Ad\]/g, "")
     .replace(/(<([^>]+)>)/gi, "");
 
-export const sanitizeText = (str) => str.replace("&amp;", "&").replace(/\[Ad\]/g, "");
+export const sanitizeText = (str) =>
+  str.replace("&amp;", "&").replace(/\[Ad\]/g, "");
 
 export const slug = (str, formattedStart, id) =>
   `${sanitize(str)}-${formattedStart
@@ -69,11 +71,10 @@ export const getFormattedDate = (start, end) => {
   let isMultipleDays = false;
   let isSameMonth = false;
   let isSameYear = false;
-  const startDay = startDateConverted.getDate()
-  const endDay = endDateConverted.getDate()
+  const startDay = startDateConverted.getDate();
+  const endDay = endDateConverted.getDate();
 
-  if (startDay !== endDay)
-    isMultipleDays = true;
+  if (startDay !== endDay) isMultipleDays = true;
 
   if (startDateConverted.getMonth() === endDateConverted.getMonth())
     isSameMonth = true;
@@ -91,10 +92,12 @@ export const getFormattedDate = (start, end) => {
   const formattedStart =
     isMultipleDays && isSameMonth
       ? `${startDay}`
-      : `${startDay} de ${nameMonth} ${isMultipleDays && isSameYear ? "" : `del ${year}`
-      }`;
-  const formattedEnd = `${endDay} de ${MONTHS[endDateConverted.getMonth()]
-    } del ${endDateConverted.getFullYear()}`;
+      : `${startDay} de ${nameMonth} ${
+          isMultipleDays && isSameYear ? "" : `del ${year}`
+        }`;
+  const formattedEnd = `${endDay} de ${
+    MONTHS[endDateConverted.getMonth()]
+  } del ${endDateConverted.getFullYear()}`;
   const startTime = `${startDateConverted.getHours()}:${String(
     startDateConverted.getMinutes()
   ).padStart(2, "0")}`;
@@ -109,8 +112,12 @@ export const getFormattedDate = (start, end) => {
     startTime,
     endTime,
     nameDay,
-    startDate: isMultipleDays ? startDay <= new Date().getDate() && convertTZ(new Date(), "Europe/Madrid") || startDateConverted : startDateConverted,
-    isLessThanFiveDays: isLessThanFiveDays(startDate)
+    startDate: isMultipleDays
+      ? (startDay <= new Date().getDate() &&
+          convertTZ(new Date(), "Europe/Madrid")) ||
+        startDateConverted
+      : startDateConverted,
+    isLessThanFiveDays: isLessThanFiveDays(startDate),
   };
 };
 
@@ -174,7 +181,7 @@ export const generateJsonData = ({
   imageUploaded,
   images,
   isMoney,
-  eventImage
+  eventImage,
 }) => ({
   "@context": "https://schema.org",
   "@type": "Event",
@@ -201,9 +208,11 @@ export const generateJsonData = ({
       longitude: lng,
     },
   },
-  image: [imageUploaded, eventImage, ...transformImagestoAbsoluteUrl(images)].filter(
-    Boolean
-  ),
+  image: [
+    imageUploaded,
+    eventImage,
+    ...transformImagestoAbsoluteUrl(images),
+  ].filter(Boolean),
   description,
   performer: {
     "@type": "PerformingGroup",
