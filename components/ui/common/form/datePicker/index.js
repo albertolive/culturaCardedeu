@@ -31,6 +31,7 @@ export default function DatePickerComponent({
   const onChangeStart = (date) => {
     onChange("startDate", date);
     setStartDate(date);
+    setEndDate(new Date(date.getTime() + 60 * 60 * 1000));
   };
   const onChangeEnd = (date) => {
     onChange("endDate", date);
@@ -102,7 +103,7 @@ const DateComponent = ({
       previousMonthButtonLabel="<"
       popperClassName="react-datepicker-left"
       popperPlacement="top-end"
-      dateFormat="d MMMM, yyyy h:mm aa"
+      dateFormat="d MMMM, yyyy HH:mm aa"
       customInput={<ButtonInput />}
       renderCustomHeader={({
         date,
