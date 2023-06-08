@@ -185,7 +185,7 @@ export default function Publica() {
         description="Publica un acte cultural - Cultura Cardedeu"
         canonical="https://www.culturacardedeu.com/publica"
       />
-      {!hideNotification && (
+      {false && (
         <Notification
           type="warning"
           customNotification={false}
