@@ -125,18 +125,21 @@ export default function QuiSom() {
               </span>
             </h1>
             <p className="mt-8 prose prose-lg text-gray-500 leading-8">
-              Cultura Cardedeu és una iniciativa ciutadana per veure en un cop
-              d&apos;ull tots els actes culturals que es fan a Cardedeu.
+              Cultura Cardedeu és una iniciativa ciutadana i sense ànim de lucre
+              impulsada per Albert Olivé que té per objectiu facilitar
+              l&apos;accés a la cultura a totes les persones de Cardedeu i
+              rodalies. Ho fem agrupant tota la programació cultural perquè la
+              tingueu a l&apos;abast d&apos;un cop d&apos;ull.
             </p>
           </div>
           <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
             <p>
-              L&apos;agenda és col·laborativa, i cada persona que organitzi un
-              acte cultural podrà publicar-lo{" "}
+              Podeu ajudar-nos a actualitzar l&apos;agenda{" "}
               <Link href="/publica" prefetch={false}>
-                <a className="font-medium text-black underline">aquí</a>
+                <a className="font-medium text-black underline">penjant</a>
               </Link>{" "}
-              pel seu compte.
+              vosaltres mateixos/es els actes que organitzeu i així, construirem
+              aquesta pàgina web de forma col·laborativa!
             </p>
             <p className="mt-6 prose prose-lg text-gray-500 mx-auto">
               Podreu seguir l&apos;agenda cultural en aquesta pàgina web i/o:
@@ -188,13 +191,17 @@ export default function QuiSom() {
               </div>
             </ul>
           </div>
-        <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
-          <a href="https://www.ayrshare.com?utm_source=powered">
-            <Image
-              src="https://www.ayrshare.com/wp-content/uploads/ayrshare-badge.png"
-              target="_blank" alt="Social Powered by Ayrshare" width="90px" height="30px" />
-          </a>
-        </div>
+          <div className="mt-6 prose prose-lg text-gray-500 mx-auto">
+            <a href="https://www.ayrshare.com?utm_source=powered">
+              <Image
+                src="https://www.ayrshare.com/wp-content/uploads/ayrshare-badge.png"
+                target="_blank"
+                alt="Social Powered by Ayrshare"
+                width="90px"
+                height="30px"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </>
