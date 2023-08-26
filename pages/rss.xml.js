@@ -42,10 +42,10 @@ const buildFeed = (items) => {
     );
 
   removedDuplicatedItems.forEach((item) => {
-    const description = `${item.title}\n\n🗓️ ${item.nameDay} ${item.formattedStart}\n\n🏡 ${item.location} \n\nℹ️ Més informació a l'enllaç de la nostra bio!`;
+    const description = `${item.title}\n\n🗓️ ${item.nameDay} ${item.formattedStart}\n\n🏡 ${item.location} \n\nℹ️ No et perdis aquest i altres esdeveniments! Fes clic al nostre perfil per trobar l'enllaç a la nostra pàgina web i descobrir-los!`;
     const regex = /(http(s?):)([\/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
     const hasEventImage = item.description.match(regex);
-    const eventImage = hasEventImage && hasEventImage[0]
+    const eventImage = hasEventImage && hasEventImage[0];
 
     feed.addItem({
       id: item.id,
@@ -54,12 +54,11 @@ const buildFeed = (items) => {
       description,
       content: item.location,
       date: new Date(item.startDate),
-      image:
-        item.imageUploaded
-          ? item.imageUploaded
-          : eventImage
-            ? eventImage
-            : `${hostUrl}${item.images[0]}`
+      image: item.imageUploaded
+        ? item.imageUploaded
+        : eventImage
+        ? eventImage
+        : `${hostUrl}${item.images[0]}`,
     });
   });
 
