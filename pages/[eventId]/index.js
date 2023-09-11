@@ -389,10 +389,13 @@ export default function Event(props) {
                 </div>
               </dl>
 
-              <dl className="mt-6 space-y-10" data-scrapper="location">
+              <dl className="mt-6 space-y-10">
                 <div>
                   <dt className="text-md font-bold text-gray-900">Lloc</dt>
-                  <dd className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500">
+                  <dd
+                    className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500"
+                    data-scrapper="location"
+                  >
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${location}`}
                       target="_blank"
