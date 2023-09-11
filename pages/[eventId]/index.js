@@ -347,7 +347,7 @@ export default function Event(props) {
                   <Weather startDate={startDate} />
                   <div
                     className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500 break-words"
-                    data-scrapper="description"
+                    id="description"
                   >
                     <div
                       dangerouslySetInnerHTML={{ __html: descriptionHTML }}
@@ -357,7 +357,7 @@ export default function Event(props) {
               </dl>
 
               {imageUploaded && (
-                <dl className="space-y-10" data-scrapper="image">
+                <dl className="space-y-10" id="image">
                   <div className="w-1/2">
                     <div className="rounded-lg bg-gray-100 overflow-hidden">
                       <a
@@ -394,7 +394,7 @@ export default function Event(props) {
                   <dt className="text-md font-bold text-gray-900">Lloc</dt>
                   <dd
                     className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500"
-                    data-scrapper="location"
+                    id="location"
                   >
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${location}`}
