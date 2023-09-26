@@ -380,7 +380,7 @@ export async function getServerSideProps({ params }) {
 
   const { event } = await getCalendarEvent(eventId);
 
-  if (!event.id) {
+  if (!event || !event.id) {
     return {
       notFound: true,
     };
