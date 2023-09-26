@@ -140,12 +140,12 @@ export default function Event(props) {
   const slug = data.event ? data.event.slug : "";
   const title = data.event ? data.event.title : "";
 
-  useEffect(() => {
-    if (newEvent || edit_suggested) return;
+  // useEffect(() => {
+  //   if (newEvent || edit_suggested) return;
 
-    if (title !== "CANCELLED" && slug && asPath !== `/${slug}`)
-      push(slug, undefined, { shallow: true });
-  }, [asPath, data, edit_suggested, newEvent, push, slug, title]);
+  //   if (title !== "CANCELLED" && slug && asPath !== `/${slug}`)
+  //     push(slug, undefined, { shallow: true });
+  // }, [asPath, data, edit_suggested, newEvent, push, slug, title]);
 
   const handleMapLoad = useCallback(() => {
     setTimeout(() => {
