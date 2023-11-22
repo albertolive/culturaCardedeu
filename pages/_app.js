@@ -4,11 +4,10 @@ import { useEffect } from "react";
 import Script from "next/script";
 import { BaseLayout } from "@components/ui/layout";
 import { useRouter } from "next/router";
+import { Notification } from "@components/ui/common";
 
 function CulturaCardedeuMainEntry({ Component, pageProps }) {
   const { events } = useRouter();
-  const infolinks_pid = 3386219;
-  const infolinks_wsid = 0;
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -59,6 +58,12 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
       />
 
       <BaseLayout>
+        <Notification
+          type="warning"
+          customNotification={false}
+          hideNotification={() => setHideNotification(true)}
+          title={`Cultura Cardedeu s’ha ampliat i ara també es pot trobar a <b><u><a target="_blank" href="https://www.esdeveniments.cat">esdeveniments.cat</a></b></u>! Quan publiqueu un esdeveniment aquí, també es publicarà automàticament a la nostra nova pàgina web.`}
+        />
         <Component {...pageProps} />
       </BaseLayout>
     </>
