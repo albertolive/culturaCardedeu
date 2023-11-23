@@ -59,10 +59,10 @@ function CulturaCardedeuMainEntry({ Component, pageProps }) {
 
       <BaseLayout>
         <Notification
+          hideClose
           type="warning"
           customNotification={false}
-          hideNotification={() => setHideNotification(true)}
-          title={`Cultura Cardedeu s’ha ampliat i ara també es pot trobar a <b><u><a target="_blank" href="https://www.esdeveniments.cat">esdeveniments.cat</a></b></u>! Quan publiqueu un esdeveniment aquí, també es publicarà automàticament a la nostra nova pàgina web.`}
+          title={`Cultura Cardedeu s&apos;ha ampliat i ara també es pot trobar a <b><u><a target="_blank" href="https://www.esdeveniments.cat">esdeveniments.cat</a></b></u>! Quan publiqueu un esdeveniment aquí, també es publicarà automàticament a la nostra nova pàgina web.`}
         />
         <Component {...pageProps} />
       </BaseLayout>
