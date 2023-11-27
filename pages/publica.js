@@ -235,12 +235,12 @@ export default function Publica() {
                 onChange={handleChangeDate}
               />
 
-              <FrequencySelect
+              {/* <FrequencySelect
                 id="frequency"
                 value={form.frequency}
                 title="Freqüència"
                 onChange={handleChangeFrequencyLocation}
-              />
+              /> */}
             </div>
           </div>
         </div>
