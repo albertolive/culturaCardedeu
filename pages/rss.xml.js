@@ -5,7 +5,7 @@ const getAllArticles = async () => {
 
   const now = new Date();
   const from = new Date();
-  const until = new Date(now.setDate(now.getDate() + 7));
+  const until = new Date(now.setDate(now.getDate() + 14));
 
   const { events } = await getCalendarEvents({
     from,
