@@ -1,11 +1,11 @@
 import { Feed } from "feed";
 
-const getAllArticles = async () => {
+const getAllArticles = async (days = 14) => {
   const { getCalendarEvents } = require("@lib/helpers");
 
   const now = new Date();
   const from = new Date();
-  const until = new Date(now.setDate(now.getDate() + 14));
+  const until = new Date(now.setDate(now.getDate() + days));
 
   const { events } = await getCalendarEvents({
     from,
@@ -67,9 +67,10 @@ const buildFeed = (items) => {
 
 export const getServerSideProps = async (context) => {
   if (context && context.res) {
-    const { res } = context;
+    const { res, query } = context;
+    const days = query.until || 14;
 
-    const articles = await getAllArticles();
+    const articles = await getAllArticles(days);
 
     const feed = buildFeed(articles);
     res.setHeader("content-type", "text/xml");
