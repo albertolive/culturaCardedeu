@@ -12,6 +12,7 @@ const getAllArticles = async (days = 14) => {
     until,
     normalizeRss: true,
     filterByDate: false,
+    maxResults: 2500,
   });
   const normalizedEvents = JSON.parse(JSON.stringify(events));
 
