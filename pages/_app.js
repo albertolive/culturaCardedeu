@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Notification } from "@components/ui/common";
 
 function CulturaCardedeuMainEntry({ Component, pageProps }) {
+  //
   const { events } = useRouter();
 
   useEffect(() => {
