@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 export default function ImageUploader({ value, onUpload, progress }) {
   const fileSelect = useRef(null);
   const [imgData, setImgData] = useState(value);
+  const [error, setError] = useState(null);
 
   async function handleImageUpload() {
     if (fileSelect) {
@@ -12,13 +13,35 @@ export default function ImageUploader({ value, onUpload, progress }) {
   }
 
   const onChangeImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      setError("Invalid file format. Please upload a JPG, PNG, or JPEG image.");
+      setImgData(null);
+      onUpload(null);
+      return;
+    }
+
+    if (file.size > maxSize) {
+      setError("File size exceeds 5MB. Please upload a smaller image.");
+      setImgData(null);
+      onUpload(null);
+      return;
+    }
+
+    setError(null);
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       setImgData(reader.result);
     });
-    reader.readAsDataURL(e.target.files[0]);
-
-    onUpload(e.target.files[0]);
+    reader.readAsDataURL(file);
+    onUpload(file);
   };
 
   return (
@@ -65,6 +88,7 @@ export default function ImageUploader({ value, onUpload, progress }) {
           />
         </form>
       </div>
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );
 }
