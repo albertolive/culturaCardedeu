@@ -6,7 +6,6 @@ import {
   DatePicker,
   Input,
   Select,
-  FrequencySelect,
   TextArea,
   ImageUpload,
 } from "@components/ui/common/form";
@@ -88,14 +87,17 @@ export default function Publica() {
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
-  const [hideNotification, setHideNotification] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
+  const [analysisError, setAnalysisError] = useState(null);
+  const [formVisible, setFormVisible] = useState(false);
+  const [imageAnalyzed, setImageAnalyzed] = useState(false);
 
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
 
     setForm(newForm);
-    setFormState(createFormState(newForm));
+    setFormState(createFormState(newForm, false)); // Set isPristine to false to trigger validation
   };
 
   const handleChange = ({ target: { name, value } }) =>
@@ -108,6 +110,97 @@ export default function Publica() {
 
   const handleChangeFrequencyLocation = ({ value }) =>
     handleFormChange("frequency", value);
+
+  const handleImageUpload = (file) => {
+    setImageToUpload(file);
+    setImageAnalyzed(false);
+    setFormVisible(false);
+    setAnalysisError(null);
+  };
+
+  const handleAnalyzeImage = async () => {
+    if (!imageToUpload) {
+      setAnalysisError("Si us plau, puja una imatge primer.");
+      return;
+    }
+
+    setIsAnalyzingImage(true);
+    setAnalysisError(null);
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const base64Data = reader.result.split(",")[1];
+
+        const response = await fetch("/api/analyzeImage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imageData: base64Data,
+            imageType: imageToUpload.type,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error ||
+              `API request failed with status ${response.status}`
+          );
+        }
+
+        const data = await response.json();
+
+        const parsedStartDate = data.startDate
+          ? new Date(data.startDate.replace("T", " "))
+          : form.startDate;
+        const parsedEndDate = data.endDate
+          ? new Date(data.endDate.replace("T", " "))
+          : form.endDate;
+
+        const newForm = {
+          ...form,
+          title: data.title || form.title,
+          description: data.description || form.description,
+          location: data.location || form.location,
+          startDate: parsedStartDate,
+          endDate: parsedEndDate,
+        };
+
+        setForm(newForm);
+        setFormState(createFormState(newForm, false));
+        setFormVisible(true); // Make form visible after successful analysis
+        setImageAnalyzed(true); // Mark image as analyzed
+      } catch (error) {
+        setAnalysisError(
+          error.message || "Hi ha hagut un error analitzant la imatge."
+        );
+        setFormVisible(true); // Still show form, but with error
+      } finally {
+        setIsAnalyzingImage(false);
+      }
+    };
+
+    reader.onerror = () => {
+      setIsAnalyzingImage(false);
+      setAnalysisError(
+        "Error en llegir el fitxer de la imatge. Si us plau, intenta-ho de nou."
+      );
+      setFormVisible(true); // Show form on file reading error
+    };
+
+    reader.readAsDataURL(imageToUpload);
+  };
+
+  const handleSkipAnalysis = () => {
+    setForm(defaultForm); // Reset to default form if skipping
+    setFormVisible(true);
+    setImageAnalyzed(false); // No analysis performed
+    setAnalysisError(null);
+    setImageToUpload(null); // Clear any uploaded image if skipping
+  };
 
   const goToEventPage = (url) => ({
     pathname: `${url}`,
@@ -175,113 +268,165 @@ export default function Publica() {
     xhr.send(fd);
   };
 
-  const notificationTitle =
-    "Avís! Preveient que s'acosta un any electoral, us volíem informar que Cultura Cardedeu no és un espai per a la publicació d'actes de partits polítics i quan en detectem algun, l'eliminarem. Considerem que els partits ja tenen els seus canals i volem deixar aquest espai per a les entitats i iniciatives culturals. Gràcies per la comprensió!";
-
   return (
     <>
       <Meta
-        title="Publica - Cultura Cardedeu"
-        description="Publica un acte cultural - Cultura Cardedeu"
+        title="Publica un acte cultural - Cultura Cardedeu"
+        description="Publica un acte cultural a l'agenda de Cardedeu. Omple el formulari per donar a conèixer el teu esdeveniment."
         canonical="https://www.culturacardedeu.com/publica"
       />
-      {false && (
-        <Notification
-          type="warning"
-          customNotification={false}
-          hideNotification={() => setHideNotification(true)}
-          title={notificationTitle}
-        />
-      )}
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
-        <div className="space-y-8 divide-y divide-gray-200">
-          <div className="pt-8">
-            <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Publica un acte cultural
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">* camps obligatoris</p>
-            </div>
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <Input
-                id="title"
-                title="Títol *"
-                value={form.title}
-                onChange={handleChange}
-              />
-
-              <TextArea
-                id="description"
-                value={form.description}
-                onChange={handleChange}
-              />
-
-              <ImageUpload
-                value={imageToUpload}
-                onUpload={setImageToUpload}
-                progress={progress}
-              />
-
-              <Select
-                id="location"
-                value={form.location}
-                title="Localització *"
-                onChange={handleChangeLocation}
-              />
-
-              <DatePicker
-                startDate={form.start}
-                endDate={form.end}
-                onChange={handleChangeDate}
-              />
-
-              {/* <FrequencySelect
-                id="frequency"
-                value={form.frequency}
-                title="Freqüència"
-                onChange={handleChangeFrequencyLocation}
-              /> */}
+        {/* Section for Image Upload and Action Buttons - Always Visible */}
+        <div className="pt-8">
+          {" "}
+          {/* This pt-8 matches the original structure for this section */}
+          <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            {" "}
+            {/* This structure also matches */}
+            <ImageUpload
+              value={imageToUpload}
+              onUpload={handleImageUpload}
+              progress={progress}
+            />
+            <div className="sm:col-span-6 mt-4">
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={handleAnalyzeImage}
+                  disabled={
+                    !imageToUpload ||
+                    isLoading ||
+                    isAnalyzingImage ||
+                    imageAnalyzed
+                  }
+                  className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-gray-700 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
+                >
+                  {isAnalyzingImage
+                    ? "Analitzant..."
+                    : "Analitza Imatge amb IA"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSkipAnalysis}
+                  disabled={isLoading || isAnalyzingImage}
+                  className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-gray-100 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
+                >
+                  Omet Anàlisi i Emplena Manualment
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        {formState.isPristine && formState.message && (
-          <div className="p-4 my-3 text-red-700 bg-red-200 rounded-lg text-sm">
-            {formState.message}
-          </div>
+
+        {/* Conditionally Rendered Form Section */}
+        {formVisible && (
+          <>
+            {analysisError && (
+              <div className="py-4">
+                {" "}
+                {/* Added padding for spacing */}
+                <Notification
+                  type="error"
+                  customNotification={false}
+                  hideNotification={() => setAnalysisError(null)}
+                  title="Error en l'Anàlisi de la Imatge"
+                  message={analysisError}
+                />
+              </div>
+            )}
+            <div className="space-y-8 divide-y divide-gray-200">
+              <div className="pt-8">
+                <div>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    Publica un acte cultural
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    * camps obligatoris
+                  </p>
+                </div>
+                <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                  <Input
+                    id="title"
+                    title="Títol *"
+                    value={form.title}
+                    onChange={handleChange}
+                  />
+                  <TextArea
+                    id="description"
+                    value={form.description}
+                    onChange={handleChange}
+                  />
+                  <Select
+                    id="location"
+                    value={form.location}
+                    title="Localització *"
+                    onChange={handleChangeLocation}
+                  />
+                  {formVisible && (
+                    <DatePicker
+                      key={`${
+                        form.startDate instanceof Date
+                          ? form.startDate.getTime()
+                          : "start-null"
+                      }-${
+                        form.endDate instanceof Date
+                          ? form.endDate.getTime()
+                          : "end-null"
+                      }`}
+                      initialStartDate={
+                        form.startDate instanceof Date ? form.startDate : null
+                      }
+                      initialEndDate={
+                        form.endDate instanceof Date ? form.endDate : null
+                      }
+                      onChange={handleChangeDate}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {formState.isPristine && formState.message && (
+              <div className="p-4 my-3 text-red-700 bg-red-200 rounded-lg text-sm">
+                {formState.message}
+              </div>
+            )}
+
+            <div className="pt-5">
+              <div className="flex justify-end">
+                <button
+                  disabled={isLoading}
+                  onClick={onSubmit}
+                  className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
+                >
+                  {isLoading ? (
+                    <>
+                      <svg
+                        role="status"
+                        className="inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600"
+                        viewBox="0 0 100 101"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="#1C64F2"
+                        />
+                      </svg>
+                      Publicant ...
+                    </>
+                  ) : (
+                    "Publica"
+                  )}
+                </button>
+              </div>
+            </div>
+          </>
         )}
-        <div className="pt-5">
-          <div className="flex justify-end">
-            <button
-              disabled={isLoading}
-              onClick={onSubmit}
-              className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-[#ECB84A] ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
-            >
-              {isLoading ? (
-                <>
-                  <svg
-                    role="status"
-                    className="inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="#1C64F2"
-                    />
-                  </svg>
-                  Publicant ...
-                </>
-              ) : (
-                "Publica"
-              )}
-            </button>
-          </div>
-        </div>
       </div>
     </>
   );
