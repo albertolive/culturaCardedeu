@@ -6,7 +6,6 @@ import {
   DatePicker,
   Input,
   Select,
-  FrequencySelect,
   TextArea,
   ImageUpload,
 } from "@components/ui/common/form";
@@ -88,11 +87,11 @@ export default function Publica() {
   const [formState, setFormState] = useState(_createFormState());
   const [isLoading, setIsLoading] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
-  const [hideNotification, setHideNotification] = useState(false); // This is for the original global notification
   const [progress, setProgress] = useState(0);
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
   const [formVisible, setFormVisible] = useState(false);
+  const [imageAnalyzed, setImageAnalyzed] = useState(false);
 
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
@@ -112,10 +111,16 @@ export default function Publica() {
   const handleChangeFrequencyLocation = ({ value }) =>
     handleFormChange("frequency", value);
 
+  const handleImageUpload = (file) => {
+    setImageToUpload(file);
+    setImageAnalyzed(false);
+    setFormVisible(false);
+    setAnalysisError(null);
+  };
+
   const handleAnalyzeImage = async () => {
     if (!imageToUpload) {
       setAnalysisError("Si us plau, puja una imatge primer.");
-      // Do not set formVisible to true here, as no action was taken.
       return;
     }
 
@@ -126,7 +131,7 @@ export default function Publica() {
     reader.onloadend = async () => {
       try {
         const base64Data = reader.result.split(",")[1];
-        
+
         const response = await fetch("/api/analyzeImage", {
           method: "POST",
           headers: {
@@ -141,30 +146,38 @@ export default function Publica() {
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(
-            errorData.error || `API request failed with status ${response.status}`
+            errorData.error ||
+              `API request failed with status ${response.status}`
           );
         }
 
         const data = await response.json();
-        
+
+        const parsedStartDate = data.startDate
+          ? new Date(data.startDate.replace("T", " "))
+          : form.startDate;
+        const parsedEndDate = data.endDate
+          ? new Date(data.endDate.replace("T", " "))
+          : form.endDate;
+
         const newForm = {
           ...form,
           title: data.title || form.title,
           description: data.description || form.description,
           location: data.location || form.location,
-          startDate: data.startDate ? new Date(data.startDate + "T00:00:00") : form.startDate,
-          endDate: data.endDate ? new Date(data.endDate + "T00:00:00") : form.endDate,
+          startDate: parsedStartDate,
+          endDate: parsedEndDate,
         };
-        
+
         setForm(newForm);
         setFormState(createFormState(newForm, false));
-        setFormVisible(true); // Show form on success
+        setFormVisible(true); // Make form visible after successful analysis
+        setImageAnalyzed(true); // Mark image as analyzed
       } catch (error) {
-        console.error("Analysis Error:", error);
         setAnalysisError(
-          `L'anàlisi de la imatge ha fallat. Si us plau, omple el formulari manualment o intenta-ho amb una altra imatge. Detall: ${error.message}`
+          error.message || "Hi ha hagut un error analitzant la imatge."
         );
-        setFormVisible(true); // Show form even on error to allow manual input
+        setFormVisible(true); // Still show form, but with error
       } finally {
         setIsAnalyzingImage(false);
       }
@@ -172,7 +185,9 @@ export default function Publica() {
 
     reader.onerror = () => {
       setIsAnalyzingImage(false);
-      setAnalysisError("Error en llegir el fitxer de la imatge. Si us plau, intenta-ho de nou.");
+      setAnalysisError(
+        "Error en llegir el fitxer de la imatge. Si us plau, intenta-ho de nou."
+      );
       setFormVisible(true); // Show form on file reading error
     };
 
@@ -180,12 +195,11 @@ export default function Publica() {
   };
 
   const handleSkipAnalysis = () => {
+    setForm(defaultForm); // Reset to default form if skipping
     setFormVisible(true);
-    if (analysisError) {
-      setAnalysisError(null); // Clear analysis error if user decides to skip
-    }
-    setForm(defaultForm); // Reset form data to default
-    setFormState(_createFormState()); // Reset form validation state
+    setImageAnalyzed(false); // No analysis performed
+    setAnalysisError(null);
+    setImageToUpload(null); // Clear any uploaded image if skipping
   };
 
   const goToEventPage = (url) => ({
@@ -254,53 +268,52 @@ export default function Publica() {
     xhr.send(fd);
   };
 
-  const notificationTitle =
-    "Avís! Preveient que s'acosta un any electoral, us volíem informar que Cultura Cardedeu no és un espai per a la publicació d'actes de partits polítics i quan en detectem algun, l'eliminarem. Considerem que els partits ja tenen els seus canals i volem deixar aquest espai per a les entitats i iniciatives culturals. Gràcies per la comprensió!";
-
   return (
     <>
       <Meta
-        title="Publica - Cultura Cardedeu"
-        description="Publica un acte cultural - Cultura Cardedeu"
+        title="Publica un acte cultural - Cultura Cardedeu"
+        description="Publica un acte cultural a l'agenda de Cardedeu. Omple el formulari per donar a conèixer el teu esdeveniment."
         canonical="https://www.culturacardedeu.com/publica"
       />
-      {false && (
-        <Notification
-          type="warning"
-          customNotification={false}
-          hideNotification={() => setHideNotification(true)}
-          title={notificationTitle}
-        />
-      )}
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
         {/* Section for Image Upload and Action Buttons - Always Visible */}
-        <div className="pt-8"> {/* This pt-8 matches the original structure for this section */}
-          <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"> {/* This structure also matches */}
+        <div className="pt-8">
+          {" "}
+          {/* This pt-8 matches the original structure for this section */}
+          <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            {" "}
+            {/* This structure also matches */}
             <ImageUpload
               value={imageToUpload}
-              onUpload={setImageToUpload}
+              onUpload={handleImageUpload}
               progress={progress}
             />
             <div className="sm:col-span-6 mt-4">
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
-                  onClick={handleAnalyzeImage} // Now uses the placeholder
-                  disabled={!imageToUpload || isLoading || isAnalyzingImage}
+                  onClick={handleAnalyzeImage}
+                  disabled={
+                    !imageToUpload ||
+                    isLoading ||
+                    isAnalyzingImage ||
+                    imageAnalyzed
+                  }
                   className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-gray-700 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
                 >
-                  {isAnalyzingImage ? "Analitzant..." : "Analitza Imatge"}
+                  {isAnalyzingImage
+                    ? "Analitzant..."
+                    : "Analitza Imatge amb IA"}
                 </button>
                 <button
                   type="button"
-                  onClick={handleSkipAnalysis} // Uses the new handler
-                  disabled={isLoading || isAnalyzingImage} // Can also be disabled if analysis is "in progress"
+                  onClick={handleSkipAnalysis}
+                  disabled={isLoading || isAnalyzingImage}
                   className="disabled:opacity-50 disabled:cursor-default disabled:hover:bg-gray-100 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer"
                 >
                   Omet Anàlisi i Emplena Manualment
                 </button>
               </div>
-              {/* Old <p> tag for analysisError removed from here */}
             </div>
           </div>
         </div>
@@ -309,24 +322,27 @@ export default function Publica() {
         {formVisible && (
           <>
             {analysisError && (
-              <div className="py-4"> {/* Added padding for spacing */}
+              <div className="py-4">
+                {" "}
+                {/* Added padding for spacing */}
                 <Notification
                   type="error"
-                  customNotification={false} // Assuming standard styling for error
+                  customNotification={false}
                   hideNotification={() => setAnalysisError(null)}
                   title="Error en l'Anàlisi de la Imatge"
                   message={analysisError}
                 />
               </div>
             )}
-            {/* This div was the start of the form fields section */}
             <div className="space-y-8 divide-y divide-gray-200">
               <div className="pt-8">
                 <div>
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
                     Publica un acte cultural
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">* camps obligatoris</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    * camps obligatoris
+                  </p>
                 </div>
                 <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                   <Input
@@ -340,36 +356,42 @@ export default function Publica() {
                     value={form.description}
                     onChange={handleChange}
                   />
-                  {/* ImageUpload is now part of the always-visible section above */}
                   <Select
                     id="location"
                     value={form.location}
                     title="Localització *"
                     onChange={handleChangeLocation}
                   />
-                  <DatePicker
-                    startDate={form.start}
-                    endDate={form.end}
-                    onChange={handleChangeDate}
-                  />
-                  {/* <FrequencySelect
-                    id="frequency"
-                    value={form.frequency}
-                    title="Freqüència"
-                    onChange={handleChangeFrequencyLocation}
-                  /> */}
+                  {formVisible && (
+                    <DatePicker
+                      key={`${
+                        form.startDate instanceof Date
+                          ? form.startDate.getTime()
+                          : "start-null"
+                      }-${
+                        form.endDate instanceof Date
+                          ? form.endDate.getTime()
+                          : "end-null"
+                      }`}
+                      initialStartDate={
+                        form.startDate instanceof Date ? form.startDate : null
+                      }
+                      initialEndDate={
+                        form.endDate instanceof Date ? form.endDate : null
+                      }
+                      onChange={handleChangeDate}
+                    />
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Form Validation Message - also conditional */}
             {formState.isPristine && formState.message && (
               <div className="p-4 my-3 text-red-700 bg-red-200 rounded-lg text-sm">
                 {formState.message}
               </div>
             )}
 
-            {/* Submit Button Section - also conditional */}
             <div className="pt-5">
               <div className="flex justify-end">
                 <button

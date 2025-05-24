@@ -9,30 +9,44 @@ import setMinutes from "date-fns/setMinutes";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function DatePickerComponent({
-  startDate: initialStartDate,
-  endDate: initialEndDate,
-  onChange,
-}) {
-  const startingDate = initialStartDate
-    ? new Date(initialStartDate)
-    : setHours(setMinutes(new Date(), 0), 9);
-  const endingDate = initialEndDate
-    ? new Date(initialEndDate)
-    : setMinutes(new Date(startingDate), 60);
+// Helper to get a stable default start date
+const getInitialDefaultStartDate = () => setHours(setMinutes(new Date(), 0), 9);
+// Helper to get a stable default end date based on a start date
+const getInitialDefaultEndDate = (startDate) =>
+  setMinutes(new Date(startDate), 60);
 
-  const [startDate, setStartDate] = useState(startingDate);
-  const [endDate, setEndDate] = useState(endingDate);
+export default function DatePickerComponent(props) {
+  const {
+    initialStartDate: initialStartDateProp,
+    initialEndDate: initialEndDateProp,
+    onChange,
+  } = props;
 
-  useEffect(() => {
-    if (startDate > endDate) setEndDate(setMinutes(startDate, 60));
-  }, [startDate, endDate]);
+  // Stable default dates initialized once
+  const [defaultStartDate] = useState(() => getInitialDefaultStartDate());
+  const [defaultEndDate] = useState(
+    () => getInitialDefaultEndDate(initialStartDateProp || defaultStartDate) // Use prop if available for initial default end
+  );
+
+  // Initialize state with props if available, otherwise use stable defaults
+  const [startDate, setStartDate] = useState(
+    initialStartDateProp || defaultStartDate
+  );
+  const [endDate, setEndDate] = useState(initialEndDateProp || defaultEndDate);
+
+  // Effect to ensure endDate is after startDate
 
   const onChangeStart = (date) => {
-    onChange("startDate", date);
     setStartDate(date);
-    setEndDate(new Date(date.getTime() + 60 * 60 * 1000));
+    onChange("startDate", date);
+
+    if (!endDate || (endDate && endDate.getTime() <= date.getTime())) {
+      const newEndDate = new Date(date.getTime() + 60 * 60 * 1000);
+      setEndDate(newEndDate);
+      onChange("endDate", newEndDate);
+    }
   };
+
   const onChangeEnd = (date) => {
     onChange("endDate", date);
     setEndDate(date);
@@ -103,7 +117,7 @@ const DateComponent = ({
       previousMonthButtonLabel="<"
       popperClassName="react-datepicker-left"
       popperPlacement="top-end"
-      dateFormat="d MMMM, yyyy HH:mm aa"
+      dateFormat="d MMMM, yyyy hh:mm aa"
       customInput={<ButtonInput />}
       renderCustomHeader={({
         date,
