@@ -116,7 +116,7 @@ Exemple de format de resposta JSON esperat:
           ],
         },
       ],
-      max_tokens: 1200, // Increased to accommodate detailed descriptions
+      max_tokens: 900, // Increased to accommodate detailed descriptions
       response_format: { type: "json_object" },
     });
 
