@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { slug, getFormattedDate } from "@utils/helpers";
@@ -136,6 +136,19 @@ async function resizeImageFile(
   });
 }
 
+// ---- START: ADDED FOR LOCALSTORAGE RATE LIMITING ----
+const MAX_AI_CALLS_PER_DAY = 3;
+const AI_ANALYSIS_USAGE_KEY = "aiAnalysisUsage"; // Key for localStorage
+
+function getCurrentDateString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+// ---- END: ADDED FOR LOCALSTORAGE RATE LIMITING ----
+
 export default function Publica() {
   const router = useRouter();
   const [form, setForm] = useState(defaultForm);
@@ -147,6 +160,21 @@ export default function Publica() {
   const [analysisError, setAnalysisError] = useState(null);
   const [formVisible, setFormVisible] = useState(false);
   const [imageAnalyzed, setImageAnalyzed] = useState(false);
+  const [showAiWarning, setShowAiWarning] = useState(false);
+  const titleInputRef = useRef(null);
+
+  const showFormAndScroll = () => {
+    setFormVisible(true);
+    // Scroll after a short delay to allow the form to render
+    setTimeout(() => {
+      if (titleInputRef.current) {
+        titleInputRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 50);
+  };
 
   const handleFormChange = (name, value) => {
     const newForm = { ...form, [name]: value };
@@ -163,12 +191,10 @@ export default function Publica() {
   const handleChangeLocation = ({ value }) =>
     handleFormChange("location", value);
 
-  const handleChangeFrequencyLocation = ({ value }) =>
-    handleFormChange("frequency", value);
-
   const handleImageUpload = (file) => {
     setImageToUpload(file);
     setImageAnalyzed(false);
+    setShowAiWarning(false);
     setFormVisible(false);
     setAnalysisError(null);
   };
@@ -177,6 +203,47 @@ export default function Publica() {
     if (!imageToUpload) {
       setAnalysisError("Si us plau, puja una imatge primer.");
       return;
+    }
+
+    setFormVisible(false);
+    const currentDate = getCurrentDateString();
+    let usageData = { date: currentDate, count: 0 };
+
+    try {
+      const storedUsage = localStorage.getItem(AI_ANALYSIS_USAGE_KEY);
+      if (storedUsage) {
+        const parsedUsage = JSON.parse(storedUsage);
+        if (parsedUsage.date === currentDate) {
+          usageData = parsedUsage;
+        } else {
+          usageData.count = 0;
+          usageData.date = currentDate;
+        }
+      }
+    } catch (e) {
+      console.error(
+        "Error reading or parsing AI analysis usage from localStorage:",
+        e
+      );
+      usageData = { date: currentDate, count: 0 };
+    }
+
+    if (usageData.count >= MAX_AI_CALLS_PER_DAY) {
+      setAnalysisError(
+        `Has assolit el límit diari de ${MAX_AI_CALLS_PER_DAY} anàlisis d'imatges amb IA. Prova-ho de nou demà.`
+      );
+      setIsAnalyzingImage(false);
+      showFormAndScroll();
+      return;
+    }
+
+    // Increment count and update localStorage *before* starting the analysis process
+    usageData.count += 1;
+    try {
+      localStorage.setItem(AI_ANALYSIS_USAGE_KEY, JSON.stringify(usageData));
+    } catch (e) {
+      console.error("Error saving AI analysis usage to localStorage:", e);
+      // If localStorage fails, the app will continue to function, but rate limiting might not be perfect
     }
 
     setIsAnalyzingImage(true);
@@ -228,26 +295,53 @@ export default function Publica() {
         ? new Date(data.endDate.replace("T", " "))
         : form.endDate;
 
-      const newForm = {
-        ...form,
-        title: data.title || form.title,
-        description: data.description || form.description,
-        location: data.location || form.location,
-        startDate: parsedStartDate,
-        endDate: parsedEndDate,
-      };
+      // Check if AI returned any meaningful data
+      if (
+        !data.title &&
+        !data.description &&
+        !data.location &&
+        !data.startDate // We check data.startDate, not parsedStartDate which might have a fallback
+      ) {
+        setAnalysisError(
+          "L'IA no ha pogut extreure informació d'esdeveniment d'aquesta imatge. És possible que no sigui un cartell d'un acte cultural o la imatge no sigui prou clara. Pots emplenar les dades manualment."
+        );
+        setShowAiWarning(false);
+        // Still set the form with whatever (likely empty) data came back, so it's consistent
+        const newForm = {
+          ...form,
+          title: data.title || "",
+          description: data.description || "",
+          location: data.location || "",
+          startDate: parsedStartDate || null, // Ensure it can be null
+          endDate: parsedEndDate || null, // Ensure it can be null
+        };
+        setForm(newForm);
+        setFormState(createFormState(newForm, false)); // Validate the (potentially empty) form
+      } else {
+        // AI returned some data, proceed as before
+        const newForm = {
+          ...form,
+          title: data.title || form.title,
+          description: data.description || form.description,
+          location: data.location || form.location,
+          startDate: parsedStartDate,
+          endDate: parsedEndDate,
+        };
+        setForm(newForm);
+        setFormState(createFormState(newForm, false));
+        setShowAiWarning(true); // Show AI warning after successful analysis with data
+        setAnalysisError(null); // Clear any previous error
+      }
 
-      setForm(newForm);
-      setFormState(createFormState(newForm, false));
-      setFormVisible(true);
-      setImageAnalyzed(true);
+      setImageAnalyzed(true); // Image has been processed, regardless of data found
+      showFormAndScroll();
     } catch (error) {
       setAnalysisError(
         `[HANDLE_ANALYZE_IMAGE_CATCH] ${
           error.message || "Hi ha hagut un error analitzant la imatge."
         }`
       );
-      setFormVisible(true);
+      showFormAndScroll();
     } finally {
       setIsAnalyzingImage(false);
     }
@@ -255,10 +349,11 @@ export default function Publica() {
 
   const handleSkipAnalysis = () => {
     setForm(defaultForm); // Reset to default form if skipping
-    setFormVisible(true);
     setImageAnalyzed(false); // No analysis performed
+    setShowAiWarning(false);
     setAnalysisError(null);
     setImageToUpload(null); // Clear any uploaded image if skipping
+    showFormAndScroll();
   };
 
   const goToEventPage = (url) => ({
@@ -377,21 +472,25 @@ export default function Publica() {
           </div>
         </div>
 
-        {/* Conditionally Rendered Form Section */}
         {formVisible && (
-          <>
+          <div ref={titleInputRef}>
             {analysisError && (
-              <div className="py-4">
-                {" "}
-                {/* Added padding for spacing */}
-                <Notification
-                  type="error"
-                  customNotification={false}
-                  hideNotification={() => setAnalysisError(null)}
-                  title="Error en l'Anàlisi de la Imatge"
-                  message={analysisError}
-                />
-              </div>
+              <Notification
+                type="error"
+                customNotification={false}
+                hideNotification={() => setAnalysisError(null)}
+                title="Error en l'Anàlisi de la Imatge"
+                message={analysisError}
+              />
+            )}
+            {showAiWarning && !analysisError && (
+              <Notification
+                type="warning"
+                customNotification={false}
+                hideNotification={() => setShowAiWarning(false)}
+                title="Revisa les Dades Emplenades per l'IA"
+                message="L'IA pot cometre errors. Si us plau, revisa acuradament tots els camps abans de publicar l'esdeveniment."
+              />
             )}
             <div className="space-y-8 divide-y divide-gray-200">
               <div className="pt-8">
@@ -484,7 +583,7 @@ export default function Publica() {
                 </button>
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </>

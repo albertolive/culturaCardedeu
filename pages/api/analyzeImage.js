@@ -52,49 +52,59 @@ async function handler(req, res) {
       .json({ error: "Missing imageData or imageType in request body." });
   }
 
-  const prompt = `Analitza la imatge proporcionada, que probablement és un cartell d'esdeveniment o material promocional similar. Extreu els següents detalls en català, estructurats en un objecte JSON. Assegura't que tot el contingut sigui 100% en català, utilitzi expressions culturals locals quan sigui apropiat, sigui únic, original, eviti contingut duplicat i mantingui la naturalitat del llenguatge.
+  const prompt = `# TASK: Cultural Event Poster Analysis for Cardedeu
 
-Extreu els següents camps:
+You are GPT-4o (multimodal). You will receive an image of a cultural-event poster. Your sole output must be a single JSON object—no extra text or formatting—conforming exactly to the schema below.
 
-- title: El títol principal o nom de l'esdeveniment, optimitzat per a SEO com un títol H1. Ha de ser concís (idealment menys de 70 caràcters), impactant, incloure paraules clau rellevants i, si és un aspecte clau, la ubicació (p.ex., "Concert de Jazz a Cardedeu"). Ha de representar amb precisió l'esdeveniment i ser atractiu per a l'audiència.
-
-- description: Un text descriptiu complet i detallat de l'esdeveniment (objectiu 300-500 paraules), basat en la informació visual de la imatge i optimitzat per a SEO. Aquest camp ha d'integrar diversos aspectes:
-    1.  **Inici Concís (Meta Descripció)**: Comença la descripció amb un resum molt breu i atractiu (màxim 160 caràcters) que funcioni com una meta descripció. Aquest resum ha d'incloure paraules clau naturals sobre l'esdeveniment i animar a llegir més.
-    2.  **Cos Detallat (Descripció Completa)**: Després del resum inicial, desenvolupa una descripció més extensa amb els següents punts:
-        -   Estructura en paràgrafs curts i llegibles per facilitar la lectura. Separa els paràgrafs amb un sol salt de línia (utilitza \`\\n\` en la cadena JSON) per assegurar una bona llegibilitat en la visualització.
-        -   Utilitza un to proper però professional, adequat per a la promoció d'un esdeveniment cultural.
-        -   Inclou detalls específics de l'esdeveniment extrets de la imatge o inferits lògicament, salientant:
-            -   Tipus d'esdeveniment cultural (concert, exposició, taller, xerrada, etc.).
-            -   Artistes o participants principals (si n'hi ha).
-            -   Aspectes únics o destacats de l'esdeveniment.
-            -   Context cultural o històric rellevant (si aplica i es pot inferir).
-            -   Públic objectiu al qual s'adreça (si es pot inferir).
-            -   Valor cultural que aporta a la comunitat (si es pot inferir).
-        -   **Optimització SEO integrada**: Al llarg de tota la descripció (tant el resum inicial com el cos detallat), incorpora de forma natural:
-            -   Vocabulari cultural català específic i ric.
-            -   Paraules clau rellevants (anteriorment pensades com una llista separada, ara integrades fluidament).
-            -   Referències geogràfiques rellevants (més enllà de la ubicació principal, si és pertinent).
-            -   Menciona institucions o entitats organitzadores/col·laboradores si apareixen a la imatge o són clarament deduïbles.
-            -   Incorpora terminologia pròpia del sector cultural de manera fluida.
-            -   Evita la sobrecàrrega de paraules clau (keyword stuffing); la prioritat és la llegibilitat i el valor per a l'usuari.
-
-- startDate: La data i hora d'inici de l'esdeveniment en format YYYY-MM-DDTHH:mm. Si l'any no s'especifica, assumeix l'any actual o el següent si la data ja ha passat. Si l'hora i els minuts no són especificats o no es poden determinar, retorna només la data en format YYYY-MM-DD. Si no es pot determinar un dia específic (per exemple, "Mitjans de juliol"), retorna null.
-
-- endDate: La data i hora de finalització de l'esdeveniment en format YYYY-MM-DDTHH:mm. Si és un esdeveniment d'un sol dia, endDate ha de ser igual a startDate (incloent l'hora si està disponible). Si l'hora i els minuts no són especificats o no es poden determinar, retorna només la data en format YYYY-MM-DD. Si no es pot determinar una data de finalització, utilitza la mateixa que startDate. Si no es pot determinar un dia específic, retorna null.
-
-- location: El lloc o ubicació de l'esdeveniment. Si no es pot trobar, retorna null.
-
-Requisits addicionals per a tots els camps de text:
-1. Si no es pot trobar alguna informació específica per a un camp de text (ex. \`location\`), retorna \`null\` per aquest camp. Per \`startDate\` i \`endDate\`, si no es pot determinar una data/hora específica, segueix les instruccions de format o retorna \`null\` si no es pot ni tan sols determinar un dia.
-2. Tots els textos han d'estar exclusivament en català. Si es detecta text en un altre idioma a la imatge, tradueix-lo al català.
-
-Exemple de format de resposta JSON esperat:
+## JSON SCHEMA
 {
-  "title": "Festival de Jazz de Tardor a Cardedeu",
-  "description": "Viu la màgia del jazz amb artistes internacionals al Teatre Principal de Cardedeu. No et perdis el concert inaugural del Festival de Jazz de Tardor!\\nEl Festival de Jazz de Tardor de Cardedeu torna un any més per omplir de música els racons de la ciutat. Aquesta edició comptarà amb la participació d'artistes de renom internacional així com talent local emergent, oferint una programació diversa que abraça des del jazz més clàssic fins a les fusions contemporànies més innovadores. Durant tres caps de setmana intensos, el Teatre Principal serà l'epicentre del festival, acollint els concerts principals. El concert inaugural, a càrrec del reconegut saxofonista internacional John Doe Quartet, promet ser una nit inoblidable... (continua la descripció fins a 300-500 paraules).",
-  "startDate": "2024-10-15T21:30",
-  "endDate": "2024-10-15T21:30",
-  "location": "Teatre Principal"
+  "title": string|null,       // SEO H1 (≤70 chars)
+  "description": string|null, // Catalan description (150–500 words; opening meta ≤160 chars) + at least two paragraphs separated by "\\n" (literal backslash+n)
+  "startDate": string|null,   // ISO 8601 date or datetime (YYYY-MM-DD or YYYY-MM-DDTHH:mm)
+  "endDate": string|null,     // Same as startDate
+  "location": string|null     // Specific Cardedeu venue
+}
+
+## FIELD RULES
+
+1. title
+    • Max 70 chars, impactful, keyword-rich.
+    • If no clear title → null.
+
+2. description
+    • Must start with an opening meta (≤160 chars). Then include at least two body paragraphs separated by the literal sequence "\\n" (backslash+n).
+    • Aim for 300–500 words total; if insufficient data, at least 150 words.
+    • Integrate any visible accessibility or category details into this narrative.
+    • Include event type, participants, unique Cardedeu context, audience, pricing (if visible).
+    • Natural, engaging Catalan; no keyword stuffing.
+    • If insufficient info → null.
+
+3. startDate / endDate
+    • Dates must strictly match ISO 8601: YYYY-MM-DD or YYYY-MM-DDTHH:mm (zero-padded two-digit month and day, optional time). No extra characters; if unable to format properly, return null.
+    • If a weekday (e.g., 'dissabte') is provided with the date, choose the year when that month-day falls on that weekday (prefer current year, otherwise next year). If no weekday given or still ambiguous, then if month/day ≥ today → current year; else → next year.
+    • Single-day events: endDate = startDate. Multi-day: use actual end date.
+    • If still unclear → null.
+
+4. location
+    • Specific venue in Cardedeu (e.g., "Teatre Auditori de Cardedeu").
+    • Map generic names: "teatre municipal" → "Teatre Municipal de Cardedeu".
+    • If none → null.
+
+## ANALYSIS GUIDELINES
+
+- Prioritize clearly readable text; never hallucinate.
+- Translate non-Catalan text accurately into Catalan.
+- Enforce all character limits and data formats exactly.
+- Use null for unknown or unclear fields.
+- Only return the JSON object—no extra commentary.
+
+## EXAMPLE OUTPUT
+{
+  "title": "Concert de Jazz al Teatre Municipal de Cardedeu",
+  "description": "Vine a gaudir del millor jazz al cor de Cardedeu amb artistes internacionals.\n\nEl Teatre Municipal de Cardedeu presentarà una nit única amb melodies clàssiques i arranjaments originals. L'esdeveniment, pensat per a adults, ofereix un ambient íntim i acollidor. Entrades: 15€ a taquilla i en línia.",
+  "startDate": "2025-06-15T21:00",
+  "endDate": "2025-06-15T23:30",
+  "location": "Teatre Municipal de Cardedeu"
 }
 `;
 
@@ -110,13 +120,13 @@ Exemple de format de resposta JSON esperat:
               type: "image_url",
               image_url: {
                 url: `data:${imageType};base64,${imageData}`,
-                detail: "low", // low detail is sufficient for text extraction and costs less
+                detail: "auto", // medium detail is sufficient for text extraction and costs less
               },
             },
           ],
         },
       ],
-      max_tokens: 900, // Increased to accommodate detailed descriptions
+      max_tokens: 1200, // Increased to accommodate detailed descriptions
       response_format: { type: "json_object" },
     });
 

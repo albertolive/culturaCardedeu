@@ -218,6 +218,7 @@ export default function Edita({ event }) {
       />
       {showDeleteMessage && (
         <Notification
+          type="success"
           customNotification={false}
           hideNotification={setShowDeleteMessage}
           title="Estem revisant la teva sol·licitud. Si en menys de 24 hores no ha estat eliminat. Si us plau, posa't en contacte amb nosaltres a:"

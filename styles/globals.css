@@ -111,8 +111,6 @@ ins.adsbygoogle[data-ad-status="unfilled"] {
 }
 
 .ql-editor > p {
-  margin-top: 1.3333333em !important;
-  margin-bottom: 1.3333333em !important;
 }
 
 .ql-editor > ul {
@@ -123,4 +121,8 @@ ins.adsbygoogle[data-ad-status="unfilled"] {
 .ql-editor > ul > li {
   margin-top: 0.6666667em;
   margin-bottom: 0.6666667em;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
 }

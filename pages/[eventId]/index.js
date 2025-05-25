@@ -249,9 +249,10 @@ export default function Event(props) {
         imageUploaded={imageUploaded || eventImage}
         preload="/static/images/gMaps.webp"
       />
-      {newEvent && <Notification title={title} url={slug} />}
+      {newEvent && <Notification type="success" title={title} url={slug} />}
       {showThankYouBanner && (
         <Notification
+          type="success"
           customNotification={false}
           hideClose
           hideNotification={setShowThankYouBanner}
