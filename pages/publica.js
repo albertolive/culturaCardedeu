@@ -81,6 +81,61 @@ const createFormState = (
   return _createFormState(false);
 };
 
+// Helper function for client-side image resizing
+async function resizeImageFile(
+  file,
+  maxWidth = 1280,
+  maxHeight = 1280,
+  quality = 0.85
+) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      let { width, height } = img;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Output as JPEG for better compression for photos/posters
+      const resizedImageDataUrl = canvas.toDataURL("image/jpeg", quality);
+      const base64Data = resizedImageDataUrl.split(",")[1];
+
+      URL.revokeObjectURL(img.src); // Clean up object URL
+
+      resolve({
+        base64Data,
+        imageType: "image/jpeg", // Output type is JPEG
+      });
+    };
+    img.onerror = (error) => {
+      URL.revokeObjectURL(img.src); // Clean up object URL on error
+      reject(
+        new Error(
+          `[RESIZE_IMG_ONERROR] Failed to load image for resizing: ${
+            error.message || error.type || "Unknown image load error"
+          }`
+        )
+      );
+    };
+  });
+}
+
 export default function Publica() {
   const router = useRouter();
   const [form, setForm] = useState(defaultForm);
@@ -127,89 +182,75 @@ export default function Publica() {
     setIsAnalyzingImage(true);
     setAnalysisError(null);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      try {
-        const base64Data = reader.result.split(",")[1];
+    try {
+      // Resize the image first
+      const { base64Data, imageType } = await resizeImageFile(imageToUpload);
 
-        const response = await fetch("/api/analyzeImage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imageData: base64Data,
-            imageType: imageToUpload.type,
-          }),
-        });
+      const response = await fetch("/api/analyzeImage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageData: base64Data,
+          imageType: imageType, // Use the type from the resized image (likely image/jpeg)
+        }),
+      });
 
-        if (!response.ok) {
-          let errorDetail = `API request failed with status ${response.status}`;
-          try {
-            // Attempt to parse the error response as JSON
-            const errorData = await response.json();
-            if (errorData && errorData.error) {
-              errorDetail = errorData.error;
-            } else if (errorData) {
-              // If there's some JSON data but not the expected .error structure
-              errorDetail = `API error: ${JSON.stringify(errorData)}`;
-            }
-          } catch (jsonError) {
-            // If parsing as JSON fails, the response might be text (e.g., HTML error page)
-            try {
-              const textError = await response.text();
-              errorDetail = `API request failed with status ${
-                response.status
-              }. Response was not JSON: ${textError.substring(0, 200)}...`; // Limit length of textError
-            } catch (textParseError) {
-              // If reading as text also fails
-              errorDetail = `API request failed with status ${response.status}. Response was not JSON and could not be read as text.`;
-            }
+      if (!response.ok) {
+        let errorDetail = `API request failed with status ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.error) {
+            errorDetail = errorData.error;
+          } else if (errorData) {
+            errorDetail = `API error: ${JSON.stringify(errorData)}`;
           }
-          throw new Error(errorDetail);
+        } catch (jsonError) {
+          try {
+            const textError = await response.text();
+            errorDetail = `API request failed with status ${
+              response.status
+            }. Response was not JSON: ${textError.substring(0, 200)}...`;
+          } catch (textParseError) {
+            errorDetail = `API request failed with status ${response.status}. Response was not JSON and could not be read as text.`;
+          }
         }
-
-        const data = await response.json();
-
-        const parsedStartDate = data.startDate
-          ? new Date(data.startDate.replace("T", " "))
-          : form.startDate;
-        const parsedEndDate = data.endDate
-          ? new Date(data.endDate.replace("T", " "))
-          : form.endDate;
-
-        const newForm = {
-          ...form,
-          title: data.title || form.title,
-          description: data.description || form.description,
-          location: data.location || form.location,
-          startDate: parsedStartDate,
-          endDate: parsedEndDate,
-        };
-
-        setForm(newForm);
-        setFormState(createFormState(newForm, false));
-        setFormVisible(true); // Make form visible after successful analysis
-        setImageAnalyzed(true); // Mark image as analyzed
-      } catch (error) {
-        setAnalysisError(
-          `${error.message || "Hi ha hagut un error analitzant la imatge."}`
-        );
-        setFormVisible(true); // Still show form, but with error
-      } finally {
-        setIsAnalyzingImage(false);
+        throw new Error(errorDetail);
       }
-    };
 
-    reader.onerror = () => {
-      setIsAnalyzingImage(false);
+      const data = await response.json();
+
+      const parsedStartDate = data.startDate
+        ? new Date(data.startDate.replace("T", " "))
+        : form.startDate;
+      const parsedEndDate = data.endDate
+        ? new Date(data.endDate.replace("T", " "))
+        : form.endDate;
+
+      const newForm = {
+        ...form,
+        title: data.title || form.title,
+        description: data.description || form.description,
+        location: data.location || form.location,
+        startDate: parsedStartDate,
+        endDate: parsedEndDate,
+      };
+
+      setForm(newForm);
+      setFormState(createFormState(newForm, false));
+      setFormVisible(true);
+      setImageAnalyzed(true);
+    } catch (error) {
       setAnalysisError(
-        "Error en llegir el fitxer de la imatge. Si us plau, intenta-ho de nou."
+        `[HANDLE_ANALYZE_IMAGE_CATCH] ${
+          error.message || "Hi ha hagut un error analitzant la imatge."
+        }`
       );
-      setFormVisible(true); // Show form on file reading error
-    };
-
-    reader.readAsDataURL(imageToUpload);
+      setFormVisible(true);
+    } finally {
+      setIsAnalyzingImage(false);
+    }
   };
 
   const handleSkipAnalysis = () => {
