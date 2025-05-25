@@ -1,11 +1,13 @@
 import CheckCircleIcon from "@heroicons/react/solid/CheckCircleIcon";
 import ExclamationCircleIcon from "@heroicons/react/solid/ExclamationCircleIcon";
 import XIcon from "@heroicons/react/solid/XIcon";
+import ExclamationIcon from "@heroicons/react/solid/ExclamationIcon";
 
 export default function Notification({
   url,
   title,
-  type,
+  message,
+  type = "success",
   customNotification = true,
   hideNotification,
   hideClose = false,
@@ -43,13 +45,40 @@ export default function Notification({
     );
   }
 
+  let bgColor, iconColor, titleColor, messageColor, IconComponent;
+
+  switch (type) {
+    case "error":
+      bgColor = "bg-red-50";
+      iconColor = "text-red-400";
+      titleColor = "text-red-800";
+      messageColor = "text-red-700";
+      IconComponent = ExclamationCircleIcon;
+      break;
+    case "warning":
+      bgColor = "bg-yellow-50";
+      iconColor = "text-yellow-400";
+      titleColor = "text-yellow-800";
+      messageColor = "text-yellow-700";
+      IconComponent = ExclamationIcon;
+      break;
+    case "success":
+    default:
+      bgColor = "bg-green-50";
+      iconColor = "text-green-400";
+      titleColor = "text-green-800";
+      messageColor = "text-green-700";
+      IconComponent = CheckCircleIcon;
+      break;
+  }
+
   return (
-    <div className="relative rounded-md bg-green-50 p-4 mb-4 break-word">
+    <div className={`relative rounded-md ${bgColor} p-4 mb-4 break-word`}>
       {!hideClose && (
         <div className="absolute top-0 right-0 pt-4 pr-4">
           <button
             type="button"
-            className=" rounded-md text-gray-400 hover:text-gray-500"
+            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             onClick={(hide) => hideNotification && hideNotification(hide)}
           >
             <span className="sr-only">Close</span>
@@ -59,31 +88,22 @@ export default function Notification({
       )}
       <div className="flex">
         <div className="flex-shrink-0">
-          {type === "warning" ? (
-            <ExclamationCircleIcon
-              className="h-5 w-5 text-green-400"
-              aria-hidden="true"
-            />
-          ) : (
-            <CheckCircleIcon
-              className="h-5 w-5 text-green-400"
-              aria-hidden="true"
-            />
-          )}
+          <IconComponent
+            className={`h-5 w-5 ${iconColor}`}
+            aria-hidden="true"
+          />
         </div>
         <div className="ml-3">
-          <h3 className="text-sm font-medium text-green-800">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: title,
-              }}
-            />{" "}
-            <span className="mt-2 text-sm text-green-700">
-              <a className="font-bold" href={`mailto:${url}`}>
-                {url}
-              </a>
-            </span>
-          </h3>
+          {title && (
+            <h3 className={`text-sm font-medium ${titleColor}`}>
+              <div dangerouslySetInnerHTML={{ __html: title }} />
+            </h3>
+          )}
+          {message && (
+            <div className={`mt-2 text-sm ${messageColor}`}>
+              <p dangerouslySetInnerHTML={{ __html: message }} />
+            </div>
+          )}
         </div>
       </div>
     </div>
