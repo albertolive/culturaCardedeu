@@ -144,11 +144,29 @@ export default function Publica() {
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.error ||
-              `API request failed with status ${response.status}`
-          );
+          let errorDetail = `API request failed with status ${response.status}`;
+          try {
+            // Attempt to parse the error response as JSON
+            const errorData = await response.json();
+            if (errorData && errorData.error) {
+              errorDetail = errorData.error;
+            } else if (errorData) {
+              // If there's some JSON data but not the expected .error structure
+              errorDetail = `API error: ${JSON.stringify(errorData)}`;
+            }
+          } catch (jsonError) {
+            // If parsing as JSON fails, the response might be text (e.g., HTML error page)
+            try {
+              const textError = await response.text();
+              errorDetail = `API request failed with status ${
+                response.status
+              }. Response was not JSON: ${textError.substring(0, 200)}...`; // Limit length of textError
+            } catch (textParseError) {
+              // If reading as text also fails
+              errorDetail = `API request failed with status ${response.status}. Response was not JSON and could not be read as text.`;
+            }
+          }
+          throw new Error(errorDetail);
         }
 
         const data = await response.json();
@@ -175,7 +193,7 @@ export default function Publica() {
         setImageAnalyzed(true); // Mark image as analyzed
       } catch (error) {
         setAnalysisError(
-          error.message || "Hi ha hagut un error analitzant la imatge."
+          `${error.message || "Hi ha hagut un error analitzant la imatge."}`
         );
         setFormVisible(true); // Still show form, but with error
       } finally {
