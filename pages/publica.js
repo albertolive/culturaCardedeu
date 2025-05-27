@@ -162,6 +162,7 @@ export default function Publica() {
   const [imageAnalyzed, setImageAnalyzed] = useState(false);
   const [showAiWarning, setShowAiWarning] = useState(false);
   const titleInputRef = useRef(null);
+  const [existingEventWarning, setExistingEventWarning] = useState(null);
 
   const showFormAndScroll = () => {
     setFormVisible(true);
@@ -361,19 +362,15 @@ export default function Publica() {
     query: { newEvent: true },
   });
 
-  const onSubmit = async () => {
-    const newFormState = createFormState(
-      form,
-      formState.isPristine,
-      null,
-      true
-    );
+  const goToEventPage = (url) => ({
+    pathname: `${url}`,
+    query: { newEvent: true },
+  });
 
-    setFormState(newFormState);
-
-    if (!newFormState.isDisabled) {
-      setIsLoading(true);
-
+  // Refactored event creation logic
+  const proceedWithEventCreation = async () => {
+    setIsLoading(true); // Ensure loading is true when we proceed
+    try {
       const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
         method: "POST",
         headers: {
@@ -390,6 +387,79 @@ export default function Publica() {
       imageToUpload
         ? uploadFile(id, slugifiedTitle)
         : router.push(goToEventPage(`/${slugifiedTitle}`));
+    } catch (error) {
+      console.error("Error proceeding with event creation:", error);
+      setIsLoading(false);
+      // Optionally: show an error notification to the user
+    }
+    // isLoading will be implicitly false if navigation occurs or an error is caught.
+    // If not navigating, ensure to set isLoading false in a finally block if needed.
+  };
+
+  const handleContinueWithCreation = () => {
+    setExistingEventWarning(null);
+    proceedWithEventCreation();
+  };
+
+  const handleCancelCreation = () => {
+    setExistingEventWarning(null);
+    setIsLoading(false);
+  };
+
+  const onSubmit = async () => {
+    const newFormState = createFormState(
+      form,
+      formState.isPristine,
+      null,
+      true
+    );
+
+    setFormState(newFormState);
+
+    if (!newFormState.isDisabled) {
+      setIsLoading(true);
+
+      // ---- START: New code to check for existing event ----
+      try {
+        const { title, startDate, endDate, location } = form;
+        const params = new URLSearchParams();
+        params.append("title", title);
+        if (startDate) {
+          params.append("startDate", startDate.toISOString());
+        }
+        if (endDate) {
+          params.append("endDate", endDate.toISOString());
+        }
+        if (location) {
+          params.append("location", location);
+        }
+
+        const checkEventUrl = `/api/checkExistingEvent?${params.toString()}`;
+        console.log("Checking for existing event with URL:", checkEventUrl);
+
+        const checkResponse = await fetch(checkEventUrl);
+        const existingEvent = await checkResponse.json();
+
+        if (checkResponse.ok && existingEvent) {
+          console.log("Existing event found:", existingEvent);
+          setExistingEventWarning(existingEvent);
+          setIsLoading(false); // Stop loading while user decides
+          return; // Stop here, wait for user action
+        } else {
+          if (!checkResponse.ok) {
+            console.warn("Failed to check for existing event, status:", checkResponse.status, "response:", existingEvent);
+          }
+          // No event found or error in check, proceed with creation
+          setExistingEventWarning(null); // Clear any previous warning
+          await proceedWithEventCreation();
+        }
+      } catch (error) {
+        console.error("Error checking for existing event:", error);
+        // If the check fails, we still proceed with the event creation.
+        setExistingEventWarning(null); // Clear any previous warning
+        await proceedWithEventCreation();
+      }
+      // ---- END: Modified code to check for existing event ----
     }
   };
 
@@ -430,6 +500,58 @@ export default function Publica() {
         canonical="https://www.culturacardedeu.com/publica"
       />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
+        {existingEventWarning && (
+          <Notification
+            type="warning"
+            title="Esdeveniment Similar Trobat"
+            customNotification={true} // Important for custom buttons/jsx message
+            hideNotification={() => setExistingEventWarning(null)} // Fallback if needed, but buttons handle it
+            message={
+              <div>
+                <p>
+                  Ja existeix un esdeveniment amb un títol similar programat per a una data propera:
+                </p>
+                <p className="font-semibold mt-2">
+                  <a
+                    href={`/${slug(
+                      existingEventWarning.summary,
+                      getFormattedDate(
+                        new Date(existingEventWarning.start.dateTime || existingEventWarning.start.date),
+                        existingEventWarning.end ? new Date(existingEventWarning.end.dateTime || existingEventWarning.end.date) : undefined
+                      ).formattedStart,
+                      existingEventWarning.id
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    {existingEventWarning.summary}
+                  </a>
+                </p>
+                <p className="mt-2">
+                  Vols continuar i crear aquest nou esdeveniment de totes maneres?
+                </p>
+              </div>
+            }
+            actions={
+              <>
+                <button
+                  onClick={handleContinueWithCreation}
+                  className="mr-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
+                >
+                  Descarta i Continua
+                </button>
+                <button
+                  onClick={handleCancelCreation}
+                  className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Cancel·la
+                </button>
+              </>
+            }
+          />
+        )}
+
         {/* Section for Image Upload and Action Buttons - Always Visible */}
         <div className="pt-8">
           {" "}
