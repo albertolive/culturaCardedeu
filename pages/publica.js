@@ -112,16 +112,22 @@ async function resizeImageFile(
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Output as JPEG for better compression for photos/posters
-      const resizedImageDataUrl = canvas.toDataURL("image/jpeg", quality);
-      const base64Data = resizedImageDataUrl.split(",")[1];
-
-      URL.revokeObjectURL(img.src); // Clean up object URL
-
-      resolve({
-        base64Data,
-        imageType: "image/jpeg", // Output type is JPEG
-      });
+      // Output as Blob for better efficiency
+      canvas.toBlob(
+        (blob) => {
+          URL.revokeObjectURL(img.src); // Clean up object URL
+          if (blob) {
+            resolve({
+              blob,
+              imageType: "image/jpeg", // Output type is JPEG
+            });
+          } else {
+            reject(new Error("Failed to create blob from canvas"));
+          }
+        },
+        "image/jpeg",
+        quality
+      );
     };
     img.onerror = (error) => {
       URL.revokeObjectURL(img.src); // Clean up object URL on error
@@ -163,6 +169,9 @@ export default function Publica() {
   const [showAiWarning, setShowAiWarning] = useState(false);
   const titleInputRef = useRef(null);
   const [existingEventWarning, setExistingEventWarning] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const showFormAndScroll = () => {
     setFormVisible(true);
@@ -198,6 +207,9 @@ export default function Publica() {
     setShowAiWarning(false);
     setFormVisible(false);
     setAnalysisError(null);
+    setUploadError(null); // Clear any previous upload errors
+    setStatusMessage(""); // Clear status message
+    setSuccessMessage(null); // Clear success message
   };
 
   const handleAnalyzeImage = async () => {
@@ -252,7 +264,17 @@ export default function Publica() {
 
     try {
       // Resize the image first
-      const { base64Data, imageType } = await resizeImageFile(imageToUpload);
+      const { blob, imageType } = await resizeImageFile(imageToUpload);
+
+      // Convert blob to base64 for API call
+      const base64Data = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64 = reader.result.split(",")[1];
+          resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+      });
 
       const response = await fetch("/api/analyzeImage", {
         method: "POST",
@@ -354,13 +376,11 @@ export default function Publica() {
     setShowAiWarning(false);
     setAnalysisError(null);
     setImageToUpload(null); // Clear any uploaded image if skipping
+    setUploadError(null); // Clear upload errors
+    setStatusMessage(""); // Clear status message
+    setSuccessMessage(null); // Clear success message
     showFormAndScroll();
   };
-
-  const goToEventPage = (url) => ({
-    pathname: `${url}`,
-    query: { newEvent: true },
-  });
 
   const goToEventPage = (url) => ({
     pathname: `${url}`,
@@ -370,6 +390,10 @@ export default function Publica() {
   // Refactored event creation logic
   const proceedWithEventCreation = async () => {
     setIsLoading(true); // Ensure loading is true when we proceed
+    setUploadError(null); // Clear any previous upload errors
+    setSuccessMessage(null); // Clear any previous success messages
+    setStatusMessage("Creant esdeveniment...");
+
     try {
       const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
         method: "POST",
@@ -384,16 +408,38 @@ export default function Publica() {
       const { formattedStart } = getFormattedDate(form.startDate, form.endDate);
       const slugifiedTitle = slug(form.title, formattedStart, id);
 
-      imageToUpload
-        ? uploadFile(id, slugifiedTitle)
-        : router.push(goToEventPage(`/${slugifiedTitle}`));
+      if (imageToUpload) {
+        setStatusMessage("Processant imatge...");
+        // Always resize image before upload to handle large mobile camera photos
+        try {
+          const { blob, imageType } = await resizeImageFile(imageToUpload);
+          // Create File object from blob for upload
+          const resizedFile = new File([blob], imageToUpload.name, {
+            type: imageType, // Use the actual image type from resizeImageFile
+          });
+          setStatusMessage("Pujant imatge...");
+          uploadFile(id, slugifiedTitle, resizedFile);
+        } catch (resizeError) {
+          console.error("Error resizing image:", resizeError);
+          setStatusMessage("Pujant imatge original...");
+          // Fallback to original file if resize fails
+          uploadFile(id, slugifiedTitle, imageToUpload);
+        }
+      } else {
+        setStatusMessage("Finalitzant...");
+        setSuccessMessage("Esdeveniment creat correctament!");
+        setTimeout(() => {
+          router.push(goToEventPage(`/${slugifiedTitle}`));
+        }, 1000);
+      }
     } catch (error) {
       console.error("Error proceeding with event creation:", error);
       setIsLoading(false);
-      // Optionally: show an error notification to the user
+      setStatusMessage("");
+      setUploadError(
+        "Error creant l'esdeveniment. Si us plau, torna-ho a intentar."
+      );
     }
-    // isLoading will be implicitly false if navigation occurs or an error is caught.
-    // If not navigating, ensure to set isLoading false in a finally block if needed.
   };
 
   const handleContinueWithCreation = () => {
@@ -438,7 +484,21 @@ export default function Publica() {
         console.log("Checking for existing event with URL:", checkEventUrl);
 
         const checkResponse = await fetch(checkEventUrl);
-        const existingEvent = await checkResponse.json();
+
+        // Improved error handling for JSON parsing
+        let existingEvent = null;
+        try {
+          existingEvent = await checkResponse.json();
+        } catch (jsonError) {
+          console.error(
+            "Failed to parse JSON response from checkExistingEvent:",
+            jsonError
+          );
+          // If JSON parsing fails, treat as no existing event found and proceed
+          setExistingEventWarning(null);
+          await proceedWithEventCreation();
+          return;
+        }
 
         if (checkResponse.ok && existingEvent) {
           console.log("Existing event found:", existingEvent);
@@ -447,7 +507,12 @@ export default function Publica() {
           return; // Stop here, wait for user action
         } else {
           if (!checkResponse.ok) {
-            console.warn("Failed to check for existing event, status:", checkResponse.status, "response:", existingEvent);
+            console.warn(
+              "Failed to check for existing event, status:",
+              checkResponse.status,
+              "response:",
+              existingEvent
+            );
           }
           // No event found or error in check, proceed with creation
           setExistingEventWarning(null); // Clear any previous warning
@@ -463,23 +528,65 @@ export default function Publica() {
     }
   };
 
-  const uploadFile = (id, slugifiedTitle) => {
+  const uploadFile = (id, slugifiedTitle, file) => {
     const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
     const xhr = new XMLHttpRequest();
     const fd = new FormData();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
+    // Set timeout to prevent infinite loading (30 seconds)
+    xhr.timeout = 30000;
+
     xhr.upload.addEventListener("progress", (e) => {
-      setProgress(Math.round((e.loaded * 100.0) / e.total));
+      const progressPercent = Math.round((e.loaded * 100.0) / e.total);
+      setProgress(progressPercent);
+      setStatusMessage(`Pujant imatge... ${progressPercent}%`);
     });
 
     xhr.onreadystatechange = (e) => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        const public_id = JSON.parse(xhr.responseText).public_id;
-        console.log(public_id);
-        router.push(goToEventPage(`/${slugifiedTitle}`));
+      if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+          const public_id = JSON.parse(xhr.responseText).public_id;
+          console.log(public_id);
+          setStatusMessage("Finalitzant...");
+          setSuccessMessage("Esdeveniment i imatge pujats correctament!");
+          setTimeout(() => {
+            router.push(goToEventPage(`/${slugifiedTitle}`));
+          }, 1000);
+        } else {
+          // Handle HTTP errors (non-200 status codes)
+          console.error(`Upload failed: HTTP ${xhr.status}`, xhr.responseText);
+          setIsLoading(false);
+          setProgress(0);
+          setStatusMessage("");
+          setUploadError(
+            `Error pujant la imatge (HTTP ${xhr.status}). Si us plau, torna-ho a intentar.`
+          );
+        }
       }
+    };
+
+    // Handle upload errors
+    xhr.onerror = () => {
+      console.error("Upload failed: Network error");
+      setIsLoading(false);
+      setProgress(0);
+      setStatusMessage("");
+      setUploadError(
+        "Error de xarxa pujant la imatge. Si us plau, comprova la connexió i torna-ho a intentar."
+      );
+    };
+
+    // Handle upload timeout
+    xhr.ontimeout = () => {
+      console.error("Upload failed: Timeout");
+      setIsLoading(false);
+      setProgress(0);
+      setStatusMessage("");
+      setUploadError(
+        "La pujada de la imatge ha trigat massa temps. Si us plau, torna-ho a intentar."
+      );
     };
 
     fd.append(
@@ -487,7 +594,7 @@ export default function Publica() {
       process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET
     );
     fd.append("tags", "browser_upload");
-    fd.append("file", imageToUpload);
+    fd.append("file", file);
     fd.append("public_id", id);
     xhr.send(fd);
   };
@@ -504,35 +611,9 @@ export default function Publica() {
           <Notification
             type="warning"
             title="Esdeveniment Similar Trobat"
-            customNotification={true} // Important for custom buttons/jsx message
-            hideNotification={() => setExistingEventWarning(null)} // Fallback if needed, but buttons handle it
-            message={
-              <div>
-                <p>
-                  Ja existeix un esdeveniment amb un títol similar programat per a una data propera:
-                </p>
-                <p className="font-semibold mt-2">
-                  <a
-                    href={`/${slug(
-                      existingEventWarning.summary,
-                      getFormattedDate(
-                        new Date(existingEventWarning.start.dateTime || existingEventWarning.start.date),
-                        existingEventWarning.end ? new Date(existingEventWarning.end.dateTime || existingEventWarning.end.date) : undefined
-                      ).formattedStart,
-                      existingEventWarning.id
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 underline"
-                  >
-                    {existingEventWarning.summary}
-                  </a>
-                </p>
-                <p className="mt-2">
-                  Vols continuar i crear aquest nou esdeveniment de totes maneres?
-                </p>
-              </div>
-            }
+            customNotification={false}
+            hideNotification={() => setExistingEventWarning(null)}
+            message={`Ja existeix un esdeveniment amb un títol similar programat per a una data propera: <strong>"${existingEventWarning.title}"</strong> (${existingEventWarning.formattedStart}). <br/><br/>Pots veure'l aquí: <a href="/${existingEventWarning.slug}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${existingEventWarning.title}</a><br/><br/>Vols continuar i crear aquest nou esdeveniment de totes maneres?`}
             actions={
               <>
                 <button
@@ -550,6 +631,63 @@ export default function Publica() {
               </>
             }
           />
+        )}
+
+        {/* Upload Error Notification */}
+        {uploadError && (
+          <Notification
+            type="error"
+            customNotification={false}
+            hideNotification={() => setUploadError(null)}
+            title="Error de Pujada"
+            message={uploadError}
+          />
+        )}
+
+        {/* Success Notification */}
+        {successMessage && (
+          <Notification
+            type="success"
+            customNotification={false}
+            hideNotification={() => setSuccessMessage(null)}
+            title="Èxit"
+            message={successMessage}
+          />
+        )}
+
+        {/* Status Message */}
+        {statusMessage && (
+          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-blue-400 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-blue-800">
+                  {statusMessage}
+                </p>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Section for Image Upload and Action Buttons - Always Visible */}

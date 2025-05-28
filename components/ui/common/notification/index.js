@@ -11,6 +11,7 @@ export default function Notification({
   customNotification = true,
   hideNotification,
   hideClose = false,
+  actions,
 }) {
   if (customNotification) {
     return (
@@ -104,6 +105,7 @@ export default function Notification({
               <p dangerouslySetInnerHTML={{ __html: message }} />
             </div>
           )}
+          {actions && <div className="mt-4">{actions}</div>}
         </div>
       </div>
     </div>
