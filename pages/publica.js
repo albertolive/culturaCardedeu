@@ -607,32 +607,6 @@ export default function Publica() {
         canonical="https://www.culturacardedeu.com/publica"
       />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
-        {existingEventWarning && (
-          <Notification
-            type="warning"
-            title="Esdeveniment Similar Trobat"
-            customNotification={false}
-            hideNotification={() => setExistingEventWarning(null)}
-            message={`Ja existeix un esdeveniment amb un títol similar programat per a una data propera: <strong>"${existingEventWarning.title}"</strong> (${existingEventWarning.formattedStart}). <br/><br/>Pots veure'l aquí: <a href="/${existingEventWarning.slug}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${existingEventWarning.title}</a><br/><br/>Vols continuar i crear aquest nou esdeveniment de totes maneres?`}
-            actions={
-              <>
-                <button
-                  onClick={handleContinueWithCreation}
-                  className="mr-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
-                >
-                  Descarta i Continua
-                </button>
-                <button
-                  onClick={handleCancelCreation}
-                  className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Cancel·la
-                </button>
-              </>
-            }
-          />
-        )}
-
         {/* Upload Error Notification */}
         {uploadError && (
           <Notification
@@ -809,7 +783,31 @@ export default function Publica() {
                 {formState.message}
               </div>
             )}
-
+            {existingEventWarning && (
+              <Notification
+                type="warning"
+                title="Esdeveniment Similar Trobat"
+                customNotification={false}
+                hideNotification={() => setExistingEventWarning(null)}
+                message={`Ja existeix un esdeveniment amb un títol similar programat per a una data propera: <strong>"${existingEventWarning.title}"</strong> (${existingEventWarning.formattedStart}). <br/><br/>Pots veure'l aquí: <a href="/${existingEventWarning.slug}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${existingEventWarning.title}</a><br/><br/>Vols continuar i crear aquest nou esdeveniment de totes maneres?`}
+                actions={
+                  <>
+                    <button
+                      onClick={handleContinueWithCreation}
+                      className="mr-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
+                    >
+                      Descarta i Continua
+                    </button>
+                    <button
+                      onClick={handleCancelCreation}
+                      className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Cancel·la
+                    </button>
+                  </>
+                }
+              />
+            )}
             <div className="pt-5">
               <div className="flex justify-end">
                 <button
