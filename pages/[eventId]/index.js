@@ -131,7 +131,7 @@ const sendGoogleEvent = (event, obj) =>
 export default function Event(props) {
   const { push, query, asPath } = useRouter();
   const { newEvent, edit_suggested = false } = query;
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(!!newEvent);
   const [openDeleteReasonModal, setOpenModalDeleteReasonModal] =
     useState(false);
   const [showThankYouBanner, setShowThankYouBanner] = useState(edit_suggested);
@@ -249,7 +249,6 @@ export default function Event(props) {
         imageUploaded={imageUploaded || eventImage}
         preload="/static/images/gMaps.webp"
       />
-      {newEvent && <Notification type="success" title={title} url={slug} />}
       {showThankYouBanner && (
         <Notification
           type="success"
@@ -463,12 +462,40 @@ export default function Event(props) {
       <Modal
         open={openModal}
         setOpen={setOpenModal}
-        title="Suggereix una edició"
+        title={
+          newEvent
+            ? "🎉 Esdeveniment Publicat amb Èxit!"
+            : "Suggereix una edició"
+        }
       >
+        {newEvent && (
+          <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+            <p className="text-sm text-green-800 mb-3">
+              <strong>Fantàstic!</strong> El teu esdeveniment{" "}
+              <strong>&quot;{title}&quot;</strong> ja és visible per a tothom a
+              Cultura Cardedeu!
+            </p>
+            <p className="text-xs text-green-700">
+              Pots editar qualsevol detall del teu esdeveniment en qualsevol
+              moment utilitzant les opcions de sota:
+            </p>
+          </div>
+        )}
         <ul role="list" className="divide-y divide-gray-200 text-left">
           <li key="edit" className="py-4 flex">
             <Link href={`/${slug}/edita`} prefetch={false}>
-              <a>
+              <a
+                onClick={() => {
+                  if (newEvent) {
+                    // Clean up the newEvent query parameter when navigating to edit
+                    const { newEvent: _, ...cleanQuery } = query;
+                    push({
+                      pathname: `/${slug}/edita`,
+                      query: cleanQuery,
+                    });
+                  }
+                }}
+              >
                 <div className="flex items-center">
                   <PencilIcon
                     className="h-7 w-7 text-[#ECB84A] text-xs"
@@ -476,41 +503,90 @@ export default function Event(props) {
                   />
                   <div className="ml-3">
                     <p className="text-sm font-medium text-gray-900">
-                      Canvia el títol o altres detalls
+                      {newEvent
+                        ? "Edita el teu esdeveniment"
+                        : "Canvia el títol o altres detalls"}
                     </p>
                     <p className="text-sm text-gray-500">
-                      Edita el títol, la ubicació, l&apos;horari, etc.
+                      {newEvent
+                        ? "Modifica el títol, descripció, ubicació, horari, etc."
+                        : "Edita el títol, la ubicació, l&apos;horari, etc."}
                     </p>
                   </div>
                 </div>
               </a>
             </Link>
           </li>
-          <li key="remove" className="py-4 flex">
-            <div
-              className="cursor-pointer"
-              as="button"
-              onClick={() => {
-                setOpenModal(false);
-                setTimeout(() => setOpenModalDeleteReasonModal(true), 300);
-                sendGoogleEvent("open-delete-modal");
-              }}
-            >
-              <div className="flex items-center">
-                <XCircleIcon
-                  className="h-7 w-7 text-[#ECB84A] text-xs"
-                  aria-hidden="true"
-                />
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">Eliminar</p>
-                  <p className="text-sm text-gray-500">
-                    L&apos;esdeveniment no existeix, està duplicat, etc.
-                  </p>
+          {!newEvent && (
+            <li key="remove" className="py-4 flex">
+              <div
+                className="cursor-pointer"
+                as="button"
+                onClick={() => {
+                  setOpenModal(false);
+                  setTimeout(() => setOpenModalDeleteReasonModal(true), 300);
+                  sendGoogleEvent("open-delete-modal");
+                }}
+              >
+                <div className="flex items-center">
+                  <XCircleIcon
+                    className="h-7 w-7 text-[#ECB84A] text-xs"
+                    aria-hidden="true"
+                  />
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">
+                      Eliminar
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      L&apos;esdeveniment no existeix, està duplicat, etc.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
+          )}
         </ul>
+        {newEvent && (
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h4 className="text-sm font-medium text-blue-900 mb-2">
+                  Què passa ara?
+                </h4>
+                <ul className="text-xs text-blue-700 space-y-1">
+                  <li>
+                    • L&apos;esdeveniment apareixerà a l&apos;agenda principal
+                  </li>
+                  <li>
+                    • La gent el podrà trobar cercant per data, ubicació o
+                    paraules clau
+                  </li>
+                  <li>
+                    • Pots compartir l&apos;enllaç d&apos;aquesta pàgina per
+                    promocionar-lo
+                  </li>
+                  <li>
+                    • Sempre pots tornar a editar-lo utilitzant el botó
+                    &quot;Suggerir un canvi&quot; d&apos;aquesta pàgina
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
       </Modal>
       <Modal
         open={openDeleteReasonModal}
