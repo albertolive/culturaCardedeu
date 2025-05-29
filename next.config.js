@@ -27,17 +27,6 @@ const nextConfig = {
   },
   reactStrictMode: false,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-      {
-        protocol: "http",
-        hostname: "**",
-      },
-    ],
-    // Fallback for older Next.js versions
     domains: [
       "impfr.tradedoubler.com",
       "connect.tradedoubler.com",
@@ -56,6 +45,7 @@ const nextConfig = {
       "http://www.bibliotecacardedeu.cat",
       "www.bibliotecacardedeu.cat",
       "https://www.bibliotecacardedeu.cat/*",
+      "res.cloudinary.com",
     ],
   },
   async headers() {

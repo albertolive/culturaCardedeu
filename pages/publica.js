@@ -172,6 +172,8 @@ export default function Publica() {
   const [uploadError, setUploadError] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
+  // Add ref for submission notifications area
+  const submissionNotificationsRef = useRef(null);
 
   const showFormAndScroll = () => {
     setFormVisible(true);
@@ -184,6 +186,18 @@ export default function Publica() {
         });
       }
     }, 50);
+  };
+
+  // Add function to scroll to submission notifications
+  const scrollToSubmissionNotifications = () => {
+    setTimeout(() => {
+      if (submissionNotificationsRef.current) {
+        submissionNotificationsRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 100);
   };
 
   const handleFormChange = (name, value) => {
@@ -393,6 +407,7 @@ export default function Publica() {
     setUploadError(null); // Clear any previous upload errors
     setSuccessMessage(null); // Clear any previous success messages
     setStatusMessage("Creant esdeveniment...");
+    scrollToSubmissionNotifications(); // Auto-scroll to show status
 
     try {
       const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
@@ -439,6 +454,7 @@ export default function Publica() {
       setUploadError(
         "Error creant l'esdeveniment. Si us plau, torna-ho a intentar."
       );
+      scrollToSubmissionNotifications(); // Auto-scroll to show error
     }
   };
 
@@ -504,6 +520,7 @@ export default function Publica() {
           console.log("Existing event found:", existingEvent);
           setExistingEventWarning(existingEvent);
           setIsLoading(false); // Stop loading while user decides
+          scrollToSubmissionNotifications(); // Auto-scroll to show warning
           return; // Stop here, wait for user action
         } else {
           if (!checkResponse.ok) {
@@ -563,6 +580,7 @@ export default function Publica() {
           setUploadError(
             `Error pujant la imatge (HTTP ${xhr.status}). Si us plau, torna-ho a intentar.`
           );
+          scrollToSubmissionNotifications(); // Auto-scroll to show error
         }
       }
     };
@@ -576,6 +594,7 @@ export default function Publica() {
       setUploadError(
         "Error de xarxa pujant la imatge. Si us plau, comprova la connexió i torna-ho a intentar."
       );
+      scrollToSubmissionNotifications(); // Auto-scroll to show error
     };
 
     // Handle upload timeout
@@ -587,6 +606,7 @@ export default function Publica() {
       setUploadError(
         "La pujada de la imatge ha trigat massa temps. Si us plau, torna-ho a intentar."
       );
+      scrollToSubmissionNotifications(); // Auto-scroll to show error
     };
 
     fd.append(
@@ -607,63 +627,6 @@ export default function Publica() {
         canonical="https://www.culturacardedeu.com/publica"
       />
       <div className="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto">
-        {/* Upload Error Notification */}
-        {uploadError && (
-          <Notification
-            type="error"
-            customNotification={false}
-            hideNotification={() => setUploadError(null)}
-            title="Error de Pujada"
-            message={uploadError}
-          />
-        )}
-
-        {/* Success Notification */}
-        {successMessage && (
-          <Notification
-            type="success"
-            customNotification={false}
-            hideNotification={() => setSuccessMessage(null)}
-            title="Èxit"
-            message={successMessage}
-          />
-        )}
-
-        {/* Status Message */}
-        {statusMessage && (
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-blue-400 animate-spin"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-blue-800">
-                  {statusMessage}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Section for Image Upload and Action Buttons - Always Visible */}
         <div className="pt-8">
           {" "}
@@ -783,6 +746,67 @@ export default function Publica() {
                 {formState.message}
               </div>
             )}
+
+            {/* Submission-related notifications - moved here to be closer to submit button */}
+            <div ref={submissionNotificationsRef} className="space-y-4">
+              {/* Upload Error Notification */}
+              {uploadError && (
+                <Notification
+                  type="error"
+                  customNotification={false}
+                  hideNotification={() => setUploadError(null)}
+                  title="Error de Pujada"
+                  message={uploadError}
+                />
+              )}
+
+              {/* Success Notification */}
+              {successMessage && (
+                <Notification
+                  type="success"
+                  customNotification={false}
+                  hideNotification={() => setSuccessMessage(null)}
+                  title="Èxit"
+                  message={successMessage}
+                />
+              )}
+
+              {/* Status Message */}
+              {statusMessage && (
+                <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <svg
+                        className="h-5 w-5 text-blue-400 animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-blue-800">
+                        {statusMessage}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {existingEventWarning && (
               <Notification
                 type="warning"
