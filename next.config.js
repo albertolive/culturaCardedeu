@@ -28,7 +28,6 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     domains: [
-      "res.cloudinary.com",
       "impfr.tradedoubler.com",
       "connect.tradedoubler.com",
       "tarambana.cat",
@@ -39,6 +38,14 @@ const nextConfig = {
       "http://www.teatreauditoricardedeu.cat",
       "www.ayrshare.com",
       "www.cardedeu.cat",
+      "bibliotecacardedeu.cat",
+      "www.bibliotecacardedeu.cat",
+      "https://www.bibliotecacardedeu.cat/*",
+      "https://www.bibliotecacardedeu.cat",
+      "http://www.bibliotecacardedeu.cat",
+      "www.bibliotecacardedeu.cat",
+      "https://www.bibliotecacardedeu.cat/*",
+      "res.cloudinary.com",
     ],
   },
   async headers() {

@@ -112,16 +112,22 @@ async function resizeImageFile(
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Output as JPEG for better compression for photos/posters
-      const resizedImageDataUrl = canvas.toDataURL("image/jpeg", quality);
-      const base64Data = resizedImageDataUrl.split(",")[1];
-
-      URL.revokeObjectURL(img.src); // Clean up object URL
-
-      resolve({
-        base64Data,
-        imageType: "image/jpeg", // Output type is JPEG
-      });
+      // Output as Blob for better efficiency
+      canvas.toBlob(
+        (blob) => {
+          URL.revokeObjectURL(img.src); // Clean up object URL
+          if (blob) {
+            resolve({
+              blob,
+              imageType: "image/jpeg", // Output type is JPEG
+            });
+          } else {
+            reject(new Error("Failed to create blob from canvas"));
+          }
+        },
+        "image/jpeg",
+        quality
+      );
     };
     img.onerror = (error) => {
       URL.revokeObjectURL(img.src); // Clean up object URL on error
@@ -162,6 +168,12 @@ export default function Publica() {
   const [imageAnalyzed, setImageAnalyzed] = useState(false);
   const [showAiWarning, setShowAiWarning] = useState(false);
   const titleInputRef = useRef(null);
+  const [existingEventWarning, setExistingEventWarning] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(null);
+  // Add ref for submission notifications area
+  const submissionNotificationsRef = useRef(null);
 
   const showFormAndScroll = () => {
     setFormVisible(true);
@@ -174,6 +186,18 @@ export default function Publica() {
         });
       }
     }, 50);
+  };
+
+  // Add function to scroll to submission notifications
+  const scrollToSubmissionNotifications = () => {
+    setTimeout(() => {
+      if (submissionNotificationsRef.current) {
+        submissionNotificationsRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 100);
   };
 
   const handleFormChange = (name, value) => {
@@ -197,6 +221,9 @@ export default function Publica() {
     setShowAiWarning(false);
     setFormVisible(false);
     setAnalysisError(null);
+    setUploadError(null); // Clear any previous upload errors
+    setStatusMessage(""); // Clear status message
+    setSuccessMessage(null); // Clear success message
   };
 
   const handleAnalyzeImage = async () => {
@@ -251,7 +278,17 @@ export default function Publica() {
 
     try {
       // Resize the image first
-      const { base64Data, imageType } = await resizeImageFile(imageToUpload);
+      const { blob, imageType } = await resizeImageFile(imageToUpload);
+
+      // Convert blob to base64 for API call
+      const base64Data = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64 = reader.result.split(",")[1];
+          resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+      });
 
       const response = await fetch("/api/analyzeImage", {
         method: "POST",
@@ -353,6 +390,9 @@ export default function Publica() {
     setShowAiWarning(false);
     setAnalysisError(null);
     setImageToUpload(null); // Clear any uploaded image if skipping
+    setUploadError(null); // Clear upload errors
+    setStatusMessage(""); // Clear status message
+    setSuccessMessage(null); // Clear success message
     showFormAndScroll();
   };
 
@@ -360,6 +400,73 @@ export default function Publica() {
     pathname: `${url}`,
     query: { newEvent: true },
   });
+
+  // Refactored event creation logic
+  const proceedWithEventCreation = async () => {
+    setIsLoading(true); // Ensure loading is true when we proceed
+    setUploadError(null); // Clear any previous upload errors
+    setSuccessMessage(null); // Clear any previous success messages
+    setStatusMessage("Creant esdeveniment...");
+    scrollToSubmissionNotifications(); // Auto-scroll to show status
+
+    try {
+      const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...form, imageUploaded: !!imageToUpload }),
+      });
+      const { id } = await rawResponse.json();
+
+      const { formattedStart } = getFormattedDate(form.startDate, form.endDate);
+      const slugifiedTitle = slug(form.title, formattedStart, id);
+
+      if (imageToUpload) {
+        setStatusMessage("Processant imatge...");
+        // Always resize image before upload to handle large mobile camera photos
+        try {
+          const { blob, imageType } = await resizeImageFile(imageToUpload);
+          // Create File object from blob for upload
+          const resizedFile = new File([blob], imageToUpload.name, {
+            type: imageType, // Use the actual image type from resizeImageFile
+          });
+          setStatusMessage("Pujant imatge...");
+          uploadFile(id, slugifiedTitle, resizedFile);
+        } catch (resizeError) {
+          console.error("Error resizing image:", resizeError);
+          setStatusMessage("Pujant imatge original...");
+          // Fallback to original file if resize fails
+          uploadFile(id, slugifiedTitle, imageToUpload);
+        }
+      } else {
+        setStatusMessage("Finalitzant...");
+        setSuccessMessage("Esdeveniment creat correctament!");
+        setTimeout(() => {
+          router.push(goToEventPage(`/${slugifiedTitle}`));
+        }, 1000);
+      }
+    } catch (error) {
+      console.error("Error proceeding with event creation:", error);
+      setIsLoading(false);
+      setStatusMessage("");
+      setUploadError(
+        "Error creant l'esdeveniment. Si us plau, torna-ho a intentar."
+      );
+      scrollToSubmissionNotifications(); // Auto-scroll to show error
+    }
+  };
+
+  const handleContinueWithCreation = () => {
+    setExistingEventWarning(null);
+    proceedWithEventCreation();
+  };
+
+  const handleCancelCreation = () => {
+    setExistingEventWarning(null);
+    setIsLoading(false);
+  };
 
   const onSubmit = async () => {
     const newFormState = createFormState(
@@ -374,42 +481,132 @@ export default function Publica() {
     if (!newFormState.isDisabled) {
       setIsLoading(true);
 
-      const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...form, imageUploaded: !!imageToUpload }),
-      });
-      const { id } = await rawResponse.json();
+      // ---- START: New code to check for existing event ----
+      try {
+        const { title, startDate, endDate, location } = form;
+        const params = new URLSearchParams();
+        params.append("title", title);
+        if (startDate) {
+          params.append("startDate", startDate.toISOString());
+        }
+        if (endDate) {
+          params.append("endDate", endDate.toISOString());
+        }
+        if (location) {
+          params.append("location", location);
+        }
 
-      const { formattedStart } = getFormattedDate(form.startDate, form.endDate);
-      const slugifiedTitle = slug(form.title, formattedStart, id);
+        const checkEventUrl = `/api/checkExistingEvent?${params.toString()}`;
+        console.log("Checking for existing event with URL:", checkEventUrl);
 
-      imageToUpload
-        ? uploadFile(id, slugifiedTitle)
-        : router.push(goToEventPage(`/${slugifiedTitle}`));
+        const checkResponse = await fetch(checkEventUrl);
+
+        // Improved error handling for JSON parsing
+        let existingEvent = null;
+        try {
+          existingEvent = await checkResponse.json();
+        } catch (jsonError) {
+          console.error(
+            "Failed to parse JSON response from checkExistingEvent:",
+            jsonError
+          );
+          // If JSON parsing fails, treat as no existing event found and proceed
+          setExistingEventWarning(null);
+          await proceedWithEventCreation();
+          return;
+        }
+
+        if (checkResponse.ok && existingEvent) {
+          console.log("Existing event found:", existingEvent);
+          setExistingEventWarning(existingEvent);
+          setIsLoading(false); // Stop loading while user decides
+          scrollToSubmissionNotifications(); // Auto-scroll to show warning
+          return; // Stop here, wait for user action
+        } else {
+          if (!checkResponse.ok) {
+            console.warn(
+              "Failed to check for existing event, status:",
+              checkResponse.status,
+              "response:",
+              existingEvent
+            );
+          }
+          // No event found or error in check, proceed with creation
+          setExistingEventWarning(null); // Clear any previous warning
+          await proceedWithEventCreation();
+        }
+      } catch (error) {
+        console.error("Error checking for existing event:", error);
+        // If the check fails, we still proceed with the event creation.
+        setExistingEventWarning(null); // Clear any previous warning
+        await proceedWithEventCreation();
+      }
+      // ---- END: Modified code to check for existing event ----
     }
   };
 
-  const uploadFile = (id, slugifiedTitle) => {
+  const uploadFile = (id, slugifiedTitle, file) => {
     const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
     const xhr = new XMLHttpRequest();
     const fd = new FormData();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
+    // Set timeout to prevent infinite loading (30 seconds)
+    xhr.timeout = 30000;
+
     xhr.upload.addEventListener("progress", (e) => {
-      setProgress(Math.round((e.loaded * 100.0) / e.total));
+      const progressPercent = Math.round((e.loaded * 100.0) / e.total);
+      setProgress(progressPercent);
+      setStatusMessage(`Pujant imatge... ${progressPercent}%`);
     });
 
     xhr.onreadystatechange = (e) => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        const public_id = JSON.parse(xhr.responseText).public_id;
-        console.log(public_id);
-        router.push(goToEventPage(`/${slugifiedTitle}`));
+      if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+          const public_id = JSON.parse(xhr.responseText).public_id;
+          console.log(public_id);
+          setStatusMessage("Finalitzant...");
+          setSuccessMessage("Esdeveniment i imatge pujats correctament!");
+          setTimeout(() => {
+            router.push(goToEventPage(`/${slugifiedTitle}`));
+          }, 1000);
+        } else {
+          // Handle HTTP errors (non-200 status codes)
+          console.error(`Upload failed: HTTP ${xhr.status}`, xhr.responseText);
+          setIsLoading(false);
+          setProgress(0);
+          setStatusMessage("");
+          setUploadError(
+            `Error pujant la imatge (HTTP ${xhr.status}). Si us plau, torna-ho a intentar.`
+          );
+          scrollToSubmissionNotifications(); // Auto-scroll to show error
+        }
       }
+    };
+
+    // Handle upload errors
+    xhr.onerror = () => {
+      console.error("Upload failed: Network error");
+      setIsLoading(false);
+      setProgress(0);
+      setStatusMessage("");
+      setUploadError(
+        "Error de xarxa pujant la imatge. Si us plau, comprova la connexió i torna-ho a intentar."
+      );
+      scrollToSubmissionNotifications(); // Auto-scroll to show error
+    };
+
+    // Handle upload timeout
+    xhr.ontimeout = () => {
+      console.error("Upload failed: Timeout");
+      setIsLoading(false);
+      setProgress(0);
+      setStatusMessage("");
+      setUploadError(
+        "La pujada de la imatge ha trigat massa temps. Si us plau, torna-ho a intentar."
+      );
+      scrollToSubmissionNotifications(); // Auto-scroll to show error
     };
 
     fd.append(
@@ -417,7 +614,7 @@ export default function Publica() {
       process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET
     );
     fd.append("tags", "browser_upload");
-    fd.append("file", imageToUpload);
+    fd.append("file", file);
     fd.append("public_id", id);
     xhr.send(fd);
   };
@@ -550,6 +747,91 @@ export default function Publica() {
               </div>
             )}
 
+            {/* Submission-related notifications - moved here to be closer to submit button */}
+            <div ref={submissionNotificationsRef} className="space-y-4">
+              {/* Upload Error Notification */}
+              {uploadError && (
+                <Notification
+                  type="error"
+                  customNotification={false}
+                  hideNotification={() => setUploadError(null)}
+                  title="Error de Pujada"
+                  message={uploadError}
+                />
+              )}
+
+              {/* Success Notification */}
+              {successMessage && (
+                <Notification
+                  type="success"
+                  customNotification={false}
+                  hideNotification={() => setSuccessMessage(null)}
+                  title="Èxit"
+                  message={successMessage}
+                />
+              )}
+
+              {/* Status Message */}
+              {statusMessage && (
+                <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <svg
+                        className="h-5 w-5 text-blue-400 animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-blue-800">
+                        {statusMessage}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {existingEventWarning && (
+              <Notification
+                type="warning"
+                title="Esdeveniment Similar Trobat"
+                customNotification={false}
+                hideNotification={() => setExistingEventWarning(null)}
+                message={`Ja existeix un esdeveniment amb un títol similar programat per a una data propera: <strong>"${existingEventWarning.title}"</strong> (${existingEventWarning.formattedStart}). <br/><br/>Pots veure'l aquí: <a href="/${existingEventWarning.slug}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${existingEventWarning.title}</a><br/><br/>Vols continuar i crear aquest nou esdeveniment de totes maneres?`}
+                actions={
+                  <>
+                    <button
+                      onClick={handleContinueWithCreation}
+                      className="mr-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
+                    >
+                      Descarta i Continua
+                    </button>
+                    <button
+                      onClick={handleCancelCreation}
+                      className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Cancel·la
+                    </button>
+                  </>
+                }
+              />
+            )}
             <div className="pt-5">
               <div className="flex justify-end">
                 <button
