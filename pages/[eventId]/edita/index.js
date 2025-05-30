@@ -92,7 +92,23 @@ export default function Edita({ event }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    setForm(event);
+    // Convert string dates to Date objects if needed
+    const processedEvent = {
+      ...event,
+      startDate:
+        event.startDate instanceof Date
+          ? event.startDate
+          : typeof event.startDate === "string"
+          ? new Date(event.startDate)
+          : event.startDate,
+      endDate:
+        event.endDate instanceof Date
+          ? event.endDate
+          : typeof event.endDate === "string"
+          ? new Date(event.endDate)
+          : event.endDate,
+    };
+    setForm(processedEvent);
   }, [event]);
 
   useEffect(() => {
@@ -282,8 +298,43 @@ export default function Edita({ event }) {
               />
 
               <DatePicker
-                startDate={form.startDate || event.startDate}
-                endDate={form.endDate || event.endDate}
+                key={`${
+                  (form.startDate instanceof Date
+                    ? form.startDate
+                    : event.startDate instanceof Date
+                    ? event.startDate
+                    : typeof event.startDate === "string"
+                    ? new Date(event.startDate)
+                    : null
+                  )?.getTime() || "start-null"
+                }-${
+                  (form.endDate instanceof Date
+                    ? form.endDate
+                    : event.endDate instanceof Date
+                    ? event.endDate
+                    : typeof event.endDate === "string"
+                    ? new Date(event.endDate)
+                    : null
+                  )?.getTime() || "end-null"
+                }`}
+                initialStartDate={
+                  form.startDate instanceof Date
+                    ? form.startDate
+                    : event.startDate instanceof Date
+                    ? event.startDate
+                    : typeof event.startDate === "string"
+                    ? new Date(event.startDate)
+                    : null
+                }
+                initialEndDate={
+                  form.endDate instanceof Date
+                    ? form.endDate
+                    : event.endDate instanceof Date
+                    ? event.endDate
+                    : typeof event.endDate === "string"
+                    ? new Date(event.endDate)
+                    : null
+                }
                 onChange={handleChangeDate}
               />
 
