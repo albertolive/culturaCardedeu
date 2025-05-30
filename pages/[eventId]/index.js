@@ -469,7 +469,7 @@ export default function Event(props) {
         }
       >
         {newEvent && (
-          <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+          <div className="mb-6 mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
             <p className="text-sm text-green-800 mb-3">
               <strong>Fantàstic!</strong> El teu esdeveniment{" "}
               <strong>&quot;{title}&quot;</strong> ja és visible per a tothom a
@@ -568,7 +568,8 @@ export default function Event(props) {
                 </h4>
                 <ul className="text-xs text-blue-700 space-y-1">
                   <li>
-                    • L&apos;esdeveniment apareixerà a l&apos;agenda principal
+                    • L&apos;esdeveniment apareixerà a l&apos;agenda principal i
+                    a totes les nostres xarxes socials.
                   </li>
                   <li>
                     • La gent el podrà trobar cercant per data, ubicació o
