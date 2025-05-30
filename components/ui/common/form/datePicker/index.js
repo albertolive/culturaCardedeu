@@ -117,7 +117,7 @@ const DateComponent = ({
       previousMonthButtonLabel="<"
       popperClassName="react-datepicker-left"
       popperPlacement="top-end"
-      dateFormat="d MMMM, yyyy hh:mm aa"
+      dateFormat="d MMMM, yyyy HH:mm"
       customInput={<ButtonInput />}
       renderCustomHeader={({
         date,
