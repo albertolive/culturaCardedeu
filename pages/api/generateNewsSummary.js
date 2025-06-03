@@ -59,32 +59,40 @@ async function handler(req, res) {
     `🚀 ${LOG_PREFIX} Starting news summary generation (Structured JSON + Tailwind HTML Assembly)...`
   );
 
-  const requestOrigin = req.headers.origin;
-  if (requestOrigin) {
-    if (process.env.NODE_ENV === "production") {
-      const allowedProdOrigins = [
-        "https://www.culturacardedeu.com",
-        "http://www.culturacardedeu.com",
-        "www.culturacardedeu.com",
-      ]; // Replace with your domain
-      if (!allowedProdOrigins.includes(requestOrigin)) {
-        console.log(
-          `❌ ${LOG_PREFIX} Forbidden origin in production:`,
-          requestOrigin
-        );
-        return res.status(403).json({ error: "Forbidden: Invalid origin." });
-      }
-    } else {
-      if (!/^http:\/\/localhost:\d+$/.test(requestOrigin) && requestOrigin) {
-        console.log(
-          `❌ ${LOG_PREFIX} Forbidden origin in development:`,
-          requestOrigin
-        );
-        return res
-          .status(403)
-          .json({ error: "Forbidden: Invalid origin in development." });
-      }
+  // Authentication: GitHub Actions (via secret token) + localhost for development
+  if (process.env.NODE_ENV === "production") {
+    // In production, require secret token for GitHub Actions
+    const authToken =
+      req.headers.authorization?.replace("Bearer ", "") ||
+      req.headers["x-api-token"];
+    const expectedToken = process.env.WORKFLOW_SECRET;
+
+    if (!expectedToken) {
+      console.error(`❌ ${LOG_PREFIX} WORKFLOW_SECRET not configured`);
+      return res.status(500).json({ error: "Server configuration error." });
     }
+
+    if (!authToken || authToken !== expectedToken) {
+      console.log(`❌ ${LOG_PREFIX} Unauthorized access attempt in production`);
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or missing token." });
+    }
+
+    console.log(`✅ ${LOG_PREFIX} Authenticated GitHub Actions request`);
+  } else {
+    // In development, allow localhost only
+    const requestOrigin = req.headers.origin;
+    if (requestOrigin && !/^http:\/\/localhost:\d+$/.test(requestOrigin)) {
+      console.log(
+        `❌ ${LOG_PREFIX} Forbidden origin in development:`,
+        requestOrigin
+      );
+      return res
+        .status(403)
+        .json({ error: "Forbidden: Invalid origin in development." });
+    }
+    console.log(`✅ ${LOG_PREFIX} Development request from localhost`);
   }
   if (req.method !== "POST" && req.method !== "GET") {
     console.log(`❌ ${LOG_PREFIX} Invalid method:`, req.method);
@@ -103,6 +111,11 @@ async function handler(req, res) {
     NEXT_PUBLIC_CREATE_NEWS_EVENT: process.env.NEXT_PUBLIC_CREATE_NEWS_EVENT,
     NEXT_PUBLIC_DOMAIN_URL: process.env.NEXT_PUBLIC_DOMAIN_URL,
   };
+
+  // Check WORKFLOW_SECRET only in production
+  if (process.env.NODE_ENV === "production") {
+    criticalEnvVars.WORKFLOW_SECRET = process.env.WORKFLOW_SECRET;
+  }
   for (const [key, value] of Object.entries(criticalEnvVars)) {
     console.log(`- ${key}:`, value ? "✅ Set" : "❌ Missing");
     if (!value) {
