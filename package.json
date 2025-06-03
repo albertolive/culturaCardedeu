@@ -14,7 +14,9 @@
     "start:production": "NODE_ENV=production env-cmd -f .env.production next start",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-news": "curl -X POST -H 'Content-Type: application/json' https://esdeveniments.cat/api/generateNewsSummary",
+    "setup-calendar": "node scripts/setupCalendar.js"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.10",

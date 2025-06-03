@@ -46,6 +46,7 @@ const nextConfig = {
       "www.bibliotecacardedeu.cat",
       "https://www.bibliotecacardedeu.cat/*",
       "res.cloudinary.com",
+      "localhost",
     ],
   },
   async headers() {
