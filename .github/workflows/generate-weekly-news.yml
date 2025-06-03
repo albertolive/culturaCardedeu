@@ -18,6 +18,7 @@ jobs:
           echo "🔄 Calling deployed API to generate weekly news..."
           response=$(curl -s -w "\n%{http_code}" \
             -X POST \
+            -H "Authorization: Bearer ${{ secrets.WORKFLOW_SECRET }}" \
             -H "Content-Type: application/json" \
             https://esdeveniments.cat/api/generateNewsSummary)
 
