@@ -1,8 +1,12 @@
 import { withSentry } from "@sentry/nextjs"; // Assuming you use Sentry
 import OpenAI from "openai";
-import { week as getWeekDateRange } from "@lib/dates"; // Ensure this path is correct
+import {
+  week as getWeekDateRange,
+  weekend as getWeekendDateRange,
+} from "@lib/dates"; // Ensure this path is correct
 import { getCalendarEvents } from "@lib/helpers"; // Ensure this path is correct
 import { slug } from "@utils/helpers"; // Ensure this path is correct
+import { MONTHS } from "@utils/constants"; // Import Catalan month names
 
 // Helper function to strip HTML tags and clean text
 function stripHtmlAndClean(text) {
@@ -17,6 +21,44 @@ function stripHtmlAndClean(text) {
     .replace(/&#39;/g, "'")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+// Helper function to format week range in Catalan
+function formatWeekRangeInCatalan(from, until) {
+  const startDate = new Date(from);
+  const endDate = new Date(until);
+
+  // Adjust end date to be the last day of the week (Sunday)
+  const adjustedEndDate = new Date(endDate);
+  adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+
+  const startDay = startDate.getDate();
+  const endDay = adjustedEndDate.getDate();
+  const month = adjustedEndDate.getMonth(); // Use end date month as it's more reliable for week ranges
+  const year = adjustedEndDate.getFullYear();
+
+  const monthName = MONTHS[month];
+
+  return `Setmana del ${startDay} al ${endDay} de ${monthName} de ${year}`;
+}
+
+// Helper function to format weekend range in Catalan
+function formatWeekendRangeInCatalan(from, until) {
+  const startDate = new Date(from);
+  const endDate = new Date(until);
+
+  // Adjust end date to be the last day of the weekend (Sunday)
+  const adjustedEndDate = new Date(endDate);
+  adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+
+  const startDay = startDate.getDate();
+  const endDay = adjustedEndDate.getDate();
+  const month = adjustedEndDate.getMonth();
+  const year = adjustedEndDate.getFullYear();
+
+  const monthName = MONTHS[month];
+
+  return `Cap de setmana del ${startDay} al ${endDay} de ${monthName} de ${year}`;
 }
 
 // Helper function to generate event URL
@@ -55,8 +97,13 @@ function prepareEventForAIAndAssembly(eventFromGetCalendarEvents) {
 
 async function handler(req, res) {
   const LOG_PREFIX = "[generateNewsSummary]";
+
+  // Determine summary type from query parameter
+  const summaryType = req.query.type || "weekly";
+  const isWeekendSummary = summaryType === "weekend";
+
   console.log(
-    `🚀 ${LOG_PREFIX} Starting news summary generation (Structured JSON + Tailwind HTML Assembly)...`
+    `🚀 ${LOG_PREFIX} Starting ${summaryType} summary generation (Structured JSON + Tailwind HTML Assembly)...`
   );
 
   // Authentication: GitHub Actions (via secret token) + localhost for development
@@ -146,14 +193,16 @@ async function handler(req, res) {
   });
 
   try {
-    const { from, until } = getWeekDateRange();
+    const { from, until } = isWeekendSummary
+      ? getWeekendDateRange()
+      : getWeekDateRange();
     console.log(
       `📥 ${LOG_PREFIX} Fetching source calendar events for ${from.toISOString()} to ${until.toISOString()}...`
     );
     const { events } = await getCalendarEvents({
       from,
       until,
-      maxResults: 5,
+      maxResults: 20,
       filterByDate: false,
     });
     console.log(`📥 ${LOG_PREFIX} Raw events fetched:`, events?.length || 0);
@@ -167,11 +216,20 @@ async function handler(req, res) {
 
     if (cleanEventsForAIContextAndAssembly.length === 0) {
       console.log(`😴 ${LOG_PREFIX} No events found, using fallback summary.`);
-      summaryOutput = {
-        title: "Una setmana tranquil·la a Cardedeu", // Adapt city
-        summary:
-          '<p class="text-lg text-gray-700">Aquesta setmana serà més tranquil·la al món cultural de Cardedeu. Aprofita per descobrir els racons més bonics del poble o gaudir d\'una bona lectura!</p>',
-      };
+
+      if (isWeekendSummary) {
+        summaryOutput = {
+          title: "Un cap de setmana tranquil a Cardedeu",
+          summary:
+            '<p class="text-lg text-gray-700 mb-6">Aquest cap de setmana serà més tranquil al món cultural de Cardedeu. Aprofita per passejar pels carrers del centre històric, gaudir de la natura als voltants o relaxar-te amb una bona lectura!</p>',
+        };
+      } else {
+        summaryOutput = {
+          title: "Una setmana tranquil·la a Cardedeu", // Adapt city
+          summary:
+            '<p class="text-lg text-gray-700 mb-6">Aquesta setmana serà més tranquil·la al món cultural de Cardedeu. Aprofita per descobrir els racons més bonics del poble o gaudir d\'una bona lectura!</p>',
+        };
+      }
     } else {
       const eventContextForAI = cleanEventsForAIContextAndAssembly
         .map(
@@ -190,62 +248,111 @@ async function handler(req, res) {
         )
         .join("\n\n");
 
+      // Format the date range in Catalan
+      const formattedDateRange = isWeekendSummary
+        ? formatWeekendRangeInCatalan(from, until)
+        : formatWeekRangeInCatalan(from, until);
+
       console.log(
         `🤖 ${LOG_PREFIX} Generating AI summary using structured JSON approach...`
       );
-      const newPromptForStructuredJson = `
-Ets un redactor cultural expert per a Cardedeu. La teva tasca és generar el contingut per a un post setmanal de notícies culturals.
-Has de retornar un objecte JSON. No incloguis comentaris ni text fora del JSON.
 
-CONTEXT DELS ESDEVENIMENTS DE LA SETMANA (utilitza això per informar la teva redacció):
-${eventContextForAI}
+      const promptPrefix = `Ets un assistent expert en generar contingut cultural estructurat en format JSON per a una web d'agenda cultural. Respon sempre en català. El contingut ha de seguir aquestes directrius:`;
 
-ESTRUCTURA JSON DE RESPOSTA REQUERIDA:
-{
-  "seoTitle": "Un títol SEO concís i atractiu per a la pàgina de notícies (màx 60 caràcters, text pla). Inclou Cardedeu i paraules clau com 'agenda', 'plans', 'esdeveniments'. Aquest serà el títol principal de l'article (H1 a la pàgina).",
-  "introductionHtml": "<p class=\"text-lg text-gray-700 mb-6\">Un paràgraf introductori (~100 paraules) en HTML que doni la benvinguda i presenti breument la setmana cultural. Inclou Cardedeu. Utilitza classes de Tailwind per a l'estil si ho consideres (ex: text-lg, text-gray-700, mb-6).</p>",
-  "highlightedEvents": [
-    {
-      "originalEventId": "L'ID de l'esdeveniment original del context (ex: 'event_id_1'). Això és CRUCIAL per mapejar imatges posteriorment.",
-      "aiGeneratedHeadingText": "Un títol breu i atractiu per a aquest esdeveniment destacat (text pla, sense HTML). Pot incloure un emoji rellevant al principi. Aquest text s'utilitzarà dins d'un <h2>.",
-      "aiGeneratedDescriptionHtml": "<div class=\"text-gray-700 leading-relaxed\"><p>1-2 paràgrafs en HTML (<200 paraules en total) descrivint aquest esdeveniment de forma engrescadora. Inclou detalls clau. IMPRESCINDIBLE: dins d'aquesta descripció, crea un enllaç HTML <a class=\"text-blue-600 hover:text-blue-800 hover:underline font-medium\" href=\"URL_ENLLAÇ_DEL_CONTEXT\" title=\"TÍTOL_ORIGINAL_DEL_CONTEXT\">TEXT_DE_L_ENLLAÇ</a> cap a la pàgina de l'esdeveniment utilitzant la 'URL Enllaç' del context. El text de l'enllaç ha de ser el 'Títol Original' de l'esdeveniment o similar. L'atribut 'title' de l'enllaç també hauria de ser el 'Títol Original'. Pots utilitzar classes de Tailwind per a l'estil de l'enllaç.</p></div>"
-    }
-    // Repeteix aquesta estructura per a 4-6 esdeveniments destacats del context.
-  ],
-  "conclusionHtml": "<p class=\"text-lg text-gray-700 mt-8\">Un paràgraf de conclusió (~100 paraules) en HTML amb una crida a l'acció o una reflexió final. Anima a explorar més. Utilitza classes de Tailwind.</p>"
-}
+      const contextSection = `CONTEXT DELS ESDEVENIMENTS ${
+        isWeekendSummary ? "DEL CAP DE SETMANA" : "DE LA SETMANA"
+      } (utilitza això per informar la teva redacció):
+      ${eventContextForAI}
 
-Instruccions addicionals:
-- Selecciona entre 4 i 6 dels esdeveniments més interessants del context per destacar.
-- Per cada esdeveniment destacat, assegura't que el "originalEventId" en el JSON correspon exactament a un "ID" del context proporcionat.
-- La "aiGeneratedDescriptionHtml" ha d'incloure l'enllaç <a> com s'ha especificat.
-- Mantingues un to proper, informatiu i entusiasta. Utilitza "Cardedeu" de forma natural.
-- Tot l'HTML generat dins dels camps ...Html ha d'estar ben format.
-`;
+      ${
+        isWeekendSummary ? "CAP DE SETMANA" : "SETMANA"
+      } A RESUMIR: ${formattedDateRange}
+              IMPORTANT: El títol SEO ha d'incloure exactament aquesta franja de dates i el mes correcte tal com s'indica aquí dalt.`;
+
+      const periodWord = isWeekendSummary ? "cap de setmana" : "setmana";
+
+      // Multiple creative examples inspired by Time Out Barcelona approach
+      const seoTitleExamples = isWeekendSummary
+        ? [
+            "Que fer aquest cap de setmana a Cardedeu – Els millors plans del 3 al 5 de juny",
+            "Cap de setmana perfecte a Cardedeu: del 3 al 5 de juny de 2024",
+            "Descobreix Cardedeu aquest cap de setmana – Plans del 3 al 5 de juny",
+            "Cultura i diversió a Cardedeu: cap de setmana del 3 al 5 de juny",
+            "Els imprescindibles del cap de setmana a Cardedeu – 3 al 5 de juny",
+            "Cardedeu t'espera aquest cap de setmana: plans del 3 al 5 de juny",
+          ]
+        : [
+            "Agenda cultural a Cardedeu – Setmana del 3 al 9 de juny: dansa, escacs i exposicions",
+            "Setmana cultural a Cardedeu: del 3 al 9 de juny de 2024",
+            "Què fer aquesta setmana a Cardedeu – Plans del 3 al 9 de juny",
+            "Cultura en directe a Cardedeu: setmana del 3 al 9 de juny",
+            "Els millors events de la setmana a Cardedeu – 3 al 9 de juny",
+            "Cardedeu vibra aquesta setmana: agenda del 3 al 9 de juny",
+            "Descobreix la setmana cultural de Cardedeu – 3 al 9 de juny",
+          ];
+
+      const seoTitleExample =
+        seoTitleExamples[Math.floor(Math.random() * seoTitleExamples.length)];
+
+      const instructionsSection = `1. La resposta ha de ser un objecte JSON estructurat amb les següents claus:
+        - "seoTitle": títol optimitzat per a cercadors (aproximat d'uns 50-60 caràcters), amb el nom del poble i la franja de dates. Sigues CREATIU i ORIGINAL! Pots usar diferents estils: pregunta directa ("Què fer..."), descriptiu ("Cultura i diversió..."), emotiu ("Cardedeu t'espera..."), o informatiu ("Els millors events..."). Exemple: "${seoTitleExample}".
+        - "metaDescription": descripció breu de 150-160 caràcters per a SEO, que resumeixi la proposta del ${periodWord}.
+        - "introduction": paràgraf introductori en HTML amb classes EXACTES: class="text-lg text-gray-700 mb-6"
+        - "events": array d'esdeveniments amb:
+          - "originalEventId": identificador original
+          - "heading": títol breu i cridaner de l'activitat
+          - "description": paràgraf en HTML amb classes EXACTES: class="text-lg text-gray-700 mb-4", explicant data, hora, lloc i un enllaç amb el títol.
+        - "conclusion": paràgraf en HTML amb classes EXACTES: class="text-lg text-gray-700 mt-8"
+
+      2. Estil:
+        - To periodístic, proper i informatiu
+        - Ús de català correcte i ric
+        - Evita frases genèriques; destaca què fa especial cada activitat
+        - OBLIGATORI: utilitza sempre les classes EXACTES especificades per cada element
+
+      3. Important:
+        - Tot el contingut ha de ser 100% en català
+        - Les dates han d'estar en format llarg amb el dia i el mes (ex: "el 6 de juny a les 19:00")
+        - Els enllaços han de tenir EXACTAMENT aquestes classes: class="text-[#ECB84A] underline"
+        - Mai utilitzis altres classes de Tailwind, només les especificades aquí`;
+
+      const newPromptForStructuredJson = `${promptPrefix}
+
+      ${contextSection}
+      ${instructionsSection}
+
+      Resposta només amb el JSON sol·licitat.`;
+
+      const agendaOrPlans = isWeekendSummary
+        ? "plans de cap de setmana"
+        : "agenda cultural";
+      const systemPrompt = `Ets un assistent especialitzat en continguts culturals de Cardedeu. Redacta un resum ${
+        isWeekendSummary ? "del cap de setmana" : "setmanal"
+      } periodístic i SEO-òptim en català. Utilitza un to neutre i informatiu (tercera persona) i estructura el text en HTML semàntic amb títols (<h1>, <h2>), paràgrafs curts i llistes quan convingui. Emprar paraules clau rellevants (p. ex. 'Cardedeu', '${agendaOrPlans}', noms d'esdeveniments destacats) en titulars i descripcions. Inclou una meta descripció atractiva amb paraules clau al front. Assegura't que les classes de Tailwind CSS (per ex. text-lg, font-medium) s'apliquin a paràgrafs i enllaços quan pertoqui. Només respon en format JSON vàlid seguint l'esquema indicat, sense cap text extra. Respon sempre en català`;
 
       const aiResponse = await openai.chat.completions.create({
         model: "openai/gpt-4o",
         messages: [
           {
             role: "system",
-            content:
-              "Ets un assistent expert en generar contingut cultural estructurat en format JSON, seguint estrictament les especificacions. Respon sempre en català. Inclou classes de Tailwind CSS dins l'HTML generat quan sigui apropiat per a paràgrafs i enllaços.",
+            content: systemPrompt,
           },
           { role: "user", content: newPromptForStructuredJson },
         ],
-        max_tokens: 2500, // Increased for detailed structured JSON and potential Tailwind classes
-        temperature: 0.7,
+        max_tokens: 3500, // Increased for detailed structured JSON and potential Tailwind classes
+        temperature: 0.5,
         response_format: { type: "json_object" },
       });
 
       const aiMessageContent = aiResponse.choices[0].message.content;
+
       if (!aiMessageContent)
         throw new Error("OpenAI response content is empty.");
       const structuredAiData = JSON.parse(aiMessageContent);
       if (
         !structuredAiData ||
         !structuredAiData.seoTitle ||
-        !structuredAiData.highlightedEvents
+        !structuredAiData.events
       ) {
         throw new Error(
           "AI did not return the expected structured JSON format."
@@ -260,19 +367,18 @@ Instruccions addicionals:
         `🛠️ ${LOG_PREFIX} Assembling final HTML from structured AI data...`
       );
       let finalHtmlSummary = "";
-      finalHtmlSummary +=
-        structuredAiData.introductionHtml ||
-        `<p class="text-lg text-gray-700 mb-6">Comença la setmana amb energia cultural a Cardedeu!</p>`;
+      const defaultIntroduction = isWeekendSummary
+        ? `<p class="text-lg text-gray-700 mb-6">Descobreix els millors plans per gaudir aquest cap de setmana a Cardedeu!</p>`
+        : `<p class="text-lg text-gray-700 mb-6">Comença la setmana amb energia cultural a Cardedeu!</p>`;
 
-      if (
-        structuredAiData.highlightedEvents &&
-        Array.isArray(structuredAiData.highlightedEvents)
-      ) {
-        structuredAiData.highlightedEvents.forEach((aiEventSection, index) => {
+      finalHtmlSummary += structuredAiData.introduction || defaultIntroduction;
+
+      if (structuredAiData.events && Array.isArray(structuredAiData.events)) {
+        structuredAiData.events.forEach((aiEventSection, index) => {
           if (
             !aiEventSection.originalEventId ||
-            !aiEventSection.aiGeneratedHeadingText ||
-            !aiEventSection.aiGeneratedDescriptionHtml
+            !aiEventSection.heading ||
+            !aiEventSection.description
           ) {
             console.warn(
               `⚠️ ${LOG_PREFIX} Skipping malformed AI event section:`,
@@ -286,10 +392,7 @@ Instruccions addicionals:
           );
 
           let imageUrl = null;
-          let imageAltText = aiEventSection.aiGeneratedHeadingText.replace(
-            /"/g,
-            "&quot;"
-          );
+          let imageAltText = aiEventSection.heading.replace(/"/g, "&quot;");
 
           if (originalEvent) {
             let imgPath = null;
@@ -318,24 +421,25 @@ Instruccions addicionals:
           }
 
           // Spacing and separator: Add border to all except the last one.
-          const isLastItem =
-            index === structuredAiData.highlightedEvents.length - 1;
+          const isLastItem = index === structuredAiData.events.length - 1;
           const itemClasses = `news-highlight-item py-6 ${
             isLastItem ? "mb-6" : "mb-8 pb-8 border-b border-gray-200"
           }`;
 
           finalHtmlSummary += `<div class="${itemClasses}">`;
           if (imageUrl) {
-            finalHtmlSummary += `<img src="${imageUrl}" alt="${imageAltText}" class="w-full max-w-xl h-auto mb-4 rounded-lg block mx-auto shadow-md">`;
+            finalHtmlSummary += `<img src="${imageUrl}" alt="${imageAltText}" class="w-full max-w-sm h-auto mb-4 rounded-lg block mx-auto shadow-md">`;
           }
-          finalHtmlSummary += `<h2 class="text-2xl font-bold text-gray-800 mt-3 mb-3">${aiEventSection.aiGeneratedHeadingText}</h2>`;
-          finalHtmlSummary += aiEventSection.aiGeneratedDescriptionHtml; // This already has Tailwind classes from AI's prompt
+          finalHtmlSummary += `<h2 class="text-2xl font-bold text-gray-800 mt-3 mb-3">${aiEventSection.heading}</h2>`;
+          finalHtmlSummary += aiEventSection.description; // This already has Tailwind classes from AI's prompt
           finalHtmlSummary += `</div>`;
         });
       }
-      finalHtmlSummary +=
-        structuredAiData.conclusionHtml ||
-        `<p class="text-lg text-gray-700 mt-8">Consulta l'agenda completa per a més detalls!</p>`;
+      const defaultConclusion = isWeekendSummary
+        ? `<p class="text-lg text-gray-700 mt-8">Gaudeix al màxim d'aquest cap de setmana i consulta l'agenda completa per a més plans!</p>`
+        : `<p class="text-lg text-gray-700 mt-8">Consulta l'agenda completa per a més detalls!</p>`;
+
+      finalHtmlSummary += structuredAiData.conclusion || defaultConclusion;
       console.log(
         `✅ ${LOG_PREFIX} Final HTML assembled. Length:`,
         finalHtmlSummary.length
@@ -352,18 +456,26 @@ Instruccions addicionals:
     console.log(
       `📅 ${LOG_PREFIX} Preparing data for Pipedream to create calendar event...`
     );
-    const { from: weekStart } = getWeekDateRange();
-    const eventStartTime = new Date(weekStart);
+
+    // Use appropriate date range for calendar event based on summary type
+    const { from: eventRangeStart, until: eventRangeEnd } = isWeekendSummary
+      ? getWeekendDateRange()
+      : getWeekDateRange();
+    const eventStartTime = new Date(eventRangeStart);
     eventStartTime.setHours(0, 0, 0, 0);
-    const eventEndTime = new Date(eventStartTime);
+    const eventEndTime = new Date(eventRangeEnd);
     eventEndTime.setHours(23, 59, 59, 999);
 
     let selectedEventImageForCalendar = null;
     const firstEventWithImage = cleanEventsForAIContextAndAssembly.find(
-      (event) => event.images && event.images.length > 0
+      (event) =>
+        event.imageUploaded &&
+        event.imageUploaded.length > 0 &&
+        event.images &&
+        event.images.length > 0
     );
     if (firstEventWithImage) {
-      const imgPath = firstEventWithImage.images[0];
+      const imgPath = firstEventWithImage.imageUploaded;
       selectedEventImageForCalendar = imgPath.startsWith("http")
         ? imgPath
         : `${process.env.NEXT_PUBLIC_DOMAIN_URL}${
@@ -379,7 +491,7 @@ Instruccions addicionals:
       startDate: eventStartTime.toISOString(),
       endDate: eventEndTime.toISOString(),
       location: "Cardedeu", // Adapt city
-      colorId: "9",
+      colorId: isWeekendSummary ? "10" : "9", // Different color for weekend events
       eventImage: selectedEventImageForCalendar, // Main image for the GCal event if Pipedream uses it
     };
 

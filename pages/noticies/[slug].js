@@ -235,9 +235,6 @@ export default function NoticiaPage({ newsItem, hasError, notFound }) {
             <header className="bg-gray-800 px-8 py-8 border-b border-gray-200">
               <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
                 <div className="flex items-center space-x-2">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    📅 Resum Setmanal
-                  </span>
                   {newsItem.formattedStart && (
                     <time className="text-sm text-white font-medium">
                       Setmana del {newsItem.formattedStart}
@@ -258,7 +255,7 @@ export default function NoticiaPage({ newsItem, hasError, notFound }) {
                       navigator.clipboard.writeText(window.location.href);
                     }
                   }}
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-1"
+                  className="text-md text-[#ECB84A] hover:text-yellow-400 font-medium flex items-center space-x-1"
                 >
                   <span>📤</span>
                   <span>Compartir</span>
@@ -278,7 +275,7 @@ export default function NoticiaPage({ newsItem, hasError, notFound }) {
               <div className="prose prose-lg max-w-none">
                 {newsItem.description ? (
                   <div
-                    className="text-gray-700 leading-relaxed [&_a]:text-blue-600 [&_a]:underline [&_a:hover]:text-blue-800 [&_a]:font-medium"
+                    className="text-gray-700 leading-relaxed [&_a]:text-[#ECB84A] [&_a]:underline [&_a:hover]:text-yellow-400 [&_a]:font-medium"
                     style={{ whiteSpace: "pre-line" }}
                     dangerouslySetInnerHTML={{
                       __html: newsItem.description,

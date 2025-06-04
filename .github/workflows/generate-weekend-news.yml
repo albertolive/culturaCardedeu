@@ -1,0 +1,36 @@
+name: Generate Weekend News
+
+on:
+  schedule:
+    - cron: "0 6 * * 4" # Runs every Thursday at 06:00 UTC
+  workflow_dispatch: # Allows you to trigger it manually too
+
+jobs:
+  generate-weekend-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate weekend news summary
+        run: |
+          echo "🔄 Calling deployed API to generate weekend news..."
+          response=$(curl -s -w "\n%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.WORKFLOW_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "https://esdeveniments.cat/api/generateNewsSummary?type=weekend")
+
+          http_code=$(echo "$response" | tail -n1)
+          response_body=$(echo "$response" | head -n -1)
+
+          echo "📡 HTTP Status: $http_code"
+          echo "📝 Response: $response_body"
+
+          if [ "$http_code" -ne 200 ]; then
+            echo "❌ Failed to generate weekend news summary"
+            exit 1
+          else
+            echo "✅ Weekend news summary generated successfully!"
+          fi
