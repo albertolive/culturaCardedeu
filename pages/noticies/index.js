@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
 import SeoMeta from "../../components/partials/seo-meta";
 import { getNewsSummaries } from "../../lib/helpers";
 import {
@@ -9,6 +10,7 @@ import {
   generateNewsStructuredData,
   CARDEDEU_SEO_KEYWORDS,
 } from "../../lib/seo-utils";
+import { MONTHS } from "../../utils/constants";
 
 // Helper function to strip HTML tags for JSON-LD
 function stripHtmlAndClean(text) {
@@ -45,6 +47,57 @@ function getImageUrl(newsItem) {
   }
 
   return `${baseUrl}/static/images/banners/cultura-cardedeu-banner-0.jpeg`;
+}
+
+// Helper function to detect if this is a weekend summary
+function isWeekendSummary(newsItem) {
+  // Check if title contains weekend indicators
+  if (newsItem.title) {
+    return newsItem.title.toLowerCase().includes("cap de setmana");
+  }
+
+  // Fallback: check date range duration
+  if (newsItem.start?.dateTime && newsItem.end?.dateTime) {
+    const startDate = new Date(newsItem.start.dateTime);
+    const endDate = new Date(newsItem.end.dateTime);
+    const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    return daysDiff <= 3; // Weekend summaries are typically 3 days or less
+  }
+
+  return false;
+}
+
+// Helper function to format the summary period in Catalan
+function formatSummaryPeriod(newsItem) {
+  const isWeekend = isWeekendSummary(newsItem);
+
+  // If we have start and end dates, format the range
+  if (newsItem.start?.dateTime && newsItem.end?.dateTime) {
+    const startDate = new Date(newsItem.start.dateTime);
+    const endDate = new Date(newsItem.end.dateTime);
+
+    // Adjust end date to be the last day of the period
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+
+    const startDay = startDate.getDate();
+    const endDay = adjustedEndDate.getDate();
+    const month = adjustedEndDate.getMonth();
+    const year = adjustedEndDate.getFullYear();
+
+    const monthName = MONTHS[month];
+    const prefix = isWeekend ? "Cap de setmana del" : "Setmana del";
+
+    return `${prefix} ${startDay} al ${endDay} de ${monthName} de ${year}`;
+  }
+
+  // Fallback to original formattedStart if available
+  if (newsItem.formattedStart) {
+    const prefix = isWeekend ? "Cap de setmana del" : "Setmana del";
+    return `${prefix} ${newsItem.formattedStart}`;
+  }
+
+  return isWeekend ? "Cap de setmana" : "Setmana";
 }
 
 export default function NoticiesPage({ newsSummaries, hasError }) {
@@ -116,7 +169,7 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
       "@type": "ItemList",
       name: "Notícies Culturals de Cardedeu",
       description:
-        "Resums setmanals d'esdeveniments culturals, teatre, música i activitats familiars a Cardedeu",
+        "Resums setmanals i de caps de setmana d'esdeveniments culturals, teatre, música i activitats familiars a Cardedeu",
       url: `${baseUrl}/noticies`,
       numberOfItems: newsSummaries.length,
       itemListElement: newsJsonLd,
@@ -173,7 +226,7 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
     <>
       <SeoMeta
         title="Notícies Culturals Cardedeu - Portal Cultural Vallès Oriental"
-        description="Notícies culturals i resums setmanals de Cardedeu. Descobreix els millors esdeveniments, teatre, música i activitats familiars cada setmana."
+        description="Notícies culturals i resums setmanals i de caps de setmana de Cardedeu. Descobreix els millors esdeveniments, teatre, música i activitats familiars cada setmana."
         type="website"
         breadcrumbs={breadcrumbs}
         customKeywords={keywords}
@@ -233,72 +286,82 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
                         <div className="flex-1">
                           <Link href={`/noticies/${slug}`}>
                             <a className="hover:text-blue-600 transition-colors">
-                              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
+                              <h2 className="text-xl md:text-2xl font-bold text-white mb-2 hover:underline">
                                 {newsItem.title}
                               </h2>
                             </a>
                           </Link>
-                          {newsItem.formattedStart && (
-                            <time className="text-sm text-white font-medium">
-                              Setmana del {newsItem.formattedStart}
-                            </time>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            📅 Resum Setmanal
-                          </span>
+                          <time className="text-sm text-white font-medium">
+                            {formatSummaryPeriod(newsItem)}
+                          </time>
                         </div>
                       </div>
                     </div>
 
                     {/* Article Preview */}
                     <div className="px-6 py-4">
-                      <div className="text-gray-700 leading-relaxed">
-                        {newsItem.description ? (
-                          <div
-                            className="line-clamp-3"
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                newsItem.description.length > 200
-                                  ? `${newsItem.description.substring(
-                                      0,
-                                      200
-                                    )}...`
-                                  : newsItem.description,
-                            }}
-                          />
-                        ) : (
-                          <p className="text-gray-500 italic">
-                            No hi ha descripció disponible per aquest resum.
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="mt-4 flex items-center justify-between">
-                        <Link href={`/noticies/${slug}`}>
-                          <a className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
-                            Llegir més
-                            <svg
-                              className="ml-2 w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
+                      <div className="flex flex-col md:flex-row gap-4 items-stretch">
+                        <div className="flex-1 flex flex-col min-h-24 md:min-h-24">
+                          <div className="text-gray-700 leading-relaxed mb-3">
+                            {newsItem.description ? (
+                              <div
+                                className="line-clamp-3"
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    newsItem.description.length > 200
+                                      ? `${newsItem.description.substring(
+                                          0,
+                                          200
+                                        )}...`
+                                      : newsItem.description,
+                                }}
                               />
-                            </svg>
-                          </a>
-                        </Link>
-                        <time className="text-sm text-gray-500">
-                          {formatDateForDisplay(
-                            newsItem.start?.dateTime || new Date().toISOString()
-                          )}
-                        </time>
+                            ) : (
+                              <p className="text-gray-500 italic">
+                                No hi ha descripció disponible per aquest resum.
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between mt-auto pb-1">
+                            <Link href={`/noticies/${slug}`}>
+                              <a className="inline-flex items-center text-[#ECB84A] hover:text-yellow-400 focus:outline-none font-medium text-md">
+                                Llegir més
+                                <svg
+                                  className="ml-1 w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              </a>
+                            </Link>
+                            <time className="text-xs text-gray-500">
+                              {formatDateForDisplay(
+                                newsItem.start?.dateTime ||
+                                  new Date().toISOString()
+                              )}
+                            </time>
+                          </div>
+                        </div>
+
+                        {newsItem.eventImage && (
+                          <div className="flex-shrink-0">
+                            <Image
+                              src={newsItem.eventImage}
+                              alt={newsItem.title || "Imatge de l'esdeveniment"}
+                              width={128}
+                              height={128}
+                              className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg shadow-sm"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </article>
@@ -317,8 +380,9 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
                   No hi ha notícies disponibles
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Encara no tenim resums setmanals disponibles. Torna aviat per
-                  descobrir les últimes notícies culturals de Cardedeu.
+                  Encara no tenim resums setmanals o de caps de setmana
+                  disponibles. Torna aviat per descobrir les últimes notícies
+                  culturals de Cardedeu.
                 </p>
                 <div className="flex justify-center space-x-4">
                   <Link href="/avui-a-cardedeu">
