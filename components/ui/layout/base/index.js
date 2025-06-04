@@ -22,6 +22,12 @@ export default function BaseLayout({ children }) {
           type="application/rss+xml"
           href="/rss.xml"
         />
+        <link
+          rel="alternative"
+          title="RSS Feed Notícies Culturals"
+          type="application/rss+xml"
+          href="/api/rss-news"
+        />
       </Head>
       <Navbar />
       <div className="mx-auto pb-[85px]">

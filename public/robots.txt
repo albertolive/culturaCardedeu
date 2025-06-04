@@ -10,3 +10,4 @@ Host: https://www.culturacardedeu.com
 # Sitemaps
 Sitemap: https://www.culturacardedeu.com/sitemap.xml
 Sitemap: https://www.culturacardedeu.com/server-sitemap.xml
+Sitemap: https://www.culturacardedeu.com/api/sitemap-news
