@@ -545,7 +545,7 @@
     "@sentry/utils" "7.120.3"
     localforage "^1.8.1"
 
-"@sentry/nextjs@^7.35.0":
+"@sentry/nextjs@^7.120.3":
   version "7.120.3"
   resolved "https://registry.yarnpkg.com/@sentry/nextjs/-/nextjs-7.120.3.tgz#bc08ccc190387885274e4645623cfcee8df35f21"
   integrity sha512-dP7yyziUi7IzAfalakYzDDCwitI6pmh+9fKInsk4WeGRU+zRZphLOngj2ZYqUurjXeOUHaO3DIlnRB9R9WG5WA==
