@@ -52,34 +52,48 @@ function getImageUrl(newsItem) {
 // Helper function to detect if this is a weekend summary
 function isWeekendSummary(newsItem) {
   // Check if title contains explicit weekend indicators
-  if (newsItem.title && newsItem.title.toLowerCase().includes("cap de setmana")) {
+  if (
+    newsItem.title &&
+    newsItem.title.toLowerCase().includes("cap de setmana")
+  ) {
     return true;
   }
 
-  // Fallback: check start day and duration
-  if (newsItem.startDate && newsItem.start?.dateTime && newsItem.end?.dateTime) {
+  // Fallback: check start day and duration using newsItem.startDate and newsItem.endDate
+  if (newsItem.startDate && newsItem.endDate) {
     try {
-      const eventStartDate = new Date(newsItem.startDate);
-      const apiStartDate = new Date(newsItem.start.dateTime);
-      const apiEndDate = new Date(newsItem.end.dateTime);
+      const parsedStartDate = new Date(newsItem.startDate);
+      const parsedEndDate = new Date(newsItem.endDate);
 
       // Check if dates are valid
-      if (isNaN(eventStartDate.getTime()) || isNaN(apiStartDate.getTime()) || isNaN(apiEndDate.getTime())) {
-        console.error("Error processing dates in isWeekendSummary: Invalid date provided");
+      if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
+        console.error(
+          "Error processing dates in isWeekendSummary: Invalid date provided (startDate or endDate)"
+        );
         return false;
       }
 
-      const startDayOfWeek = eventStartDate.getDay(); // Sunday = 0, ... , Saturday = 6
-      const durationMs = apiEndDate.getTime() - apiStartDate.getTime();
+      const startDayOfWeek = parsedStartDate.getDay(); // Sunday = 0, ... , Saturday = 6
+      // Calculate duration based on parsedStartDate and parsedEndDate
+      const durationMs = parsedEndDate.getTime() - parsedStartDate.getTime();
       const daysDiff = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
 
-      if ((startDayOfWeek === 5 || startDayOfWeek === 6 || startDayOfWeek === 0) && daysDiff >= 1 && daysDiff <= 4) {
+      if (
+        (startDayOfWeek === 5 || // Friday
+          startDayOfWeek === 6 || // Saturday
+          startDayOfWeek === 0) && // Sunday
+        daysDiff >= 1 &&
+        daysDiff <= 4 // Duration 1 to 4 days
+      ) {
         return true;
       }
     } catch (e) {
-      // This catch block might now be less likely to be hit for date parsing errors,
-      // but kept for other potential errors within the try block.
-      console.error("Error processing dates in isWeekendSummary:", e);
+      // This catch block can still catch errors from new Date() if format is totally unparseable,
+      // or other unexpected errors.
+      console.error(
+        "Error processing dates in isWeekendSummary (fallback logic):",
+        e
+      );
     }
   }
 
@@ -89,25 +103,56 @@ function isWeekendSummary(newsItem) {
 // Helper function to format the summary period in Catalan
 function formatSummaryPeriod(newsItem) {
   const isWeekend = isWeekendSummary(newsItem);
+  // console.log("formatSummaryPeriod", newsItem.title, isWeekend); // Removed
 
   // If we have start and end dates, format the range
-  if (newsItem.start?.dateTime && newsItem.end?.dateTime) {
-    const startDate = new Date(newsItem.start.dateTime);
-    const endDate = new Date(newsItem.end.dateTime);
+  if (newsItem.startDate && newsItem.endDate) {
+    try {
+      const startDateObj = new Date(newsItem.startDate);
+      const endDateObj = new Date(newsItem.endDate);
 
-    // Adjust end date to be the last day of the period
-    const adjustedEndDate = new Date(endDate);
-    adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+      // Check if dates are valid
+      if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
+        console.error(
+          "Error processing dates in formatSummaryPeriod: Invalid date provided (startDate or endDate). Falling back."
+        );
+        // Allow to fall through to the next fallback mechanisms
+      } else {
+        // Adjust end date to be the last day of the period (assuming endDate is exclusive)
+        const adjustedEndDate = new Date(endDateObj);
+        adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
 
-    const startDay = startDate.getDate();
-    const endDay = adjustedEndDate.getDate();
-    const month = adjustedEndDate.getMonth();
-    const year = adjustedEndDate.getFullYear();
+        const startDay = startDateObj.getDate();
+        const endDay = adjustedEndDate.getDate();
+        // Ensure month and year are taken from the adjusted end date,
+        // which correctly handles periods crossing month/year boundaries for the "X al Y de MONTH" part.
+        const month = adjustedEndDate.getMonth();
+        const year = adjustedEndDate.getFullYear();
 
-    const monthName = MONTHS[month];
-    const prefix = isWeekend ? "Cap de setmana del" : "Setmana del";
+        const monthName = MONTHS[month];
+        const prefix = isWeekend ? "Cap de setmana del" : "Setmana del";
 
-    return `${prefix} ${startDay} al ${endDay} de ${monthName} de ${year}`;
+        // Handle single-day case for cleaner display (e.g. "del 6 de Juny" instead of "del 6 al 6 de Juny")
+        // This requires checking if startDate and adjustedEndDate are the same day.
+        if (
+          startDateObj.getFullYear() === adjustedEndDate.getFullYear() &&
+          startDateObj.getMonth() === adjustedEndDate.getMonth() &&
+          startDay === endDay
+        ) {
+          return `${prefix} ${startDay} de ${monthName} de ${year}`;
+        }
+        // Handle case where adjustedEndDate might be before startDate after adjustment (e.g. period was <1 day or invalid)
+        // In such scenario, it might be better to default to a simpler format or just the start date.
+        // For now, allowing "X al Y" even if Y < X (e.g. "6 al 5") if dates lead to it, to minimize behavioral change beyond field usage.
+        // However, with the -1 adjustment, if startDate and endDate are for the same day (e.g. start 6th 00:00, end 6th 23:59, making end exclusive to be 7th 00:00)
+        // then startDateObj is 6th, endDateObj is 7th, adjustedEndDate is 6th. So startDay=6, endDay=6. This is caught by single-day case.
+
+        return `${prefix} ${startDay} al ${endDay} de ${monthName} de ${year}`;
+      }
+    } catch (e) {
+      console.error("Error processing dates in formatSummaryPeriod:", e);
+      // Allow to fall through to the next fallback mechanisms
+    }
   }
 
   // Fallback to original formattedStart if available
