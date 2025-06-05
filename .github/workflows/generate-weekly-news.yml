@@ -20,7 +20,7 @@ jobs:
             -X POST \
             -H "Authorization: Bearer ${{ secrets.WORKFLOW_SECRET }}" \
             -H "Content-Type: application/json" \
-            https://esdeveniments.cat/api/generateNewsSummary)
+            https://www.culturacardedeu.com/api/generateNewsSummary)
 
           http_code=$(echo "$response" | tail -n1)
           response_body=$(echo "$response" | head -n -1)
