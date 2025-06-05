@@ -15,6 +15,7 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
+    "test": "jest",
     "generate-news": "curl -X POST -H 'Content-Type: application/json' https://esdeveniments.cat/api/generateNewsSummary",
     "setup-calendar": "node scripts/setupCalendar.js"
   },
@@ -44,6 +45,7 @@
     "cross-env": "^7.0.3",
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
+    "jest": "^29.7.0",
     "next-sitemap": "^2.5.28"
   }
 }

@@ -51,17 +51,36 @@ function getImageUrl(newsItem) {
 
 // Helper function to detect if this is a weekend summary
 function isWeekendSummary(newsItem) {
-  // Check if title contains weekend indicators
-  if (newsItem.title) {
-    return newsItem.title.toLowerCase().includes("cap de setmana");
+  // Check if title contains explicit weekend indicators
+  if (newsItem.title && newsItem.title.toLowerCase().includes("cap de setmana")) {
+    return true;
   }
 
-  // Fallback: check date range duration
-  if (newsItem.start?.dateTime && newsItem.end?.dateTime) {
-    const startDate = new Date(newsItem.start.dateTime);
-    const endDate = new Date(newsItem.end.dateTime);
-    const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-    return daysDiff <= 3; // Weekend summaries are typically 3 days or less
+  // Fallback: check start day and duration
+  if (newsItem.startDate && newsItem.start?.dateTime && newsItem.end?.dateTime) {
+    try {
+      const eventStartDate = new Date(newsItem.startDate);
+      const apiStartDate = new Date(newsItem.start.dateTime);
+      const apiEndDate = new Date(newsItem.end.dateTime);
+
+      // Check if dates are valid
+      if (isNaN(eventStartDate.getTime()) || isNaN(apiStartDate.getTime()) || isNaN(apiEndDate.getTime())) {
+        console.error("Error processing dates in isWeekendSummary: Invalid date provided");
+        return false;
+      }
+
+      const startDayOfWeek = eventStartDate.getDay(); // Sunday = 0, ... , Saturday = 6
+      const durationMs = apiEndDate.getTime() - apiStartDate.getTime();
+      const daysDiff = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
+
+      if ((startDayOfWeek === 5 || startDayOfWeek === 6 || startDayOfWeek === 0) && daysDiff >= 1 && daysDiff <= 4) {
+        return true;
+      }
+    } catch (e) {
+      // This catch block might now be less likely to be hit for date parsing errors,
+      // but kept for other potential errors within the try block.
+      console.error("Error processing dates in isWeekendSummary:", e);
+    }
   }
 
   return false;
