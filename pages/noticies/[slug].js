@@ -194,7 +194,7 @@ export default function NoticiaPage({ newsItem, hasError, notFound }) {
   return (
     <>
       <SeoMeta
-        title={seoTitle}
+        seoTitle={seoTitle}
         description={seoDescription}
         type="article"
         article={articleData}

@@ -2,14 +2,25 @@ import { getNewsSummaries } from "../../lib/helpers";
 
 export default async function handler(req, res) {
   try {
-    // Fetch recent news summaries (last 30 days for Google News)
-    const { newsSummaries } = await getNewsSummaries({
-      maxResults: 100,
+    // Fetch recent news summaries
+    const { newsSummaries, noEventsFound } = await getNewsSummaries({
+      maxResults: 100, // Google News sitemap limit is 1,000 URLs
     });
+
+    if (noEventsFound || !newsSummaries || newsSummaries.length === 0) {
+      res.setHeader("Content-Type", "application/xml; charset=utf-8");
+      res
+        .status(200)
+        .send(
+          '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"></urlset>'
+        );
+      return;
+    }
 
     const siteUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
-    // Filter news from last 30 days (Google News requirement)
+    // Filter news (Google News typically processes articles from the last 2 days, but sitemap can contain more)
+    // Let's keep a reasonable window, e.g., last 30 days, to ensure recent content is available.
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -17,7 +28,7 @@ export default async function handler(req, res) {
       newsSummaries?.filter((article) => {
         const articleDate = article.start?.dateTime
           ? new Date(article.start.dateTime)
-          : new Date();
+          : new Date(article.publicationDate || article.date || Date.now()); // Use available date field
         return articleDate >= thirtyDaysAgo;
       }) || [];
 
@@ -28,16 +39,16 @@ export default async function handler(req, res) {
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${recentNews
   .map((article) => {
-    // Generate slug for the article URL
-    const slug = generateSlug(article.title, article.formattedStart);
-    const articleUrl = `${siteUrl}/noticies/${slug}`;
+    // CRITICAL: Use article.slug if it's the source of truth for your news article URLs.
+    // Ensure article.slug is populated correctly by getNewsSummaries/normalizeEvent.
+    const articleUrl = `${siteUrl}/noticies/${article.slug}`; // Assumes /noticies/ is the correct path
 
-    // Format publication date (Google News format)
     const pubDate = article.start?.dateTime
       ? new Date(article.start.dateTime).toISOString()
-      : new Date().toISOString();
+      : new Date(
+          article.publicationDate || article.date || Date.now()
+        ).toISOString();
 
-    // Clean title for XML
     const cleanTitle = (article.title || "Notícia Cultural")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -45,16 +56,46 @@ ${recentNews
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
 
-    // Clean description for XML
-    const cleanDescription = (
+    // Use article description or a snippet for image caption
+    const imageCaption = (
       article.description || "Resum setmanal cultural de Cardedeu"
     )
-      .substring(0, 200)
+      .replace(/<[^>]*>/g, "") // Strip HTML tags
+      .substring(0, 200) // Ensure it's a snippet
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+
+    // Prioritize article-specific image
+    let imageUrl = `${siteUrl}/static/images/logo-cultura-cardedeu.png`; // Default fallback
+    if (article.imageUploaded) {
+      imageUrl = article.imageUploaded.startsWith("http")
+        ? article.imageUploaded
+        : `${siteUrl}${article.imageUploaded.startsWith("/") ? "" : "/"}${
+            article.imageUploaded
+          }`;
+    } else if (
+      article.images &&
+      article.images.length > 0 &&
+      article.images[0]
+    ) {
+      const imgPath = article.images[0];
+      imageUrl = imgPath.startsWith("http")
+        ? imgPath
+        : `${siteUrl}${imgPath.startsWith("/") ? "" : "/"}${imgPath}`;
+    }
+
+    // Optional: Dynamic keywords from article tags if available
+    const keywords = (
+      article.tags && Array.isArray(article.tags)
+        ? article.tags.join(", ")
+        : "cultura, cardedeu, notícies"
+    )
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
     return `  <url>
     <loc>${articleUrl}</loc>
@@ -65,16 +106,14 @@ ${recentNews
       </news:publication>
       <news:publication_date>${pubDate}</news:publication_date>
       <news:title>${cleanTitle}</news:title>
-      <news:keywords>cultura, cardedeu, esdeveniments, notícies locals, activitats culturals</news:keywords>
+      <news:keywords>${keywords}</news:keywords>
       <news:stock_tickers></news:stock_tickers>
     </news:news>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>daily</changefreq> <!-- More appropriate for news -->
+    <priority>0.9</priority> <!-- News is often high priority -->
     <image:image>
-      <image:loc>${siteUrl}/static/images/banners/cultura-cardedeu-banner-${Math.floor(
-      Math.random() * 9
-    )}.jpeg</image:loc>
-      <image:caption>${cleanDescription}</image:caption>
+      <image:loc>${imageUrl}</image:loc>
+      <image:caption>${imageCaption}</image:caption>
       <image:title>${cleanTitle}</image:title>
     </image:image>
   </url>`;
@@ -82,24 +121,24 @@ ${recentNews
   .join("\n")}
 </urlset>`;
 
-    // Set proper headers
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.setHeader(
       "Cache-Control",
-      "public, s-maxage=3600, stale-while-revalidate=1800"
+      "public, s-maxage=1800, stale-while-revalidate=900" // Shorter cache for news sitemap
     );
     res.status(200).send(sitemapXml);
   } catch (error) {
     console.error("Error generating news sitemap:", error);
-    res.status(500).json({ error: "Failed to generate news sitemap" });
+    Sentry.captureException(error); // Assuming Sentry is configured
+    res.status(500).send("Error generating news sitemap"); // Send plain text or simple XML error
   }
 }
 
-// Helper function to generate slug (same as used in news pages)
+// The local generateSlug function is no longer needed if article.slug is used.
+// If article.slug is NOT available, you MUST ensure this function is present and correct:
+/*
 function generateSlug(title, date) {
   if (!title) return "noticia";
-
-  // Clean title and convert to slug
   const cleanTitle = title
     .toLowerCase()
     .replace(/[àáâã]/g, "a")
@@ -114,12 +153,10 @@ function generateSlug(title, date) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .substring(0, 50);
-
-  // Add date if available
   if (date) {
     const cleanDate = date.replace(/\D/g, "").substring(0, 8);
     return `${cleanTitle}-${cleanDate}`;
   }
-
   return cleanTitle;
 }
+*/
