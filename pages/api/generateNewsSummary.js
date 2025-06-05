@@ -463,8 +463,14 @@ async function handler(req, res) {
       : getWeekDateRange();
     const eventStartTime = new Date(eventRangeStart);
     eventStartTime.setHours(0, 0, 0, 0);
-    const eventEndTime = new Date(eventRangeEnd);
-    eventEndTime.setHours(23, 59, 59, 999);
+
+    // eventRangeEnd from getWeekendDateRange/getWeekDateRange is typically exclusive
+    // (e.g., Monday 00:00:00 for a summary period ending Sunday 23:59:59).
+    // To get the actual last day of the period for the calendar event, we subtract one day
+    // from eventRangeEnd and then set it to the end of that day.
+    const actualLastDayOfPeriod = new Date(eventRangeEnd);
+    actualLastDayOfPeriod.setDate(actualLastDayOfPeriod.getDate() - 1);
+    actualLastDayOfPeriod.setHours(23, 59, 59, 999);
 
     let selectedEventImageForCalendar = null;
     const firstEventWithImage = cleanEventsForAIContextAndAssembly.find(
@@ -489,7 +495,7 @@ async function handler(req, res) {
       title: summaryOutput.title, // This is the SEO Title, H1 for the page
       description: summaryOutput.summary, // The fully assembled HTML body with H2s, images, etc.
       startDate: eventStartTime.toISOString(),
-      endDate: eventEndTime.toISOString(),
+      endDate: actualLastDayOfPeriod.toISOString(), // Use the corrected end date
       location: "Cardedeu", // Adapt city
       colorId: isWeekendSummary ? "10" : "9", // Different color for weekend events
       eventImage: selectedEventImageForCalendar, // Main image for the GCal event if Pipedream uses it
