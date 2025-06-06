@@ -87,16 +87,6 @@ ${recentNews
         : `${siteUrl}${imgPath.startsWith("/") ? "" : "/"}${imgPath}`;
     }
 
-    // Optional: Dynamic keywords from article tags if available
-    const keywords = (
-      article.tags && Array.isArray(article.tags)
-        ? article.tags.join(", ")
-        : "cultura, cardedeu, notícies"
-    )
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-
     return `  <url>
     <loc>${articleUrl}</loc>
     <news:news>
@@ -106,8 +96,6 @@ ${recentNews
       </news:publication>
       <news:publication_date>${pubDate}</news:publication_date>
       <news:title>${cleanTitle}</news:title>
-      <news:keywords>${keywords}</news:keywords>
-      <news:stock_tickers></news:stock_tickers>
     </news:news>
     <changefreq>daily</changefreq> <!-- More appropriate for news -->
     <priority>0.9</priority> <!-- News is often high priority -->
