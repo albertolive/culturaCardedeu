@@ -13,6 +13,7 @@ import {
   generateEventFAQs,
   generateNewsStructuredData,
 } from "../../lib/seo-utils";
+import { MONTHS } from "../../utils/constants";
 
 // Helper function to strip HTML tags for JSON-LD
 function stripHtmlAndClean(text) {
@@ -49,6 +50,115 @@ function getArticleImageUrl(newsItem) {
   }
 
   return `${baseUrl}/static/images/banners/cultura-cardedeu-banner-0.jpeg`;
+}
+
+// Helper function to detect if this is a weekend summary
+function isWeekendSummary(newsItem) {
+  // Check if title contains explicit weekend indicators
+  if (
+    newsItem.title &&
+    newsItem.title.toLowerCase().includes("cap de setmana")
+  ) {
+    return true;
+  }
+
+  // Fallback: check start day and duration using newsItem.startDate and newsItem.endDate
+  if (newsItem.startDate && newsItem.endDate) {
+    try {
+      const parsedStartDate = new Date(newsItem.startDate);
+      const parsedEndDate = new Date(newsItem.endDate);
+
+      // Check if dates are valid
+      if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
+        console.error(
+          "Error processing dates in isWeekendSummary: Invalid date provided (startDate or endDate)"
+        );
+        return false;
+      }
+
+      const startDayOfWeek = parsedStartDate.getDay(); // Sunday = 0, ... , Saturday = 6
+      // Calculate duration based on parsedStartDate and parsedEndDate
+      const durationMs = parsedEndDate.getTime() - parsedStartDate.getTime();
+      const daysDiff = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
+
+      if (
+        (startDayOfWeek === 5 || // Friday
+          startDayOfWeek === 6 || // Saturday
+          startDayOfWeek === 0) && // Sunday
+        daysDiff >= 1 &&
+        daysDiff <= 4 // Duration 1 to 4 days
+      ) {
+        return true;
+      }
+    } catch (e) {
+      // This catch block can still catch errors from new Date() if format is totally unparseable,
+      // or other unexpected errors.
+      console.error(
+        "Error processing dates in isWeekendSummary (fallback logic):",
+        e
+      );
+    }
+  }
+
+  return false;
+}
+
+// Helper function to format the summary period in Catalan
+function formatSummaryPeriod(newsItem) {
+  const isWeekend = isWeekendSummary(newsItem);
+
+  // If we have start and end dates, format the range
+  if (newsItem.startDate && newsItem.endDate) {
+    try {
+      const startDateObj = new Date(newsItem.startDate);
+      const endDateObj = new Date(newsItem.endDate);
+
+      // Check if dates are valid
+      if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
+        console.error(
+          "Error processing dates in formatSummaryPeriod: Invalid date provided (startDate or endDate). Falling back."
+        );
+        // Allow to fall through to the next fallback mechanisms
+      } else {
+        // Adjust end date to be the last day of the period (assuming endDate is exclusive)
+        const adjustedEndDate = new Date(endDateObj);
+        adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+
+        const startDay = startDateObj.getDate();
+        const endDay = adjustedEndDate.getDate();
+        // Ensure month and year are taken from the adjusted end date,
+        // which correctly handles periods crossing month/year boundaries for the "X al Y de MONTH" part.
+        const month = adjustedEndDate.getMonth();
+        const year = adjustedEndDate.getFullYear();
+
+        const monthName = MONTHS[month];
+        const prefix = isWeekend ? "Cap de setmana del" : "Setmana del";
+
+        // Handle single-day case for cleaner display (e.g. "del 6 de Juny" instead of "del 6 al 6 de Juny")
+        // This requires checking if startDate and adjustedEndDate are the same day.
+        if (
+          startDateObj.getFullYear() === adjustedEndDate.getFullYear() &&
+          startDateObj.getMonth() === adjustedEndDate.getMonth() &&
+          startDay === endDay
+        ) {
+          return `${prefix} ${startDay} de ${monthName} de ${year}`;
+        }
+
+        return `${prefix} ${startDay} al ${endDay} de ${monthName} de ${year}`;
+      }
+    } catch (e) {
+      console.error("Error processing dates in formatSummaryPeriod:", e);
+      // Allow to fall through to the next fallback mechanisms
+    }
+  }
+
+  // Fallback to original formattedStart if available
+  if (newsItem.formattedStart) {
+    const prefix = isWeekend ? "Cap de setmana del" : "Setmana del";
+    return `${prefix} ${newsItem.formattedStart}`;
+  }
+
+  return isWeekend ? "Cap de setmana" : "Setmana";
 }
 
 export default function NoticiaPage({ newsItem, hasError, notFound }) {
@@ -235,11 +345,9 @@ export default function NoticiaPage({ newsItem, hasError, notFound }) {
             <header className="bg-gray-800 px-8 py-8 border-b border-gray-200">
               <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
                 <div className="flex items-center space-x-2">
-                  {newsItem.formattedStart && (
-                    <time className="text-sm text-white font-medium">
-                      Setmana del {newsItem.formattedStart}
-                    </time>
-                  )}
+                  <time className="text-sm text-white font-medium">
+                    {formatSummaryPeriod(newsItem)}
+                  </time>
                 </div>
 
                 {/* Share button */}
