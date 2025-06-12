@@ -496,7 +496,7 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
 // Server-side data fetching for better SEO
 export async function getStaticProps() {
   try {
-    const { newsSummaries, noEventsFound } = await getNewsSummaries({
+    const { newsSummaries } = await getNewsSummaries({
       maxResults: 10,
     });
 
