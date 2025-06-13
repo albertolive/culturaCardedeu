@@ -4,7 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import SeoMeta from "../../components/partials/seo-meta";
 import { getNewsSummaries } from "../../lib/helpers";
-import { useGetNews } from "../../components/hooks/useGetNews";
+import { useGetNews } from "@components/hooks/useGetNews";
 import {
   generateBreadcrumbs,
   generateDynamicKeywords,
@@ -497,23 +497,24 @@ export default function NoticiesPage(props) {
           )}
 
           {/* Load More Button */}
-          {finalNewsSummaries.length > 0 && finalNewsSummaries.length >= page * 5 && (
-            <div className="text-center mt-8">
-              <button
-                type="button"
-                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
-                onClick={() => {
-                  setPage((prevPage) => prevPage + 1);
-                  sendGA();
-                }}
-                disabled={isLoading}
-              >
-                <span className="text-white">
-                  {isLoading ? "Carregant..." : "Carregar més notícies"}
-                </span>
-              </button>
-            </div>
-          )}
+          {finalNewsSummaries.length > 0 &&
+            finalNewsSummaries.length >= page * 5 && (
+              <div className="text-center mt-8">
+                <button
+                  type="button"
+                  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
+                  onClick={() => {
+                    setPage((prevPage) => prevPage + 1);
+                    sendGA();
+                  }}
+                  disabled={isLoading}
+                >
+                  <span className="text-white">
+                    {isLoading ? "Carregant..." : "Carregar més notícies"}
+                  </span>
+                </button>
+              </div>
+            )}
 
           {/* Call to Action */}
           <div className="mt-12">
