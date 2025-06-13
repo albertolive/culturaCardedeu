@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import SeoMeta from "../../components/partials/seo-meta";
 import { getNewsSummaries } from "../../lib/helpers";
+import { useGetNews } from "../../components/hooks/useGetNews";
 import {
   generateBreadcrumbs,
   generateDynamicKeywords,
@@ -164,7 +165,39 @@ function formatSummaryPeriod(newsItem) {
   return isWeekend ? "Cap de setmana" : "Setmana";
 }
 
-export default function NoticiesPage({ newsSummaries, hasError }) {
+export default function NoticiesPage(props) {
+  const [page, setPage] = useState(() => {
+    const storedPage =
+      typeof window !== "undefined" &&
+      window.localStorage.getItem("currentNewsPage");
+    return storedPage ? parseInt(storedPage) : 1;
+  });
+
+  const {
+    data: { newsSummaries = [], noEventsFound },
+    error,
+    isLoading,
+    isValidating,
+  } = useGetNews({ props, maxResults: page * 5 });
+
+  // For backward compatibility when using static props fallback
+  const hasError = error || props.hasError;
+  const finalNewsSummaries =
+    newsSummaries.length > 0 ? newsSummaries : props.newsSummaries || [];
+
+  const sendGA = () => {
+    if (typeof window !== "undefined") {
+      window.gtag && window.gtag("event", "load-more-news");
+    }
+  };
+
+  useEffect(() => {
+    localStorage.setItem("currentNewsPage", page);
+  }, [page]);
+
+  useEffect(() => {
+    localStorage.removeItem("currentNewsPage");
+  }, []);
   // SEO optimization
   const breadcrumbs = generateBreadcrumbs([
     { name: "Notícies", slug: "noticies" },
@@ -181,11 +214,11 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
 
   // Generate JSON-LD structured data for the news index page
   let jsonLdScript = null;
-  if (!hasError && newsSummaries && newsSummaries.length > 0) {
+  if (!hasError && finalNewsSummaries && finalNewsSummaries.length > 0) {
     const baseUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
     // Generate JSON-LD for each news item
-    const newsJsonLd = newsSummaries.map((newsItem, index) => {
+    const newsJsonLd = finalNewsSummaries.map((newsItem, index) => {
       const slug = generateSlug(newsItem.title, newsItem.formattedStart);
       const newsUrl = `${baseUrl}/noticies/${slug}`;
       const cleanDescription = stripHtmlAndClean(newsItem.description);
@@ -235,7 +268,7 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
       description:
         "Resums setmanals i de caps de setmana d'esdeveniments culturals, teatre, música i activitats familiars a Cardedeu",
       url: `${baseUrl}/noticies`,
-      numberOfItems: newsSummaries.length,
+      numberOfItems: finalNewsSummaries.length,
       itemListElement: newsJsonLd,
       publisher: {
         "@type": "Organization",
@@ -330,9 +363,9 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
             </p>
           </header>
 
-          {newsSummaries.length > 0 ? (
+          {finalNewsSummaries.length > 0 ? (
             <div className="space-y-8">
-              {newsSummaries.map((newsItem, index) => {
+              {finalNewsSummaries.map((newsItem, index) => {
                 // Generate slug from title and date
                 const slug = generateSlug(
                   newsItem.title,
@@ -408,8 +441,7 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
                             </Link>
                             <time className="text-xs text-gray-500">
                               {formatDateForDisplay(
-                                newsItem.start?.dateTime ||
-                                  new Date().toISOString()
+                                newsItem.startDate || newsItem.start?.dateTime
                               )}
                             </time>
                           </div>
@@ -461,6 +493,25 @@ export default function NoticiesPage({ newsSummaries, hasError }) {
                   </Link>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Load More Button */}
+          {finalNewsSummaries.length > 0 && finalNewsSummaries.length >= page * 5 && (
+            <div className="text-center mt-8">
+              <button
+                type="button"
+                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
+                onClick={() => {
+                  setPage((prevPage) => prevPage + 1);
+                  sendGA();
+                }}
+                disabled={isLoading}
+              >
+                <span className="text-white">
+                  {isLoading ? "Carregant..." : "Carregar més notícies"}
+                </span>
+              </button>
             </div>
           )}
 
