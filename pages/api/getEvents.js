@@ -1,7 +1,7 @@
 import { withSentry } from "@sentry/nextjs";
 
 import { today, week, weekend, twoWeeksDefault } from "@lib/dates";
-import { getCalendarEvents } from "@lib/helpers";
+import { getCalendarEvents, getNewsSummaries } from "@lib/helpers";
 
 const noEventsFound = async (events) => {
   const { from, until } = twoWeeksDefault();
@@ -50,6 +50,12 @@ const handler = async (req, res) => {
       if (events.noEventsFound) events = await noEventsFound(events);
 
       break;
+    case "news":
+      events = await getNewsSummaries({
+        maxResults: parseInt(maxResults) || 10,
+      });
+
+      break;
     default:
       const from = new Date();
 
@@ -57,14 +63,16 @@ const handler = async (req, res) => {
   }
 
   try {
-    res.setHeader('Cache-Control', 'max-age=1800');
+    res.setHeader("Cache-Control", "max-age=1800");
     res.setHeader("Content-Type", "application/json");
     res.status(200).json({
       ...events,
       noEventsFound: events.noEventsFound
         ? events.noEventsFound
+        : events.events
+        ? events.events.length === 0
         : events.length === 0,
-      currentYear: new Date().getFullYear()
+      currentYear: new Date().getFullYear(),
     });
   } catch (error) {
     console.error(error);
