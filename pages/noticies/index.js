@@ -174,10 +174,9 @@ export default function NoticiesPage(props) {
   });
 
   const {
-    data: { newsSummaries = [], noEventsFound },
+    data: { newsSummaries = [] },
     error,
     isLoading,
-    isValidating,
   } = useGetNews({ props, maxResults: page * 5 });
 
   // For backward compatibility when using static props fallback
