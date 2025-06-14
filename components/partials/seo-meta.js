@@ -40,6 +40,8 @@ const generateStructuredData = (props) => {
       addressLocality: "Cardedeu",
       addressRegion: "Catalunya",
       addressCountry: "ES",
+      postalCode: "08440",
+      streetAddress: "Cardedeu",
     },
     areaServed: {
       "@type": "City",
@@ -83,14 +85,18 @@ const generateStructuredData = (props) => {
       description:
         "Portal cultural de Cardedeu amb informació sobre esdeveniments, teatre, música, exposicions i activitats familiars",
       url: siteUrl,
+      image: `${siteUrl}/static/images/logo-cultura-cardedeu.png`,
       telephone: "+34-938-461-800",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Plaça de la Vila, 1",
+        streetAddress: "Cardedeu",
         addressLocality: "Cardedeu",
         postalCode: "08440",
+        streetAddress: "Cardedeu",
         addressRegion: "Catalunya",
         addressCountry: "ES",
+        postalCode: "08440",
+        streetAddress: "Cardedeu",
       },
       geo: {
         "@type": "GeoCoordinates",
@@ -163,6 +169,8 @@ const generateStructuredData = (props) => {
           addressLocality: "Cardedeu",
           addressRegion: "Catalunya",
           addressCountry: "ES",
+          postalCode: "08440",
+          streetAddress: "Cardedeu",
         },
         geo: {
           "@type": "GeoCoordinates",
@@ -196,6 +204,8 @@ const generateStructuredData = (props) => {
               "@type": "PostalAddress",
               addressLocality: "Cardedeu",
               addressCountry: "ES",
+              postalCode: "08440",
+              streetAddress: "Cardedeu",
             },
           },
         })) || [],
@@ -274,6 +284,8 @@ const generateStructuredData = (props) => {
             addressLocality: "Cardedeu",
             addressRegion: "Catalunya",
             addressCountry: "ES",
+            postalCode: "08440",
+            streetAddress: "Cardedeu",
           },
         },
         organizer: {
