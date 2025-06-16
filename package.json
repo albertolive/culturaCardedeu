@@ -30,7 +30,7 @@
     "feed": "^4.2.2",
     "next": "12.1.4",
     "openai": "^4.103.0",
-    "postcss": "^8.4.21",
+    "postcss": "^8.5.5",
     "react": "18.2.0",
     "react-datepicker": "^4.9.0",
     "react-dom": "18.2.0",
