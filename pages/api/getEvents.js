@@ -13,8 +13,8 @@ const noEventsFound = async (events) => {
 };
 
 const handler = async (req, res) => {
-  const { page, q, maxResults } = req.query;
-  const pageNumber = parseInt(page) || 0;
+  const { page, q, maxResults, pageToken, pageNum } = req.query;
+  const pageNumber = parseInt(pageNum) || parseInt(page) || 0;
   const resultsPerPage = parseInt(maxResults) || 10;
 
   let events = [];
@@ -53,29 +53,37 @@ const handler = async (req, res) => {
 
       break;
     case "news":
-      events = await getNewsSummaries({
-        maxResults: parseInt(maxResults) || 10,
-      });
+      // Fetch a reasonable batch and apply consistent pagination logic
+      const newsData = await getNewsSummaries({ maxResults: 20 });
 
-      // Apply pagination to news (newest first logic)
-      if (events.newsSummaries && events.newsSummaries.length > 0) {
-        const startIndex = 0; // Always start from 0 to show all news from first page
-        const endIndex = (pageNumber + 1) * resultsPerPage; // Show news up to current page
-        
-        const paginatedNews = events.newsSummaries.slice(startIndex, endIndex);
+      if (newsData.newsSummaries && newsData.newsSummaries.length > 0) {
+        // Apply pagination: return only the items for the current page
+        const startIndex = pageNumber * resultsPerPage;
+        const endIndex = startIndex + resultsPerPage;
+        const paginatedNews = newsData.newsSummaries.slice(
+          startIndex,
+          endIndex
+        );
+
         events = {
-          ...events,
+          ...newsData,
           newsSummaries: paginatedNews,
-          hasMore: events.newsSummaries.length > endIndex,
-          totalCount: events.newsSummaries.length
+          hasMore: newsData.newsSummaries.length > endIndex,
+          totalCount: newsData.newsSummaries.length,
+          currentPage: pageNumber,
         };
+      } else {
+        events = newsData;
       }
-
       break;
     default:
       const from = new Date();
 
-      events = await getCalendarEvents({ from, q, maxResults: (pageNumber + 1) * resultsPerPage });
+      events = await getCalendarEvents({
+        from,
+        q,
+        maxResults: (pageNumber + 1) * resultsPerPage,
+      });
   }
 
   try {
