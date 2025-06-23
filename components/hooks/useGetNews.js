@@ -21,6 +21,6 @@ export const useGetNews = ({
     revalidateOnReconnect: true,
     refreshWhenOffline: true,
     suspense: true,
-    keepPreviousData: true,
+    keepPreviousData: false,
   });
 };
