@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
@@ -173,16 +173,60 @@ export default function NoticiesPage(props) {
     return storedPage ? parseInt(storedPage) : 1;
   });
 
+  // State to accumulate all loaded news
+  const [allNews, setAllNews] = useState(props.newsSummaries || []);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMoreNews, setHasMoreNews] = useState(true);
+
+  // Only fetch initial page with SWR for consistency
   const {
-    data: { newsSummaries = [] },
+    data: swrData = {},
     error,
-    isLoading,
-  } = useGetNews({ props, maxResults: page * 5 });
+    isLoading: isInitialLoading,
+  } = useGetNews({
+    props,
+    maxResults: 5,
+    pageNum: 0, // Always fetch page 0 for initial load
+  });
+
+  // Update allNews when initial SWR data changes
+  useEffect(() => {
+    if (swrData?.newsSummaries && swrData.newsSummaries.length > 0) {
+      setAllNews(swrData.newsSummaries);
+    }
+  }, [swrData?.newsSummaries]);
 
   // For backward compatibility when using static props fallback
   const hasError = error || props.hasError;
-  const finalNewsSummaries =
-    newsSummaries.length > 0 ? newsSummaries : props.newsSummaries || [];
+
+  // Function to load more news
+  const loadMoreNews = async () => {
+    if (isLoadingMore || !hasMoreNews) return;
+
+    setIsLoadingMore(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN_URL}/api/getEvents?page=news&maxResults=5&pageNum=${page}`
+      );
+      const data = await response.json();
+
+      if (data.newsSummaries && data.newsSummaries.length > 0) {
+        // Append new items to existing array
+        setAllNews((prevNews) => [...prevNews, ...data.newsSummaries]);
+        setPage((prevPage) => prevPage + 1);
+
+        // Check if there are more items
+        setHasMoreNews(data.hasMore || false);
+      } else {
+        // No more items
+        setHasMoreNews(false);
+      }
+    } catch (error) {
+      console.error("Error loading more news:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
 
   const sendGA = () => {
     if (typeof window !== "undefined") {
@@ -213,11 +257,11 @@ export default function NoticiesPage(props) {
 
   // Generate JSON-LD structured data for the news index page
   let jsonLdScript = null;
-  if (!hasError && finalNewsSummaries && finalNewsSummaries.length > 0) {
+  if (!hasError && allNews && allNews.length > 0) {
     const baseUrl = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
     // Generate JSON-LD for each news item
-    const newsJsonLd = finalNewsSummaries.map((newsItem, index) => {
+    const newsJsonLd = allNews.map((newsItem, index) => {
       const slug = generateSlug(newsItem.title, newsItem.formattedStart);
       const newsUrl = `${baseUrl}/noticies/${slug}`;
       const cleanDescription = stripHtmlAndClean(newsItem.description);
@@ -267,7 +311,7 @@ export default function NoticiesPage(props) {
       description:
         "Resums setmanals i de caps de setmana d'esdeveniments culturals, teatre, música i activitats familiars a Cardedeu",
       url: `${baseUrl}/noticies`,
-      numberOfItems: finalNewsSummaries.length,
+      numberOfItems: allNews.length,
       itemListElement: newsJsonLd,
       publisher: {
         "@type": "Organization",
@@ -362,9 +406,9 @@ export default function NoticiesPage(props) {
             </p>
           </header>
 
-          {finalNewsSummaries.length > 0 ? (
+          {allNews.length > 0 ? (
             <div className="space-y-8">
-              {finalNewsSummaries.map((newsItem, index) => {
+              {allNews.map((newsItem, index) => {
                 // Generate slug from title and date
                 const slug = generateSlug(
                   newsItem.title,
@@ -496,24 +540,23 @@ export default function NoticiesPage(props) {
           )}
 
           {/* Load More Button */}
-          {finalNewsSummaries.length > 0 &&
-            finalNewsSummaries.length >= page * 5 && (
-              <div className="text-center mt-8">
-                <button
-                  type="button"
-                  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
-                  onClick={() => {
-                    setPage((prevPage) => prevPage + 1);
-                    sendGA();
-                  }}
-                  disabled={isLoading}
-                >
-                  <span className="text-white">
-                    {isLoading ? "Carregant..." : "Carregar més notícies"}
-                  </span>
-                </button>
-              </div>
-            )}
+          {allNews.length > 0 && hasMoreNews && (
+            <div className="text-center mt-8">
+              <button
+                type="button"
+                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-[#ECB84A] hover:bg-yellow-400 focus:outline-none"
+                onClick={() => {
+                  loadMoreNews();
+                  sendGA();
+                }}
+                disabled={isLoadingMore}
+              >
+                <span className="text-white">
+                  {isLoadingMore ? "Carregant..." : "Carregar més notícies"}
+                </span>
+              </button>
+            </div>
+          )}
 
           {/* Call to Action */}
           <div className="mt-12">
@@ -547,13 +590,20 @@ export default function NoticiesPage(props) {
 // Server-side data fetching for better SEO
 export async function getStaticProps() {
   try {
-    const { newsSummaries } = await getNewsSummaries({
-      maxResults: 10,
-    });
+    // Use the exact same logic as the API to ensure consistency
+    const newsData = await getNewsSummaries({ maxResults: 20 });
+
+    let finalNews = [];
+    if (newsData.newsSummaries && newsData.newsSummaries.length > 0) {
+      // Apply the same pagination logic as API: get first page (0-5)
+      const startIndex = 0;
+      const endIndex = 5;
+      finalNews = newsData.newsSummaries.slice(startIndex, endIndex);
+    }
 
     return {
       props: {
-        newsSummaries: newsSummaries || [],
+        newsSummaries: finalNews,
         hasError: false,
       },
       // Revalidate every hour to keep content fresh
