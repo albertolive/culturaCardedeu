@@ -14,6 +14,8 @@ const noEventsFound = async (events) => {
 
 const handler = async (req, res) => {
   const { page, q, maxResults } = req.query;
+  const pageNumber = parseInt(page) || 0;
+  const resultsPerPage = parseInt(maxResults) || 10;
 
   let events = [];
 
@@ -55,11 +57,25 @@ const handler = async (req, res) => {
         maxResults: parseInt(maxResults) || 10,
       });
 
+      // Apply pagination to news (newest first logic)
+      if (events.newsSummaries && events.newsSummaries.length > 0) {
+        const startIndex = 0; // Always start from 0 to show all news from first page
+        const endIndex = (pageNumber + 1) * resultsPerPage; // Show news up to current page
+        
+        const paginatedNews = events.newsSummaries.slice(startIndex, endIndex);
+        events = {
+          ...events,
+          newsSummaries: paginatedNews,
+          hasMore: events.newsSummaries.length > endIndex,
+          totalCount: events.newsSummaries.length
+        };
+      }
+
       break;
     default:
       const from = new Date();
 
-      events = await getCalendarEvents({ from, q, maxResults });
+      events = await getCalendarEvents({ from, q, maxResults: (pageNumber + 1) * resultsPerPage });
   }
 
   try {
