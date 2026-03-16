@@ -389,7 +389,8 @@ export default function Publica() {
     setImageAnalyzed(false); // No analysis performed
     setShowAiWarning(false);
     setAnalysisError(null);
-    setImageToUpload(null); // Clear any uploaded image if skipping
+    // Keep imageToUpload — user uploaded an image for the event,
+    // they're only skipping AI analysis, not discarding the image
     setUploadError(null); // Clear upload errors
     setStatusMessage(""); // Clear status message
     setSuccessMessage(null); // Clear success message
@@ -401,45 +402,187 @@ export default function Publica() {
     query: { newEvent: true },
   });
 
-  // Refactored event creation logic
+  // Upload file to Cloudinary, returning a promise
+  const uploadFileToCloudinary = (file, id, onProgress) => {
+    return new Promise((resolve, reject) => {
+      const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
+      const xhr = new XMLHttpRequest();
+      const fd = new FormData();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+      xhr.timeout = 60000;
+
+      xhr.upload.addEventListener("progress", (e) => {
+        if (e.lengthComputable && onProgress) {
+          onProgress(Math.round((e.loaded * 100.0) / e.total));
+        }
+      });
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch (e) {
+              reject(new Error("Failed to parse Cloudinary response"));
+            }
+          } else {
+            reject(
+              new Error(
+                `Upload failed with HTTP ${xhr.status}: ${xhr.responseText}`
+              )
+            );
+          }
+        }
+      };
+
+      xhr.onerror = () => reject(new Error("Network error during upload"));
+      xhr.ontimeout = () => reject(new Error("Upload timed out"));
+
+      fd.append(
+        "upload_preset",
+        process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET
+      );
+      fd.append("tags", "browser_upload");
+      fd.append("file", file);
+      fd.append("public_id", id);
+      xhr.send(fd);
+    });
+  };
+
+  // Upload with retry (up to maxRetries additional attempts)
+  const uploadWithRetry = async (file, id, onProgress, maxRetries = 2) => {
+    let lastError;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) {
+          setStatusMessage(
+            `Reintentant pujada de la imatge (intent ${attempt + 1})...`
+          );
+          // Exponential backoff before retry
+          await new Promise((r) =>
+            setTimeout(r, 1000 * Math.pow(2, attempt))
+          );
+        }
+        return await uploadFileToCloudinary(file, id, onProgress);
+      } catch (error) {
+        lastError = error;
+        console.error(`Upload attempt ${attempt + 1} failed:`, error.message);
+      }
+    }
+    throw lastError;
+  };
+
+  // Update event to mark the image as uploaded (sets guestsCanModify on Google Calendar)
+  const markEventImageUploaded = async (eventId) => {
+    const response = await fetch(process.env.NEXT_PUBLIC_EDIT_EVENT, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...form,
+        id: eventId,
+        imageUploaded: true,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Failed to update event image flag: HTTP ${response.status}`
+      );
+    }
+  };
+
+  // Robust event creation logic:
+  // 1. Create event WITHOUT image flag
+  // 2. Upload image to Cloudinary (with retry)
+  // 3. If upload succeeds (HTTP 200), update event to set imageUploaded = true
   const proceedWithEventCreation = async () => {
-    setIsLoading(true); // Ensure loading is true when we proceed
-    setUploadError(null); // Clear any previous upload errors
-    setSuccessMessage(null); // Clear any previous success messages
+    setIsLoading(true);
+    setUploadError(null);
+    setSuccessMessage(null);
     setStatusMessage("Creant esdeveniment...");
-    scrollToSubmissionNotifications(); // Auto-scroll to show status
+    scrollToSubmissionNotifications();
 
     try {
+      // Step 1: Create event WITHOUT image flag — safe default
       const rawResponse = await fetch(process.env.NEXT_PUBLIC_CREATE_EVENT, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...form, imageUploaded: !!imageToUpload }),
+        body: JSON.stringify({ ...form, imageUploaded: false }),
       });
-      const { id } = await rawResponse.json();
 
+      if (!rawResponse.ok) {
+        throw new Error(
+          `Event creation failed with HTTP ${rawResponse.status}`
+        );
+      }
+
+      const { id } = await rawResponse.json();
       const { formattedStart } = getFormattedDate(form.startDate, form.endDate);
       const slugifiedTitle = slug(form.title, formattedStart, id);
 
       if (imageToUpload) {
+        // Step 2: Resize image
         setStatusMessage("Processant imatge...");
-        // Always resize image before upload to handle large mobile camera photos
+        let fileToUpload;
         try {
           const { blob, imageType } = await resizeImageFile(imageToUpload);
-          // Create File object from blob for upload
-          const resizedFile = new File([blob], imageToUpload.name, {
-            type: imageType, // Use the actual image type from resizeImageFile
+          fileToUpload = new File([blob], imageToUpload.name, {
+            type: imageType,
           });
-          setStatusMessage("Pujant imatge...");
-          uploadFile(id, slugifiedTitle, resizedFile);
         } catch (resizeError) {
           console.error("Error resizing image:", resizeError);
-          setStatusMessage("Pujant imatge original...");
-          // Fallback to original file if resize fails
-          uploadFile(id, slugifiedTitle, imageToUpload);
+          fileToUpload = imageToUpload; // Fallback to original
         }
+
+        // Step 3: Upload to Cloudinary with retry
+        setStatusMessage("Pujant imatge...");
+        try {
+          await uploadWithRetry(fileToUpload, id, (progressPercent) => {
+            setProgress(progressPercent);
+            setStatusMessage(`Pujant imatge... ${progressPercent}%`);
+          });
+
+          // Cloudinary returned HTTP 200 — image is stored.
+          // Now mark the event as having an image.
+          setStatusMessage("Associant imatge a l'esdeveniment...");
+          try {
+            await markEventImageUploaded(id);
+            setSuccessMessage(
+              "Esdeveniment i imatge pujats correctament!"
+            );
+          } catch (editError) {
+            console.error(
+              "Failed to update event image flag:",
+              editError
+            );
+            // Image IS in Cloudinary, but flag update failed.
+            // The image will appear once the flag is manually corrected.
+            setUploadError(
+              "L'esdeveniment i la imatge s'han creat, però hi ha hagut un error associant la imatge. Contacta'ns perquè ho solucionem."
+            );
+          }
+        } catch (imgUploadError) {
+          console.error(
+            "Image upload failed after retries:",
+            imgUploadError
+          );
+          // Event exists safely without image flag
+          setUploadError(
+            "L'esdeveniment s'ha creat correctament, però la imatge no s'ha pogut pujar. Pots editar l'esdeveniment més tard per afegir la imatge."
+          );
+        }
+
+        setStatusMessage("Finalitzant...");
+        setProgress(0);
+        setTimeout(() => {
+          router.push(goToEventPage(`/${slugifiedTitle}`));
+        }, 2000);
       } else {
         setStatusMessage("Finalitzant...");
         setSuccessMessage("Esdeveniment creat correctament!");
@@ -454,7 +597,7 @@ export default function Publica() {
       setUploadError(
         "Error creant l'esdeveniment. Si us plau, torna-ho a intentar."
       );
-      scrollToSubmissionNotifications(); // Auto-scroll to show error
+      scrollToSubmissionNotifications();
     }
   };
 
@@ -545,79 +688,7 @@ export default function Publica() {
     }
   };
 
-  const uploadFile = (id, slugifiedTitle, file) => {
-    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`;
-    const xhr = new XMLHttpRequest();
-    const fd = new FormData();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-    // Set timeout to prevent infinite loading (30 seconds)
-    xhr.timeout = 30000;
-
-    xhr.upload.addEventListener("progress", (e) => {
-      const progressPercent = Math.round((e.loaded * 100.0) / e.total);
-      setProgress(progressPercent);
-      setStatusMessage(`Pujant imatge... ${progressPercent}%`);
-    });
-
-    xhr.onreadystatechange = (e) => {
-      if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-          const public_id = JSON.parse(xhr.responseText).public_id;
-          console.log(public_id);
-          setStatusMessage("Finalitzant...");
-          setSuccessMessage("Esdeveniment i imatge pujats correctament!");
-          setTimeout(() => {
-            router.push(goToEventPage(`/${slugifiedTitle}`));
-          }, 1000);
-        } else {
-          // Handle HTTP errors (non-200 status codes)
-          console.error(`Upload failed: HTTP ${xhr.status}`, xhr.responseText);
-          setIsLoading(false);
-          setProgress(0);
-          setStatusMessage("");
-          setUploadError(
-            `Error pujant la imatge (HTTP ${xhr.status}). Si us plau, torna-ho a intentar.`
-          );
-          scrollToSubmissionNotifications(); // Auto-scroll to show error
-        }
-      }
-    };
-
-    // Handle upload errors
-    xhr.onerror = () => {
-      console.error("Upload failed: Network error");
-      setIsLoading(false);
-      setProgress(0);
-      setStatusMessage("");
-      setUploadError(
-        "Error de xarxa pujant la imatge. Si us plau, comprova la connexió i torna-ho a intentar."
-      );
-      scrollToSubmissionNotifications(); // Auto-scroll to show error
-    };
-
-    // Handle upload timeout
-    xhr.ontimeout = () => {
-      console.error("Upload failed: Timeout");
-      setIsLoading(false);
-      setProgress(0);
-      setStatusMessage("");
-      setUploadError(
-        "La pujada de la imatge ha trigat massa temps. Si us plau, torna-ho a intentar."
-      );
-      scrollToSubmissionNotifications(); // Auto-scroll to show error
-    };
-
-    fd.append(
-      "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET
-    );
-    fd.append("tags", "browser_upload");
-    fd.append("file", file);
-    fd.append("public_id", id);
-    xhr.send(fd);
-  };
+  // uploadFile is no longer needed — replaced by uploadFileToCloudinary + uploadWithRetry above
 
   return (
     <>
