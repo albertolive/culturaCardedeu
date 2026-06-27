@@ -56,6 +56,7 @@ export const convertTZ = (date, tzString) =>
   );
 
 export const getFormattedDate = (start, end) => {
+  const isAllDay = start && start.date && !start.dateTime;
   const startDate = new Date(
     (start && start.date) || (start && start.dateTime) || start
   );
@@ -69,7 +70,15 @@ export const getFormattedDate = (start, end) => {
   const startDay = startDateConverted.getDate();
   const endDay = endDateConverted.getDate();
 
-  if (startDay !== endDay) isMultipleDays = true;
+  if (isAllDay) {
+    const diffTime = Math.abs(endDate - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays > 1) {
+      isMultipleDays = true;
+    }
+  } else {
+    if (startDay !== endDay) isMultipleDays = true;
+  }
 
   if (startDateConverted.getMonth() === endDateConverted.getMonth())
     isSameMonth = true;
@@ -93,10 +102,10 @@ export const getFormattedDate = (start, end) => {
   const formattedEnd = `${endDay} de ${
     MONTHS[endDateConverted.getMonth()]
   } del ${endDateConverted.getFullYear()}`;
-  const startTime = `${startDateConverted.getHours()}:${String(
+  const startTime = isAllDay ? "00:00" : `${startDateConverted.getHours()}:${String(
     startDateConverted.getMinutes()
   ).padStart(2, "0")}`;
-  const endTime = `${endDateConverted.getHours()}:${String(
+  const endTime = isAllDay ? "00:00" : `${endDateConverted.getHours()}:${String(
     endDateConverted.getMinutes()
   ).padStart(2, "0")}`;
 

@@ -17,6 +17,20 @@ function to3HourForecastFormat(date) {
   return `${forecastHour}:00:00`;
 }
 
+const cleanLocation = (loc) => {
+  if (!loc) return "Cardedeu";
+  const cleanLoc = loc.split(",")[0].trim();
+  const lowerLoc = cleanLoc.toLowerCase();
+  if (
+    lowerLoc.includes("cecuca") ||
+    lowerLoc.includes("centre cultural de cardedeu") ||
+    lowerLoc.includes("centre cultural cardedeu")
+  ) {
+    return "Teatre Auditori Cardedeu";
+  }
+  return cleanLoc;
+};
+
 export const normalizeWeather = (startDate, weatherInfo) => {
   if (isNaN(startDate)) return {}
   const startDateConverted = startDate.toISOString().split('T')[0];
@@ -55,7 +69,7 @@ export const normalizeEvents = (event, weatherInfo) => {
   } = getFormattedDate(event.start, event.end);
   const weatherObject = normalizeWeather(startDate, weatherInfo)
   const eventImage = hasEventImage(event.description)
-  const location = event.location ? event.location.split(",")[0] : "Cardedeu";
+  const location = cleanLocation(event.location);
   let title = event.summary ? sanitizeText(event.summary) : "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
 
@@ -104,7 +118,7 @@ export const normalizeEvent = (event) => {
     nameDay,
   } = getFormattedDate(event.start, event.end);
 
-  let location = event.location ? event.location.split(",")[0] : "Cardedeu";
+  let location = cleanLocation(event.location);
   let title = event.summary ? sanitizeText(event.summary) : "";
   const tag = TAGS.find((v) => title.includes(v)) || null;
 
