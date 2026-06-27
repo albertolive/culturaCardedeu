@@ -137,7 +137,7 @@ export const LOCATIONS = {
   salaSarau: ["sarau"],
   santHilari: ["hilari"],
   tarambana: ["tarambana"],
-  teatreAuditoriCardedeu: ["teatre", "auditori"],
+  teatreAuditoriCardedeu: ["teatre", "auditori", "cecuca", "centre cultural"],
   textilRase: ["textil", "rase"],
   vilaPaquita: ["paquita"],
   totsona: ["totsona"],

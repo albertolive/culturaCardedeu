@@ -387,7 +387,9 @@ export default function Event(props) {
                 <div>
                   <dt className="text-md font-bold text-gray-900">Hora</dt>
                   <dd className="mt-3 xs:text-sm md:text-md lg:text-sm text-gray-500">
-                    {startTime} - {endTime}
+                    {startTime === "00:00" && endTime === "00:00"
+                      ? "Tot el dia"
+                      : `${startTime} - ${endTime}`}
                   </dd>
                 </div>
               </dl>
