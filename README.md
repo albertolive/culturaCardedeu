@@ -18,7 +18,7 @@ The site automatically generates weekly cultural news summaries using AI:
 ### How it works:
 
 1. **Data Collection**: Fetches upcoming events from Google Calendar
-2. **AI Generation**: Uses GitHub Models (GPT-4o) to create engaging summaries in Catalan
+2. **AI Generation**: Uses the [ai-gateway](https://github.com/albertolive/ai-gateway) provider cascade (`lib/gatewayClient.js`) to create engaging summaries in Catalan
 3. **Storage**: Saves summaries as events in a separate Google Calendar
 4. **Display**: Shows summaries on `/noticies` page with individual article pages
 
@@ -27,7 +27,12 @@ The site automatically generates weekly cultural news summaries using AI:
 #### 1. Environment Variables
 
 ```bash
-# GitHub Models API (for AI generation)
+# ai-gateway providers (for AI generation, /api/generateNewsSummary and /api/generatemeteo)
+OPENROUTER_API_KEY=your_openrouter_api_key
+GEMINI_API_KEY=your_gemini_api_key
+GROQ_API_KEY=your_groq_api_key
+
+# GitHub Models API (for AI generation, /api/analyzeImage only — retiring 2026-07-30, not yet migrated)
 GITHUB_TOKEN=your_github_token_here
 
 # Google Calendar API
@@ -50,7 +55,8 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
 
 Add these secrets to your GitHub repository:
 
-- `GITHUB_TOKEN`: Your GitHub token with models access
+- `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `GROQ_API_KEY`: ai-gateway provider keys
+- `GITHUB_TOKEN`: Your GitHub token with models access (still required by `/api/analyzeImage`)
 - `NEWS_CALENDAR_ID`: Your news calendar ID
 - `GOOGLE_SERVICE_ACCOUNT_KEY`: Contents of your service account JSON file
 
@@ -104,7 +110,7 @@ Deployed on Vercel with automatic deployments from the main branch.
 - Tailwind CSS
 - SWR for data fetching
 - Google Calendar API
-- GitHub Models (GPT-4o)
+- ai-gateway provider cascade (news summaries) / GitHub Models GPT-4o (image analysis)
 - Sentry for error tracking
 
 ## Getting Started

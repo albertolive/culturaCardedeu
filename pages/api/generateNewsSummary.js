@@ -1,5 +1,5 @@
 import { withSentry } from "@sentry/nextjs"; // Assuming you use Sentry
-import OpenAI from "openai";
+import { complete } from "@lib/gatewayClient";
 import {
   week as getWeekDateRange,
   weekend as getWeekendDateRange,
@@ -152,7 +152,6 @@ async function handler(req, res) {
   // --- Environment Variable Checks ---
   console.log(`🔐 ${LOG_PREFIX} Checking environment variables...`);
   const criticalEnvVars = {
-    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     NEWS_CALENDAR_ID_OR_NEXT:
       process.env.NEWS_CALENDAR_ID || process.env.NEXT_PUBLIC_NEWS_CALENDAR_ID,
     NEXT_PUBLIC_CREATE_NEWS_EVENT: process.env.NEXT_PUBLIC_CREATE_NEWS_EVENT,
@@ -171,26 +170,15 @@ async function handler(req, res) {
       return res.status(500).json({ error: errorMessage });
     }
   }
-  console.log(
-    "- GITHUB_MODELS_ENDPOINT:",
-    process.env.GITHUB_MODELS_ENDPOINT ? "✅ Set" : "ℹ️ Not Set (using default)"
-  );
   console.log("- NODE_ENV:", process.env.NODE_ENV);
 
   // --- Configuration ---
   const NEWS_CALENDAR_ID =
     process.env.NEWS_CALENDAR_ID || process.env.NEXT_PUBLIC_NEWS_CALENDAR_ID;
-  const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-  const GITHUB_MODELS_ENDPOINT =
-    process.env.GITHUB_MODELS_ENDPOINT || "https://models.github.ai/inference";
 
   console.log(
-    `⚙️ ${LOG_PREFIX} Configuration: NEWS_CALENDAR_ID: ${NEWS_CALENDAR_ID}, GITHUB_MODELS_ENDPOINT: ${GITHUB_MODELS_ENDPOINT}`
+    `⚙️ ${LOG_PREFIX} Configuration: NEWS_CALENDAR_ID: ${NEWS_CALENDAR_ID}`
   );
-  const openai = new OpenAI({
-    baseURL: GITHUB_MODELS_ENDPOINT,
-    apiKey: GITHUB_TOKEN,
-  });
 
   try {
     const { from, until } = isWeekendSummary
@@ -330,25 +318,22 @@ async function handler(req, res) {
         isWeekendSummary ? "del cap de setmana" : "setmanal"
       } periodístic i SEO-òptim en català. Utilitza un to neutre i informatiu (tercera persona) i estructura el text en HTML semàntic amb títols (<h1>, <h2>), paràgrafs curts i llistes quan convingui. Emprar paraules clau rellevants (p. ex. 'Cardedeu', '${agendaOrPlans}', noms d'esdeveniments destacats) en titulars i descripcions. Inclou una meta descripció atractiva amb paraules clau al front. Assegura't que les classes de Tailwind CSS (per ex. text-lg, font-medium) s'apliquin a paràgrafs i enllaços quan pertoqui. Només respon en format JSON vàlid seguint l'esquema indicat, sense cap text extra. Respon sempre en català`;
 
-      const aiResponse = await openai.chat.completions.create({
-        model: "openai/gpt-4o",
-        messages: [
-          {
-            role: "system",
-            content: systemPrompt,
-          },
-          { role: "user", content: newPromptForStructuredJson },
-        ],
-        max_tokens: 3500, // Increased for detailed structured JSON and potential Tailwind classes
+      const aiMessageContent = await complete(newPromptForStructuredJson, {
+        cascade: "general",
+        system: systemPrompt,
         temperature: 0.5,
-        response_format: { type: "json_object" },
       });
-
-      const aiMessageContent = aiResponse.choices[0].message.content;
 
       if (!aiMessageContent)
         throw new Error("OpenAI response content is empty.");
-      const structuredAiData = JSON.parse(aiMessageContent);
+      // Some ai-gateway providers wrap JSON in a markdown code fence even when
+      // asked to reply with JSON only; strip it before parsing.
+      const cleanedAiMessageContent = aiMessageContent
+        .trim()
+        .replace(/^```(?:json)?\s*/i, "")
+        .replace(/```\s*$/, "")
+        .trim();
+      const structuredAiData = JSON.parse(cleanedAiMessageContent);
       if (
         !structuredAiData ||
         !structuredAiData.seoTitle ||
