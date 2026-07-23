@@ -33,15 +33,15 @@ async function handler(req, res) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  if (!process.env.GITHUB_TOKEN) {
-    console.error("GITHUB_TOKEN no configurat al servidor.");
+  if (!process.env.GEMINI_API_KEY) {
+    console.error("GEMINI_API_KEY no configurat al servidor.");
     return res
       .status(500)
-      .json({ error: "GITHUB_TOKEN no configurat al servidor." });
+      .json({ error: "GEMINI_API_KEY no configurat al servidor." });
   }
 
-  const token = process.env.GITHUB_TOKEN;
-  const endpoint = "https://models.github.ai/inference";
+  const token = process.env.GEMINI_API_KEY;
+  const endpoint = "https://generativelanguage.googleapis.com/v1beta/openai";
   const openai = new OpenAI({ baseURL: endpoint, apiKey: token });
 
   const { imageData, imageType } = req.body; // e.g., imageType = 'image/jpeg' or 'image/png'
@@ -110,7 +110,7 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
 
   try {
     const response = await openai.chat.completions.create({
-      model: "openai/gpt-4o",
+      model: "gemini-2.0-flash",
       messages: [
         {
           role: "user",
@@ -139,9 +139,17 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
         .json({ error: "Failed to analyze image: Empty response from AI." });
     }
 
+    // Gemini wraps JSON replies in a markdown code fence even when asked to
+    // reply with JSON only; strip it before parsing.
+    const cleanedMessageContent = messageContent
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```\s*$/, "")
+      .trim();
+
     let structuredData = null;
     try {
-      structuredData = JSON.parse(messageContent);
+      structuredData = JSON.parse(cleanedMessageContent);
     } catch (e) {
       console.error("Failed to parse OpenAI JSON response:", e);
       console.error("Raw OpenAI response:", messageContent);
