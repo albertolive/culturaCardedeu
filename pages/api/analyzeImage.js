@@ -110,7 +110,7 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gemini-2.0-flash",
+      model: "gemini-3.6-flash",
       messages: [
         {
           role: "user",
