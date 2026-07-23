@@ -32,8 +32,8 @@ OPENROUTER_API_KEY=your_openrouter_api_key
 GEMINI_API_KEY=your_gemini_api_key
 GROQ_API_KEY=your_groq_api_key
 
-# GitHub Models API (for AI generation, /api/analyzeImage only — retiring 2026-07-30, not yet migrated)
-GITHUB_TOKEN=your_github_token_here
+# GEMINI_API_KEY above is also used directly by /api/analyzeImage (Gemini's
+# OpenAI-compatible endpoint, called for vision support)
 
 # Google Calendar API
 NEXT_PUBLIC_GOOGLE_CALENDAR=your_google_api_key
@@ -55,8 +55,7 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
 
 Add these secrets to your GitHub repository:
 
-- `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `GROQ_API_KEY`: ai-gateway provider keys
-- `GITHUB_TOKEN`: Your GitHub token with models access (still required by `/api/analyzeImage`)
+- `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `GROQ_API_KEY`: ai-gateway provider keys (`GEMINI_API_KEY` also powers `/api/analyzeImage`)
 - `NEWS_CALENDAR_ID`: Your news calendar ID
 - `GOOGLE_SERVICE_ACCOUNT_KEY`: Contents of your service account JSON file
 
@@ -110,7 +109,7 @@ Deployed on Vercel with automatic deployments from the main branch.
 - Tailwind CSS
 - SWR for data fetching
 - Google Calendar API
-- ai-gateway provider cascade (news summaries) / GitHub Models GPT-4o (image analysis)
+- ai-gateway provider cascade (news summaries) / Gemini 2.0 Flash (image analysis)
 - Sentry for error tracking
 
 ## Getting Started
