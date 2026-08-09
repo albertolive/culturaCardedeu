@@ -27,7 +27,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.13",
     "date-fns": "^2.29.3",
-    "feed": "^4.2.2",
+    "feed": "^5.1.0",
     "next": "12.1.4",
     "openai": "^4.103.0",
     "postcss": "^8.4.21",
