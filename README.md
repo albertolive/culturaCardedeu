@@ -53,8 +53,12 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
 
 Add these secrets to your GitHub repository:
 
-- `GATEWAY_TOKEN`: hosted ai-gateway key (powers `/api/generateNewsSummary` and `/api/generatemeteo`)
-- `GEMINI_API_KEY`: powers `/api/analyzeImage` (vision)
+- `WORKFLOW_SECRET`: shared token the scheduled workflows send to the deployed API endpoints
+
+> **Note:** `GATEWAY_TOKEN` is NOT a GitHub secret — it's read at server runtime by
+> `lib/gatewayClient.js`, so set it (and `GEMINI_API_KEY` for `/api/analyzeImage`) as
+> **environment variables on the Vercel project**. The workflows only call the
+> already-deployed endpoints, so they never touch those keys themselves.
 - `NEWS_CALENDAR_ID`: Your news calendar ID
 - `GOOGLE_SERVICE_ACCOUNT_KEY`: Contents of your service account JSON file
 
