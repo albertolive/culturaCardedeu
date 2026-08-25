@@ -18,7 +18,7 @@ The site automatically generates weekly cultural news summaries using AI:
 ### How it works:
 
 1. **Data Collection**: Fetches upcoming events from Google Calendar
-2. **AI Generation**: Uses the [ai-gateway](https://github.com/albertolive/ai-gateway) provider cascade (`lib/gatewayClient.js`) to create engaging summaries in Catalan
+2. **AI Generation**: Uses the hosted [ai-gateway](https://github.com/albertolive/ai-gateway) (`lib/gatewayClient.js`) — one `GATEWAY_TOKEN`, cascade-first — to create engaging summaries in Catalan
 3. **Storage**: Saves summaries as events in a separate Google Calendar
 4. **Display**: Shows summaries on `/noticies` page with individual article pages
 
@@ -27,12 +27,10 @@ The site automatically generates weekly cultural news summaries using AI:
 #### 1. Environment Variables
 
 ```bash
-# ai-gateway providers (for AI generation, /api/generateNewsSummary and /api/generatemeteo)
-OPENROUTER_API_KEY=your_openrouter_api_key
-GEMINI_API_KEY=your_gemini_api_key
-GROQ_API_KEY=your_groq_api_key
+# Hosted ai-gateway (for AI generation, /api/generateNewsSummary and /api/generatemeteo)
+GATEWAY_TOKEN=your_gateway_token
 
-# GEMINI_API_KEY above is also used directly by /api/analyzeImage (Gemini's
+# GEMINI_API_KEY is used directly by /api/analyzeImage (Gemini's
 # OpenAI-compatible endpoint, called for vision support)
 
 # Google Calendar API
@@ -55,7 +53,12 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
 
 Add these secrets to your GitHub repository:
 
-- `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `GROQ_API_KEY`: ai-gateway provider keys (`GEMINI_API_KEY` also powers `/api/analyzeImage`)
+- `WORKFLOW_SECRET`: shared token the scheduled workflows send to the deployed API endpoints
+
+> **Note:** `GATEWAY_TOKEN` is NOT a GitHub secret — it's read at server runtime by
+> `lib/gatewayClient.js`, so set it (and `GEMINI_API_KEY` for `/api/analyzeImage`) as
+> **environment variables on the Vercel project**. The workflows only call the
+> already-deployed endpoints, so they never touch those keys themselves.
 - `NEWS_CALENDAR_ID`: Your news calendar ID
 - `GOOGLE_SERVICE_ACCOUNT_KEY`: Contents of your service account JSON file
 
@@ -109,7 +112,7 @@ Deployed on Vercel with automatic deployments from the main branch.
 - Tailwind CSS
 - SWR for data fetching
 - Google Calendar API
-- ai-gateway provider cascade (news summaries) / Gemini 2.0 Flash (image analysis)
+- hosted ai-gateway (news summaries) / Gemini Flash (image analysis)
 - Sentry for error tracking
 
 ## Getting Started
