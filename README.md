@@ -27,11 +27,9 @@ The site automatically generates weekly cultural news summaries using AI:
 #### 1. Environment Variables
 
 ```bash
-# Hosted ai-gateway (for AI generation, /api/generateNewsSummary and /api/generatemeteo)
+# Hosted ai-gateway (for AI generation: /api/generateNewsSummary, /api/generatemeteo
+# and /api/analyzeImage, which sends the poster as an image_url part)
 GATEWAY_TOKEN=your_gateway_token
-
-# GEMINI_API_KEY is used directly by /api/analyzeImage (Gemini's
-# OpenAI-compatible endpoint, called for vision support)
 
 # Google Calendar API
 NEXT_PUBLIC_GOOGLE_CALENDAR=your_google_api_key
@@ -56,9 +54,9 @@ Add these secrets to your GitHub repository:
 - `WORKFLOW_SECRET`: shared token the scheduled workflows send to the deployed API endpoints
 
 > **Note:** `GATEWAY_TOKEN` is NOT a GitHub secret — it's read at server runtime by
-> `lib/gatewayClient.js`, so set it (and `GEMINI_API_KEY` for `/api/analyzeImage`) as
-> **environment variables on the Vercel project**. The workflows only call the
-> already-deployed endpoints, so they never touch those keys themselves.
+> `lib/gatewayClient.js`, so set it as an **environment variable on the Vercel
+> project**. The workflows only call the already-deployed endpoints, so they never
+> touch that key themselves.
 - `NEWS_CALENDAR_ID`: Your news calendar ID
 - `GOOGLE_SERVICE_ACCOUNT_KEY`: Contents of your service account JSON file
 
@@ -112,7 +110,7 @@ Deployed on Vercel with automatic deployments from the main branch.
 - Tailwind CSS
 - SWR for data fetching
 - Google Calendar API
-- hosted ai-gateway (news summaries) / Gemini Flash (image analysis)
+- hosted ai-gateway (news summaries and image analysis)
 - Sentry for error tracking
 
 ## Getting Started
