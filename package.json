@@ -15,6 +15,7 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
+    "test": "node lib/parseAiJson.check.mjs",
     "generate-news": "curl -X POST -H 'Content-Type: application/json' https://esdeveniments.cat/api/generateNewsSummary",
     "setup-calendar": "node scripts/setupCalendar.js"
   },
