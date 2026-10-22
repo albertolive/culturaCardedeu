@@ -161,9 +161,7 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
     return res.status(200).json(structuredData);
   } catch (error) {
     console.error("Error calling ai-gateway:", error);
-    return res
-      .status(500)
-      .json({ error: error.message || "Failed to analyze image." });
+    return res.status(500).json({ error: "Failed to analyze image." });
   }
 }
 
