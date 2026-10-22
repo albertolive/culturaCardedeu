@@ -1,5 +1,5 @@
 import { withSentry } from "@sentry/nextjs";
-import OpenAI from "openai";
+import { complete } from "@lib/gatewayClient";
 
 async function handler(req, res) {
   const requestOrigin = req.headers.origin;
@@ -32,17 +32,6 @@ async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
-
-  if (!process.env.GEMINI_API_KEY) {
-    console.error("GEMINI_API_KEY no configurat al servidor.");
-    return res
-      .status(500)
-      .json({ error: "GEMINI_API_KEY no configurat al servidor." });
-  }
-
-  const token = process.env.GEMINI_API_KEY;
-  const endpoint = "https://generativelanguage.googleapis.com/v1beta/openai";
-  const openai = new OpenAI({ baseURL: endpoint, apiKey: token });
 
   const { imageData, imageType } = req.body; // e.g., imageType = 'image/jpeg' or 'image/png'
 
@@ -109,8 +98,8 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
 `;
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gemini-3.6-flash",
+    const messageContent = await complete(null, {
+      cascade: "general",
       messages: [
         {
           role: "user",
@@ -118,22 +107,15 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
             { type: "text", text: prompt },
             {
               type: "image_url",
-              image_url: {
-                url: `data:${imageType};base64,${imageData}`,
-                detail: "auto", // medium detail is sufficient for text extraction and costs less
-              },
+              image_url: { url: `data:${imageType};base64,${imageData}` },
             },
           ],
         },
       ],
-      max_tokens: 1200, // Increased to accommodate detailed descriptions
-      response_format: { type: "json_object" },
     });
 
-    const messageContent = response.choices[0].message.content;
-
     if (!messageContent) {
-      console.error("OpenAI response content is empty.");
+      console.error("AI response content is empty.");
       return res
         .status(500)
         .json({ error: "Failed to analyze image: Empty response from AI." });
@@ -151,8 +133,8 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
     try {
       structuredData = JSON.parse(cleanedMessageContent);
     } catch (e) {
-      console.error("Failed to parse OpenAI JSON response:", e);
-      console.error("Raw OpenAI response:", messageContent);
+      console.error("Failed to parse AI JSON response:", e);
+      console.error("Raw AI response:", messageContent);
       return res.status(500).json({
         error:
           "Failed to parse analysis results. The AI response was not valid JSON.",
@@ -178,17 +160,8 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
 
     return res.status(200).json(structuredData);
   } catch (error) {
-    console.error("Error calling OpenAI API:", error);
-    let errorMessage = "Failed to analyze image.";
-    if (error.response) {
-      console.error("OpenAI API Error Response:", error.response.data);
-      errorMessage = error.response.data.error
-        ? error.response.data.error.message
-        : errorMessage;
-    } else if (error.message) {
-      errorMessage = error.message;
-    }
-    return res.status(500).json({ error: errorMessage });
+    console.error("Error calling ai-gateway:", error);
+    return res.status(500).json({ error: "Failed to analyze image." });
   }
 }
 
