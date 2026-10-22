@@ -1,5 +1,6 @@
 import { withSentry } from "@sentry/nextjs";
 import { complete } from "@lib/gatewayClient";
+import { parseAiJson } from "@lib/parseAiJson";
 
 async function handler(req, res) {
   const requestOrigin = req.headers.origin;
@@ -121,17 +122,9 @@ You are GPT-4o (multimodal). You will receive an image of a cultural-event poste
         .json({ error: "Failed to analyze image: Empty response from AI." });
     }
 
-    // Gemini wraps JSON replies in a markdown code fence even when asked to
-    // reply with JSON only; strip it before parsing.
-    const cleanedMessageContent = messageContent
-      .trim()
-      .replace(/^```(?:json)?\s*/i, "")
-      .replace(/```\s*$/, "")
-      .trim();
-
     let structuredData = null;
     try {
-      structuredData = JSON.parse(cleanedMessageContent);
+      structuredData = parseAiJson(messageContent);
     } catch (e) {
       console.error("Failed to parse AI JSON response:", e);
       console.error("Raw AI response:", messageContent);
